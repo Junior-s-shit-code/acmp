@@ -1,0 +1,10 @@
+4
+byte 1
+short 2
+int 4
+long 8
+4
+byte a[1];
+short b[2][2][2];
+int c[100][100];
+long a[177];
