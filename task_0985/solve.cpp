@@ -107,17 +107,16 @@ std::vector <int> getSizes() {
 			ans.push_back(std::atoi(value.c_str()));
 		}
 	}
-	std::reverse(ans.begin(), ans.end());
 	return ans;
 }
 
 void solve(std::unordered_map <std::string, int> &types) {
 	BigInteger typeValue = BigInteger::valueOf(getType(types));
 	std::vector <int> size = getSizes();
-	BigInteger ans = BigInteger::valueOf(size[0]) * typeValue;
+	BigInteger ans = BigInteger::valueOf(size[(int)size.size() - 1]) * typeValue;
 	BigInteger extra = BigInteger::valueOf(24);
 	ans = ans + extra;
-	for (int i = 1; i < (int)size.size(); i++) {
+	for (int i = (int)size.size() - 2; i >= 0; i--) {
 		BigInteger nextValue = BigInteger::valueOf(size[i]);
 		ans = ans * nextValue;
 		ans = ans + extra;
