@@ -107,24 +107,22 @@ std::vector <int> getSizes() {
 			ans.push_back(std::atoi(value.c_str()));
 		}
 	}
+	std::reverse(ans.begin(), ans.end());
 	return ans;
-}
-
-BigInteger getCalculation(BigInteger typeValue, const int curIndex, std::vector <int> &size) {
-	if (curIndex + 1 == (int)size.size()) {
-		BigInteger prod = BigInteger::valueOf(size[curIndex]) * typeValue;
-		return BigInteger::valueOf(24) + prod;
-	} else {
-		BigInteger nextCalc = getCalculation(typeValue, curIndex + 1, size);
-		BigInteger prod = BigInteger::valueOf(size[curIndex]) * nextCalc;
-		return BigInteger::valueOf(24) + prod;
-	}
 }
 
 void solve(std::unordered_map <std::string, int> &types) {
 	BigInteger typeValue = BigInteger::valueOf(getType(types));
 	std::vector <int> size = getSizes();
-	printf("%s\n", getCalculation(typeValue, 0, size).toString().c_str());
+	BigInteger ans = BigInteger::valueOf(size[0]) * typeValue;
+	BigInteger extra = BigInteger::valueOf(24);
+	ans = ans + extra;
+	for (int i = 1; i < (int)size.size(); i++) {
+		BigInteger nextValue = BigInteger::valueOf(size[i]);
+		ans = ans * nextValue;
+		ans = ans + extra;
+	}
+	printf("%s\n", ans.toString().c_str());
 }
 
 int main() {
