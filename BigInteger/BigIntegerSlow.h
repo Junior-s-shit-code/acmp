@@ -11,12 +11,12 @@ private:
 	short sign = 1;
 	std::vector <short> value;
 
+public:
+
 	BigInteger()
 		: sign(1)
-		, value(0)
+		, value(0) 
 	{}
-
-public:
 
 	BigInteger operator +(BigInteger second) {
 		BigInteger newNum;
