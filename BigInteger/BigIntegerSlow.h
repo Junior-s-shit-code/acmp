@@ -5,15 +5,18 @@
 #include <cstdlib>
 
 class BigInteger {
-	short sign = 1;
-	std::vector <short int> value;
 
-public:
+private:
+
+	short sign = 1;
+	std::vector <short> value;
 
 	BigInteger()
 		: sign(1)
 		, value(0)
 	{}
+
+public:
 
 	BigInteger operator +(BigInteger second) {
 		BigInteger newNum;
@@ -41,6 +44,11 @@ public:
 		}
 	}
 
+	BigInteger operator += (const BigInteger second) {
+		*this = *this + second;
+		return *this;
+	}
+
 	BigInteger operator -(BigInteger second) {
 		if (sign == 1 && second.sign == -1) {
 			return *this + -second;
@@ -57,6 +65,9 @@ public:
 						newNum.value[i] += 10;
 						newNum.value[i + 1]--;
 					}
+					if (newNum.value[newNum.value.size() - 1] == 0) {
+						newNum.value.erase(newNum.value.end() - 1);
+					}
 				}
 				return newNum;
 			} else {
@@ -65,10 +76,33 @@ public:
 		}
 	}
 
-	BigInteger operator -() const{
+	BigInteger operator -= (const BigInteger second) {
+		*this = *this - second;
+		return *this;
+	}
+
+	BigInteger operator -() const {
 		BigInteger newNum = *this;
 		newNum.sign *= -1;
 		return newNum;
+	}
+
+	BigInteger operator --() {
+		*this = *this - BigInteger::valueOf(1);
+		return *this;
+	}
+
+	BigInteger operator ++() {
+		*this = *this + BigInteger::valueOf(1);
+		return *this;
+	}
+
+	BigInteger operator --(int) {
+		return -- *this;
+	}
+
+	BigInteger operator ++(int) {
+		return ++ * this;
 	}
 
 	BigInteger operator *(const BigInteger second) {
@@ -91,24 +125,26 @@ public:
 		return newNum;
 	}
 
+	BigInteger operator *= (const BigInteger second) {
+		*this = *this * second;
+		return *this;
+	}
+
 	BigInteger operator /(const BigInteger second) {
 
 	}
 
-	BigInteger operator =(long long second) {
-		if (second < 0) {
-			sign = -1;
-			second *= -1;
-		}
-		while (second != 0) {
-			value.push_back(second % 10);
-			second /= 10;
-		}
+	BigInteger operator /= (const BigInteger second) {
+		*this = *this / second;
 		return *this;
 	}
 
-	BigInteger operator =(const std::string &second) {
-		*this = valueOf(second);
+	BigInteger operator %(const BigInteger second) {
+
+	}
+
+	BigInteger operator %= (const BigInteger second) {
+		*this = *this % second;
 		return *this;
 	}
 
@@ -145,31 +181,19 @@ public:
 	}
 
 	bool operator >=(const BigInteger second) const {
-		if (*this > second || *this == second) {
-			return true;
-		} 
-		return false;
+		return (*this > second || *this == second);
 	}
 
 	bool operator <(const BigInteger second) const {
-		if (!(*this >= second)) {
-			return true;
-		}
-		return false;
+		return !(*this >= second);
 	}
 
 	bool operator <= (const BigInteger second) const {
-		if (!(*this > second)) {
-			return true;
-		}
-		return false;
+		return !(*this > second);
 	}
 
-	bool operator ==(const BigInteger second) const { //to correct work wanna delete useless cells in value, while we do operator ( - )
-		if (*this == second) {
-			return true;
-		}
-		return false;
+	bool operator ==(const BigInteger second) const { //to correct work wanna delete useless cells in value, while we do operator ( - )  |||   UPD: done
+		return (sign == second.sign && value == second.value);
 	}
 
 	static BigInteger valueOf(long long num) {
@@ -189,6 +213,22 @@ public:
 		return newNum;
 	}
 
+	BigInteger pow(BigInteger value, long long ext) {
+		BigInteger ans = BigInteger::valueOf(1);
+		while (ext) {
+			if (ext & 1) {
+				ans *= value;
+			} 
+			value *= value;
+			ext >>= 1;
+		}
+		return ans;
+	}
+
+	BigInteger pow(BigInteger value, BigInteger ext) {
+		return pow(value, ext.toLong());
+	}
+
 	std::string toString() const {
 		std::string ans = "";
 		if (sign == -1) {
@@ -198,5 +238,13 @@ public:
 			ans += (value[i] + '0');
 		}
 		return ans;
+	}
+
+	int toInt() const {
+		return std::atoi(toString().c_str());
+	}
+
+	long long toLong() const {
+		return std::atoll(toString().c_str());
 	}
 };
