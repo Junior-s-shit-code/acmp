@@ -18,6 +18,11 @@ public:
 		, value(0) 
 	{}
 
+	BigInteger(const short &setSign, const std::vector <short> &setValue)
+		: sign(setSign)
+		, value(setValue) 
+	{}
+
 	BigInteger operator +(BigInteger second) {
 		BigInteger newNum;
 		if (sign == second.sign) {
@@ -25,7 +30,7 @@ public:
 			newNum.value = value;
 			
 			for (int i = 0; i < (int)second.value.size(); i++) {
-				if (i == newNum.value.size()) {
+				if (i == (int) newNum.value.size()) {
 					newNum.value.push_back(0);
 				}
 				newNum.value[i] += second.value[i];
@@ -50,9 +55,7 @@ public:
 	}
 
 	BigInteger operator -(BigInteger second) {
-		if (sign == 1 && second.sign == -1) {
-			return *this + -second;
-		} else if (sign == -1 && second.sign == 1) {
+		if (sign != second.sign) {
 			return *this + -second;
 		} else if (sign == -1) {
 			return (-second) - (-*this);
@@ -130,8 +133,45 @@ public:
 		return *this;
 	}
 
-	BigInteger operator /(const BigInteger second) {
-
+	BigInteger operator /(BigInteger second) { //write second option, when we use '/' like in school and check time 
+		short newSign = sign * second.sign;
+		sign = second.sign = 1;
+		std::string ans = "";
+		std::string divisor = second.toString();
+		std::string dividend = "";
+		int start;
+		for (int i = (int)value.size() - 1; i >= 0; i--) {
+			dividend += std::to_string(value[i]);
+			if ((int)dividend.length() > (int)divisor.length() || ((int)dividend.length() == (int)divisor.length() && dividend >= divisor)) {
+				start = i;
+				dividend.erase(dividend.end() - 1);
+			}
+		}
+		for (int i = start; i >= 0; i--) {
+			dividend += std::to_string(value[i]);
+			BigInteger a = BigInteger::valueOf(dividend);
+			BigInteger b = BigInteger::valueOf(divisor);
+			BigInteger midValue;
+			int left = 0;
+			int right = 10;
+			while (right > left + 1) {
+				int mid = (left + right) >> 1;
+				midValue = b * BigInteger::valueOf(mid);
+				if (midValue == a) {
+					left = mid;
+					right = left + 1;
+				} else if (midValue > a) {
+					right = mid;
+				} else {
+					left = mid;
+				}
+			}
+			ans += std::to_string(left);
+			dividend = (a - midValue).toString();
+		}
+		BigInteger newValue = BigInteger::valueOf(ans);
+		newValue.sign = newSign;
+		return newValue;
 	}
 
 	BigInteger operator /= (const BigInteger second) {
@@ -140,7 +180,7 @@ public:
 	}
 
 	BigInteger operator %(const BigInteger second) {
-
+		return *this - (*this / second * second);
 	}
 
 	BigInteger operator %= (const BigInteger second) {
@@ -160,23 +200,11 @@ public:
 		int size1 = str1.length();
 		int size2 = str2.length();
 
-
-		if (sign == 1 && second.sign == -1) {
-			return true;
-		} else if (sign == -1 && second.sign == 1) {
-			return false;
-		} else if (sign == 1) {  // wanna be optimized with bit-arithmetic
-			if ((size1 > size2) || (size1 == size2 && str1 > str2)) {
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			if ((size1 > size2) || (size1 == size2 && str1 > str2)) {
-				return false;
-			} else {
-				return true;
-			}
+		if (sign != second.sign) {
+			return sign == 1;
+		}
+		else {
+			return (sign == 1) == ((size1 > size2) || (size1 == size2 && str1 > str2));
 		}
 	}
 
@@ -246,5 +274,9 @@ public:
 
 	long long toLong() const {
 		return std::atoll(toString().c_str());
+	}
+
+	BigInteger abs() {
+		return BigInteger { 1, value };
 	}
 };
