@@ -43,9 +43,9 @@ public:
 			return newNum;
 
 		} else if (sign == -1) {
-			return second - *this;
+			return second - -*this;
 		} else {
-			return *this - second;
+			return *this - -second;
 		}
 	}
 
@@ -118,6 +118,7 @@ public:
 				}
 				newNum.value[i + j] += value[i] * second.value[j];
 				int extra = newNum.value[i + j] / 10;
+				newNum.value[i + j] %= 10;
 				if (extra > 0 && i + j + 1 == (int)newNum.value.size()) {
 					newNum.value.push_back(extra);
 				} else if (extra > 0) {
@@ -136,6 +137,9 @@ public:
 	BigInteger operator /(BigInteger second) { //write second option, when we use '/' like in school and check time 
 		short newSign = sign * second.sign;
 		sign = second.sign = 1;
+		if (second > * this) {
+			return BigInteger { 1, std::vector <short> {0} };
+		}
 		std::string ans = "";
 		std::string divisor = second.toString();
 		std::string dividend = "";
@@ -147,27 +151,35 @@ public:
 				dividend.erase(dividend.end() - 1);
 			}
 		}
+		printf("pre-dividend: %s\n", dividend.c_str()); //
 		for (int i = start; i >= 0; i--) {
 			dividend += std::to_string(value[i]);
+			printf("new-dividend: %s\n", dividend.c_str()); //
 			BigInteger a = BigInteger::valueOf(dividend);
-			BigInteger b = BigInteger::valueOf(divisor);
+			BigInteger b = second.abs();
 			BigInteger midValue;
 			int left = 0;
 			int right = 10;
-			while (right > left + 1) {
+			while (right != left + 1) {
 				int mid = (left + right) >> 1;
-				midValue = b * BigInteger::valueOf(mid);
+				BigInteger k = BigInteger::valueOf(mid);
+				midValue = k*b;
+				printf("Mid = %d; midValue = %s\n", mid, midValue.toString().c_str());//
 				if (midValue == a) {
 					left = mid;
 					right = left + 1;
+					printf("mid value == a\n");
 				} else if (midValue > a) {
 					right = mid;
+					printf("mid value > a\n");
 				} else {
 					left = mid;
+					printf("mid value < a\n");
 				}
 			}
 			ans += std::to_string(left);
 			dividend = (a - midValue).toString();
+			printf("create new-dividend: %s\n", dividend.c_str()); //
 		}
 		BigInteger newValue = BigInteger::valueOf(ans);
 		newValue.sign = newSign;
@@ -225,7 +237,7 @@ public:
 	}
 
 	static BigInteger valueOf(long long num) {
-		return valueOf(std::to_string(num).c_str());
+		return valueOf(std::to_string(num));
 	}
 
 	static BigInteger valueOf(std::string str) {
@@ -236,7 +248,7 @@ public:
 			end++;
 		}
 		for (int i = (int)str.length() - 1; i >= end; i--) {
-			newNum.value.push_back((short int) (str[i] - '0'));
+			newNum.value.push_back((short) (str[i] - '0'));
 		}
 		return newNum;
 	}
