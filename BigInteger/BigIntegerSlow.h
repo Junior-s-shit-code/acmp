@@ -3,6 +3,7 @@
 #include <string>
 #include <algorithm>
 #include <cstdlib>
+#include <iostream>
 
 class BigInteger {
 
@@ -151,10 +152,8 @@ public:
 				dividend.erase(dividend.end() - 1);
 			}
 		}
-		printf("pre-dividend: %s\n", dividend.c_str()); //
 		for (int i = start; i >= 0; i--) {
 			dividend += std::to_string(value[i]);
-			printf("new-dividend: %s\n", dividend.c_str()); //
 			BigInteger a = BigInteger::valueOf(dividend);
 			BigInteger b = second.abs();
 			BigInteger midValue;
@@ -164,22 +163,17 @@ public:
 				int mid = (left + right) >> 1;
 				BigInteger k = BigInteger::valueOf(mid);
 				midValue = k*b;
-				printf("Mid = %d; midValue = %s\n", mid, midValue.toString().c_str());//
 				if (midValue == a) {
 					left = mid;
 					right = left + 1;
-					printf("mid value == a\n");
 				} else if (midValue > a) {
 					right = mid;
-					printf("mid value > a\n");
 				} else {
 					left = mid;
-					printf("mid value < a\n");
 				}
 			}
 			ans += std::to_string(left);
 			dividend = (a - midValue).toString();
-			printf("create new-dividend: %s\n", dividend.c_str()); //
 		}
 		BigInteger newValue = BigInteger::valueOf(ans);
 		newValue.sign = newSign;
@@ -234,6 +228,12 @@ public:
 
 	bool operator ==(const BigInteger second) const { //to correct work wanna delete useless cells in value, while we do operator ( - )  |||   UPD: done
 		return (sign == second.sign && value == second.value);
+	}
+
+	friend std::ostream& operator << (std::ostream &out, const BigInteger num) {
+		std::string ans = num.toString();
+		out << ans;
+		return out;
 	}
 
 	static BigInteger valueOf(long long num) {
