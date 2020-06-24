@@ -4,7 +4,8 @@
 #include <algorithm>
 #include <cstdlib>
 #include <iostream>
-
+//#include "C:/Users/Van`a_Pes/source/repos/Junior-s-shit-code/BigInteger_google_unit_tests/test.cpp"
+/*
 class BigInteger {
 
 private:
@@ -138,7 +139,10 @@ public:
 	BigInteger operator /(BigInteger second) { //write second option, when we use '/' like in school and check time 
 		short newSign = sign * second.sign;
 		sign = second.sign = 1;
-		if (second > * this) {
+		if (second == BigInteger::valueOf(0)) {
+			throw 1;
+		}
+		else if (second > * this) {
 			return BigInteger { 1, std::vector <short> {0} };
 		}
 		std::string ans = "";
@@ -266,6 +270,9 @@ public:
 	}
 
 	BigInteger pow(BigInteger value, BigInteger ext) {
+		if (value < BigInteger::valueOf(0) || ext < BigInteger::valueOf(0)) {
+			throw 1;
+		}
 		return pow(value, ext.toLong());
 	}
 
@@ -291,4 +298,4 @@ public:
 	BigInteger abs() {
 		return BigInteger { 1, value };
 	}
-};
+};*/
