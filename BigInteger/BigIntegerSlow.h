@@ -4,8 +4,8 @@
 #include <algorithm>
 #include <cstdlib>
 #include <iostream>
-//#include "C:/Users/Van`a_Pes/source/repos/Junior-s-shit-code/BigInteger_google_unit_tests/test.cpp"
-/*
+#include <cassert>
+
 class BigInteger {
 
 private:
@@ -17,37 +17,48 @@ public:
 
 	BigInteger()
 		: sign(1)
-		, value(0) 
-	{}
+		, value(0) {}
 
 	BigInteger(const short &setSign, const std::vector <short> &setValue)
 		: sign(setSign)
-		, value(setValue) 
-	{}
+		, value(setValue) {}
 
-	BigInteger operator +(BigInteger second) {
-		BigInteger newNum;
-		if (sign == second.sign) {
-			newNum.sign = sign;
-			newNum.value = value;
-			
-			for (int i = 0; i < (int)second.value.size(); i++) {
-				if (i == (int) newNum.value.size()) {
-					newNum.value.push_back(0);
+	BigInteger operator + (BigInteger second) {
+		if (sign == second.sign && sign == 1) {
+			BigInteger newValue;
+			int n1 = (int)value.size();
+			int n2 = (int)second.value.size();
+			for (int i = 0; i < (int)std::max(n1, n2); i++) {
+				int curSum = 0;
+				if (i < n1) {
+					curSum += value[i];
 				}
-				newNum.value[i] += second.value[i];
-				int extra = newNum.value[i] / 10;
-				newNum.value[i] %= 10;
-				if (extra > 0 && i + 1 == (int)second.value.size()) {
-					newNum.value.push_back(extra);
+				if (i < n2) {
+					curSum += second.value[i];
+				}
+				int extra = curSum / 10;
+				curSum %= 10;
+				if (i >= (int)newValue.value.size()) {
+					newValue.value.push_back(curSum);
+				} else {
+					newValue.value[i] += curSum;
+					extra += newValue.value[i] / 10;
+					newValue.value[i] %= 10;
+				}
+
+				if (extra > 0 && i + 1 >= (int)newValue.value.size()) {
+					newValue.value.push_back(extra);
+				} else if (extra > 0) {
+					newValue.value[i + 1] += extra;
 				}
 			}
-			return newNum;
-
+			return newValue;
+		} else if (sign == second.sign) {
+			return -(this->abs() + second.abs());
 		} else if (sign == -1) {
-			return second - -*this;
+			return second - this->abs();
 		} else {
-			return *this - -second;
+			return *this - second.abs();
 		}
 	}
 
@@ -57,27 +68,41 @@ public:
 	}
 
 	BigInteger operator -(BigInteger second) {
-		if (sign != second.sign) {
-			return *this + -second;
-		} else if (sign == -1) {
-			return (-second) - (-*this);
-		} else {
-			if (*this >= second) {
-				BigInteger newNum = *this;
-				for (int i = 0; i < (int)second.value.size(); i++) {
-					newNum.value[i] -= second.value[i];
-					if (newNum.value[i] < 0) {
-						newNum.value[i] += 10;
-						newNum.value[i + 1]--;
+		if (sign == second.sign && sign == -1) {
+			return (second.abs() - (this->abs()));
+		} else if (sign == second.sign) {
+			if (*this == second) {
+				return BigInteger::valueOf(0);
+			} else if (*this < second) {
+				return -(second - *this);
+			} else {
+				BigInteger newValue = *this;
+				assert(newValue.sign == 1);
+				for (int i = 0; i < (int)newValue.value.size(); i++) {
+					if (i < (int)second.value.size()) {
+						newValue.value[i] -= second.value[i];
 					}
-					if (newNum.value[newNum.value.size() - 1] == 0) {
-						newNum.value.erase(newNum.value.end() - 1);
+					if (newValue.value[i] < 0) {
+						newValue.value[i] += 10;
+						assert(i + 1 < (int)newValue.value.size());
+						newValue.value[i + 1]--;
 					}
 				}
-				return newNum;
-			} else {
-				return -(second - *this);
+
+				int end = (int)newValue.value.size() - 1;
+				while (newValue.value[end] == 0) {
+					end--;
+				}
+				std::vector <short> ans(end + 1);
+				for (int i = 0; i <= end; i++) {
+					ans[i] = newValue.value[i];
+				}
+				return BigInteger { 1, ans };
 			}
+		} else if (sign == -1) {
+			return -(this->abs() + second);
+		} else {
+			return *this + second.abs();
 		}
 	}
 
@@ -87,9 +112,7 @@ public:
 	}
 
 	BigInteger operator -() const {
-		BigInteger newNum = *this;
-		newNum.sign *= -1;
-		return newNum;
+		return BigInteger { sign * -1, value };
 	}
 
 	BigInteger operator --() {
@@ -103,7 +126,7 @@ public:
 	}
 
 	BigInteger operator --(int) {
-		return -- *this;
+		return -- * this;
 	}
 
 	BigInteger operator ++(int) {
@@ -111,11 +134,15 @@ public:
 	}
 
 	BigInteger operator *(const BigInteger second) {
+		const BigInteger null = BigInteger::valueOf(0);
+		if (*this == null || second == null) {
+			return null;
+		}
 		BigInteger newNum;
 		newNum.sign = sign * second.sign;
 		for (int i = 0; i < (int)value.size(); i++) {
 			for (int j = 0; j < (int)second.value.size(); j++) {
-				if (i + j == (int) newNum.value.size()) {
+				if (i + j == (int)newNum.value.size()) {
 					newNum.value.push_back(0);
 				}
 				newNum.value[i + j] += value[i] * second.value[j];
@@ -136,49 +163,49 @@ public:
 		return *this;
 	}
 
-	BigInteger operator /(BigInteger second) { //write second option, when we use '/' like in school and check time 
+	BigInteger operator /(BigInteger second) { //write second option, when we use '/' like in school and check time
 		short newSign = sign * second.sign;
+		short selfThisSign = sign;
 		sign = second.sign = 1;
-		if (second == BigInteger::valueOf(0)) {
-			throw 1;
+
+		if (*this < second || *this == BigInteger::valueOf(0)) {
+			sign = selfThisSign;
+			return BigInteger::valueOf(0);
+		} else if (*this == second) {
+			sign = selfThisSign;
+			return BigInteger::valueOf(1);
 		}
-		else if (second > * this) {
-			return BigInteger { 1, std::vector <short> {0} };
-		}
-		std::string ans = "";
+
+		std::string item = this->toString();
 		std::string divisor = second.toString();
-		std::string dividend = "";
-		int start;
-		for (int i = (int)value.size() - 1; i >= 0; i--) {
-			dividend += std::to_string(value[i]);
-			if ((int)dividend.length() > (int)divisor.length() || ((int)dividend.length() == (int)divisor.length() && dividend >= divisor)) {
-				start = i;
-				dividend.erase(dividend.end() - 1);
-			}
+		int start = (int)divisor.length();
+		std::string dividend = item.substr(0, start);
+		if (dividend >= divisor) {
+			start--;
+			dividend = item.substr(0, start);
 		}
-		for (int i = start; i >= 0; i--) {
-			dividend += std::to_string(value[i]);
+
+		std::string ans = "";
+		const BigInteger b = BigInteger::valueOf(divisor);
+		for (int i = start; i < (int)item.length(); i++) {
+			dividend += item[i];
+
 			BigInteger a = BigInteger::valueOf(dividend);
-			BigInteger b = second.abs();
-			BigInteger midValue;
-			int left = 0;
-			int right = 10;
-			while (right != left + 1) {
-				int mid = (left + right) >> 1;
-				BigInteger k = BigInteger::valueOf(mid);
-				midValue = k*b;
-				if (midValue == a) {
-					left = mid;
-					right = left + 1;
-				} else if (midValue > a) {
-					right = mid;
-				} else {
-					left = mid;
-				}
+			BigInteger curValue = BigInteger::valueOf(0);
+			BigInteger nextValue = curValue + b;
+			int curAns = 0;
+			while (nextValue <= a) {
+				curValue = nextValue;
+				nextValue += b;
+				curAns++;
 			}
-			ans += std::to_string(left);
-			dividend = (a - midValue).toString();
+			a -= curValue;
+			dividend = a.toString();
+			ans += std::to_string(curAns);
 		}
+
+		sign = selfThisSign;
+
 		BigInteger newValue = BigInteger::valueOf(ans);
 		newValue.sign = newSign;
 		return newValue;
@@ -190,7 +217,7 @@ public:
 	}
 
 	BigInteger operator %(const BigInteger second) {
-		return *this - (*this / second * second);
+		return *this - ((*this / second) * second);
 	}
 
 	BigInteger operator %= (const BigInteger second) {
@@ -212,8 +239,7 @@ public:
 
 		if (sign != second.sign) {
 			return sign == 1;
-		}
-		else {
+		} else {
 			return (sign == 1) == ((size1 > size2) || (size1 == size2 && str1 > str2));
 		}
 	}
@@ -234,7 +260,7 @@ public:
 		return (sign == second.sign && value == second.value);
 	}
 
-	friend std::ostream& operator << (std::ostream &out, const BigInteger num) {
+	friend std::ostream &operator << (std::ostream &out, const BigInteger num) {
 		std::string ans = num.toString();
 		out << ans;
 		return out;
@@ -252,7 +278,7 @@ public:
 			end++;
 		}
 		for (int i = (int)str.length() - 1; i >= end; i--) {
-			newNum.value.push_back((short) (str[i] - '0'));
+			newNum.value.push_back((short)(str[i] - '0'));
 		}
 		return newNum;
 	}
@@ -262,7 +288,7 @@ public:
 		while (ext) {
 			if (ext & 1) {
 				ans *= value;
-			} 
+			}
 			value *= value;
 			ext >>= 1;
 		}
@@ -278,11 +304,11 @@ public:
 
 	std::string toString() const {
 		std::string ans = "";
-		if (sign == -1) {
-			ans += '-';
+		for (int i = 0; i < (int)this->value.size(); i++) {
+			ans.insert(ans.begin(), this->value[i] + '0');
 		}
-		for (int i = (int)value.size() - 1; i >= 0; i--) {
-			ans += (value[i] + '0');
+		if (this->sign == -1) {
+			ans = "-" + ans;
 		}
 		return ans;
 	}
@@ -295,7 +321,7 @@ public:
 		return std::atoll(toString().c_str());
 	}
 
-	BigInteger abs() {
+	BigInteger abs() const {
 		return BigInteger { 1, value };
 	}
-};*/
+};
