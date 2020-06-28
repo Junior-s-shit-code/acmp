@@ -83,8 +83,9 @@ public:
 						newValue.value[i] -= second.value[i];
 					}
 					if (newValue.value[i] < 0) {
+
 						newValue.value[i] += 10;
-						assert(i + 1 < (int)newValue.value.size());
+						//assert(i + 1 < (int)newValue.value.size());
 						newValue.value[i + 1]--;
 					}
 				}
@@ -165,48 +166,49 @@ public:
 
 	BigInteger operator /(BigInteger second) { //write second option, when we use '/' like in school and check time
 		short newSign = sign * second.sign;
-		short selfThisSign = sign;
+		short selfSign = sign;
 		sign = second.sign = 1;
 
-		if (*this < second || *this == BigInteger::valueOf(0)) {
-			sign = selfThisSign;
-			return BigInteger::valueOf(0);
-		} else if (*this == second) {
-			sign = selfThisSign;
-			return BigInteger::valueOf(1);
+		if (second == BigInteger::valueOf("0")) {
+			sign = selfSign;
+			printf("Error! divisor is null\n");
+		} else if (second == BigInteger::valueOf("0")) {
+			sign = selfSign;
+			return second;
+		} else if (*this < second) {
+			sign = selfSign;
+			return BigInteger::valueOf("0");
 		}
 
-		std::string item = this->toString();
-		std::string divisor = second.toString();
-		int start = (int)divisor.length();
-		std::string dividend = item.substr(0, start);
-		if (dividend >= divisor) {
-			start--;
-			dividend = item.substr(0, start);
+		BigInteger curDividend;
+		int start = 0;
+		for (int start = 0; start < (int)value.size(); start++) {
+			if (start == 0) {
+				curDividend.value[start] = value[start];
+			} else {
+				curDividend.value.push_back(value[start]);
+			}
+			if (curDividend >= second) {
+				break;
+			}
 		}
-
-		std::string ans = "";
-		const BigInteger b = BigInteger::valueOf(divisor);
-		for (int i = start; i < (int)item.length(); i++) {
-			dividend += item[i];
-
-			BigInteger a = BigInteger::valueOf(dividend);
-			BigInteger curValue = BigInteger::valueOf(0);
-			BigInteger nextValue = curValue + b;
+		std::string ans = ""; //check for empty
+		while (start + 1 < (int)value.size()) {
+			BigInteger curDivisor = BigInteger::valueOf("0");
+			BigInteger nextDivisor = second;
 			int curAns = 0;
-			while (nextValue <= a) {
-				curValue = nextValue;
-				nextValue += b;
+			while (nextDivisor < curDividend) {
+				curDivisor = nextDivisor;
+				nextDivisor += second;
 				curAns++;
 			}
-			a -= curValue;
-			dividend = a.toString();
 			ans += std::to_string(curAns);
+			start++;
+			curDividend -= curDivisor;
+			curDividend.value.push_back(value[start]);
 		}
-
-		sign = selfThisSign;
-
-		BigInteger newValue = BigInteger::valueOf(ans);
+		sign = selfSign;
+		BigInteger newValue = valueOf(ans);
 		newValue.sign = newSign;
 		return newValue;
 	}
