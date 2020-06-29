@@ -135,7 +135,7 @@ public:
 	}
 
 	BigInteger operator *(const BigInteger second) {
-		const BigInteger null = BigInteger::valueOf(0);
+		const BigInteger null = valueOf(0);
 		if (*this == null || second == null) {
 			return null;
 		}
@@ -152,7 +152,7 @@ public:
 				if (extra > 0 && i + j + 1 == (int)newNum.value.size()) {
 					newNum.value.push_back(extra);
 				} else if (extra > 0) {
-					newNum.value[i + j + 1] += extra; //  need to prove that the value in the highest digit will not exceed 9, or that we will consider it
+					newNum.value[i + j + 1] += extra;
 				}
 			}
 		}
@@ -169,44 +169,54 @@ public:
 		short selfSign = sign;
 		sign = second.sign = 1;
 
-		if (second == BigInteger::valueOf("0")) {
+		if (second == valueOf("0")) {
 			sign = selfSign;
-			printf("Error! divisor is null\n");
-		} else if (second == BigInteger::valueOf("0")) {
+			printf("\nError! divisor is null\n");
+			return valueOf("0");
+		} else if (second == valueOf("0")) {
 			sign = selfSign;
 			return second;
 		} else if (*this < second) {
 			sign = selfSign;
-			return BigInteger::valueOf("0");
+			return valueOf("0");
 		}
 
 		BigInteger curDividend;
+		std::string curDividendStr = "";
+		std::string secondStr = second.toString();
+		int secLen = (int)secondStr.length();
 		int start = 0;
-		for (int start = 0; start < (int)value.size(); start++) {
-			if (start == 0) {
-				curDividend.value[start] = value[start];
-			} else {
-				curDividend.value.push_back(value[start]);
-			}
-			if (curDividend >= second) {
+
+		for (start = (int)value.size() - 1; start >= 0; start--) {
+			curDividendStr += (value[start] + '0');
+			int curDivLen = (int)curDividendStr.length();
+			if ((int)curDivLen > (int)secLen || (curDivLen == secLen && curDivLen >= secLen)) {
 				break;
 			}
 		}
-		std::string ans = ""; //check for empty
-		while (start + 1 < (int)value.size()) {
-			BigInteger curDivisor = BigInteger::valueOf("0");
+		curDividend = valueOf(curDividendStr);
+		std::string ans = "";
+		while (start >= 0) {
+			BigInteger curDivisor = valueOf("0");
 			BigInteger nextDivisor = second;
 			int curAns = 0;
-			while (nextDivisor < curDividend) {
+			while (nextDivisor <= curDividend) {
 				curDivisor = nextDivisor;
 				nextDivisor += second;
 				curAns++;
 			}
+
 			ans += std::to_string(curAns);
-			start++;
-			curDividend -= curDivisor;
-			curDividend.value.push_back(value[start]);
+			start--;
+			if (start >= 0) {
+				curDividend -= curDivisor;
+				curDividendStr = curDividend.toString();
+				curDividendStr += (value[start] + '0');
+				curDividend = valueOf(curDividendStr);
+			}
+
 		}
+
 		sign = selfSign;
 		BigInteger newValue = valueOf(ans);
 		newValue.sign = newSign;
@@ -286,7 +296,7 @@ public:
 	}
 
 	BigInteger pow(BigInteger value, long long ext) {
-		BigInteger ans = BigInteger::valueOf(1);
+		BigInteger ans = valueOf(1);
 		while (ext) {
 			if (ext & 1) {
 				ans *= value;
@@ -298,7 +308,7 @@ public:
 	}
 
 	BigInteger pow(BigInteger value, BigInteger ext) {
-		if (value < BigInteger::valueOf(0) || ext < BigInteger::valueOf(0)) {
+		if (value < valueOf(0) || ext < valueOf(0)) {
 			throw 1;
 		}
 		return pow(value, ext.toLong());
