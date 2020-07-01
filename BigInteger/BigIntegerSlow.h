@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <vector>
 #include <string>
 #include <algorithm>
@@ -85,7 +84,6 @@ public:
 					if (newValue.value[i] < 0) {
 
 						newValue.value[i] += 10;
-						//assert(i + 1 < (int)newValue.value.size());
 						newValue.value[i + 1]--;
 					}
 				}
@@ -164,7 +162,7 @@ public:
 		return *this;
 	}
 
-	BigInteger operator /(BigInteger second) { //write second option, when we use '/' like in school and check time
+	BigInteger operator /(BigInteger second) {
 		short newSign = sign * second.sign;
 		short selfSign = sign;
 		sign = second.sign = 1;
@@ -173,9 +171,9 @@ public:
 			sign = selfSign;
 			printf("\nError! divisor is null\n");
 			return valueOf("0");
-		} else if (second == valueOf("0")) {
+		} else if (second == valueOf("1")) {
 			sign = selfSign;
-			return second;
+			return *this;
 		} else if (*this < second) {
 			sign = selfSign;
 			return valueOf("0");
@@ -211,12 +209,17 @@ public:
 			if (start >= 0) {
 				curDividend -= curDivisor;
 				curDividendStr = curDividend.toString();
-				curDividendStr += (value[start] + '0');
+				char c = value[start] + '0';
+				if (!(curDividendStr == "0" && c == '0')) {
+					curDividendStr += (value[start] + '0');
+				}
 				curDividend = valueOf(curDividendStr);
 			}
 
 		}
-
+		while ((int)ans.length() > 1 && ans[0] == '0') {
+			ans.erase(ans.begin());
+		}
 		sign = selfSign;
 		BigInteger newValue = valueOf(ans);
 		newValue.sign = newSign;
@@ -278,11 +281,11 @@ public:
 		return out;
 	}
 
-	static BigInteger valueOf(long long num) {
+	static BigInteger valueOf(const long long num) {
 		return valueOf(std::to_string(num));
 	}
 
-	static BigInteger valueOf(std::string str) {
+	static BigInteger valueOf(const std::string str) {
 		BigInteger newNum;
 		int end = 0;
 		if (str[0] == '-') {
@@ -295,7 +298,10 @@ public:
 		return newNum;
 	}
 
-	BigInteger pow(BigInteger value, long long ext) {
+	static BigInteger pow(BigInteger value, long long ext) {
+		if (ext < 0) {
+			throw 1;
+		}
 		BigInteger ans = valueOf(1);
 		while (ext) {
 			if (ext & 1) {
@@ -305,13 +311,6 @@ public:
 			ext >>= 1;
 		}
 		return ans;
-	}
-
-	BigInteger pow(BigInteger value, BigInteger ext) {
-		if (value < valueOf(0) || ext < valueOf(0)) {
-			throw 1;
-		}
-		return pow(value, ext.toLong());
 	}
 
 	std::string toString() const {
