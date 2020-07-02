@@ -5,12 +5,15 @@
 #include <iostream>
 #include <cassert>
 
+const long long mod = 1000000000;
+const int cellSize = 9;
+
 class BigInteger {
 
 private:
 
 	short sign = 1;
-	std::vector <short> value;
+	std::vector <long long> value;
 
 public:
 
@@ -18,7 +21,7 @@ public:
 		: sign(1)
 		, value(0) {}
 
-	BigInteger(const short &setSign, const std::vector <short> &setValue)
+	BigInteger(const short &setSign, const std::vector <long long> &setValue)
 		: sign(setSign)
 		, value(setValue) {}
 
@@ -28,21 +31,21 @@ public:
 			int n1 = (int)value.size();
 			int n2 = (int)second.value.size();
 			for (int i = 0; i < (int)std::max(n1, n2); i++) {
-				int curSum = 0;
+				long long curSum = 0;
 				if (i < n1) {
 					curSum += value[i];
 				}
 				if (i < n2) {
 					curSum += second.value[i];
 				}
-				int extra = curSum / 10;
-				curSum %= 10;
+				long long extra = curSum / mod;
+				curSum %= mod;
 				if (i >= (int)newValue.value.size()) {
 					newValue.value.push_back(curSum);
 				} else {
 					newValue.value[i] += curSum;
-					extra += newValue.value[i] / 10;
-					newValue.value[i] %= 10;
+					extra += newValue.value[i] / mod;
+					newValue.value[i] %= mod;
 				}
 
 				if (extra > 0 && i + 1 >= (int)newValue.value.size()) {
@@ -76,14 +79,12 @@ public:
 				return -(second - *this);
 			} else {
 				BigInteger newValue = *this;
-				assert(newValue.sign == 1);
 				for (int i = 0; i < (int)newValue.value.size(); i++) {
 					if (i < (int)second.value.size()) {
 						newValue.value[i] -= second.value[i];
 					}
 					if (newValue.value[i] < 0) {
-
-						newValue.value[i] += 10;
+						newValue.value[i] += mod;
 						newValue.value[i + 1]--;
 					}
 				}
@@ -92,7 +93,7 @@ public:
 				while (newValue.value[end] == 0) {
 					end--;
 				}
-				std::vector <short> ans(end + 1);
+				std::vector <long long> ans(end + 1);
 				for (int i = 0; i <= end; i++) {
 					ans[i] = newValue.value[i];
 				}
@@ -145,8 +146,8 @@ public:
 					newNum.value.push_back(0);
 				}
 				newNum.value[i + j] += value[i] * second.value[j];
-				int extra = newNum.value[i + j] / 10;
-				newNum.value[i + j] %= 10;
+				long long extra = newNum.value[i + j] / mod;
+				newNum.value[i + j] %= mod;
 				if (extra > 0 && i + j + 1 == (int)newNum.value.size()) {
 					newNum.value.push_back(extra);
 				} else if (extra > 0) {
@@ -179,14 +180,16 @@ public:
 			return valueOf("0");
 		}
 
+		std::string thisStr = this->toString();
 		BigInteger curDividend;
 		std::string curDividendStr = "";
 		std::string secondStr = second.toString();
 		int secLen = (int)secondStr.length();
 		int start = 0;
+		int thisSize = (int)thisStr.length();
 
-		for (start = (int)value.size() - 1; start >= 0; start--) {
-			curDividendStr += (value[start] + '0');
+		for (start = 0; start < thisSize; start++) {
+			curDividendStr += thisStr[start];
 			int curDivLen = (int)curDividendStr.length();
 			if ((int)curDivLen > (int)secLen || (curDivLen == secLen && curDivLen >= secLen)) {
 				break;
@@ -194,7 +197,7 @@ public:
 		}
 		curDividend = valueOf(curDividendStr);
 		std::string ans = "";
-		while (start >= 0) {
+		while (start < thisSize) {
 			BigInteger curDivisor = valueOf("0");
 			BigInteger nextDivisor = second;
 			int curAns = 0;
@@ -205,13 +208,13 @@ public:
 			}
 
 			ans += std::to_string(curAns);
-			start--;
-			if (start >= 0) {
+			start++;
+			if (start < thisSize) {
 				curDividend -= curDivisor;
 				curDividendStr = curDividend.toString();
-				char c = value[start] + '0';
+				char c = thisStr[start];
 				if (!(curDividendStr == "0" && c == '0')) {
-					curDividendStr += (value[start] + '0');
+					curDividendStr += thisStr[start];
 				}
 				curDividend = valueOf(curDividendStr);
 			}
@@ -241,14 +244,8 @@ public:
 	}
 
 	bool operator >(const BigInteger second) const {
-		std::string str1 = "";
-		for (int i = (int)value.size() - 1; i >= 0; i--) {
-			str1 += (value[i] + '0');
-		}
-		std::string str2 = "";
-		for (int i = (int)second.value.size() - 1; i >= 0; i--) {
-			str2 += (second.value[i] + '0');
-		}
+		std::string str1 = this->toString();
+		std::string str2 = second.toString();
 		int size1 = str1.length();
 		int size2 = str2.length();
 
@@ -271,7 +268,7 @@ public:
 		return !(*this > second);
 	}
 
-	bool operator ==(const BigInteger second) const {
+	bool operator ==(const BigInteger second) const { 
 		return (sign == second.sign && value == second.value);
 	}
 
@@ -287,13 +284,22 @@ public:
 
 	static BigInteger valueOf(const std::string str) {
 		BigInteger newNum;
-		int end = 0;
-		if (str[0] == '-') {
-			newNum.sign = -1;
-			end++;
+		for (int i = (int)str.length() - 1; i >= 0; i -= cellSize) {
+			std::string newCell = "";
+			
+			for (int j = (i - cellSize + 1 < 0 ? i : cellSize - 1); j >= 0; j--) {
+				newCell += str[i - j];
+			}
+			if (newCell == "-") {
+				newNum.sign = -1;
+				break;
+			}
+			newNum.value.push_back(std::atoll(newCell.c_str()));
 		}
-		for (int i = (int)str.length() - 1; i >= end; i--) {
-			newNum.value.push_back((short)(str[i] - '0'));
+		int last = (int)newNum.value.size() - 1;
+		if (newNum.value[last] < 0) {
+			newNum.value[last] *= -1;
+			newNum.sign = -1;
 		}
 		return newNum;
 	}
@@ -315,10 +321,16 @@ public:
 
 	std::string toString() const {
 		std::string ans = "";
-		for (int i = 0; i < (int)this->value.size(); i++) {
-			ans.insert(ans.begin(), this->value[i] + '0');
+		for (int i = 0; i < (int) value.size(); i++) {
+			std::string newStr = std::to_string(value[i]);
+			if (i < (int)value.size() - 1) {
+				while ((int)newStr.length() < cellSize) {
+					newStr.insert(newStr.begin(), '0');
+				}
+			}
+			ans = newStr + ans;
 		}
-		if (this->sign == -1) {
+		if (sign == -1) {
 			ans = "-" + ans;
 		}
 		return ans;
