@@ -1,11 +1,5 @@
 ﻿#include "pch.h"
-#include "..\acmp\BigInteger\cbigfast.h"
-#include <stdio.h>
-#include <vector>
-#include <string>
-#include <algorithm>
-#include <cstdlib>
-#include <iostream>
+#include "..\acmp\BigInteger\BigInteger.cpp"
 
 
 TEST(correctness, handAdd) {
@@ -410,7 +404,7 @@ TEST(correctness, pow) {
 
 int main(int argc, char **argv) {
 	freopen("input.txt", "r", stdin);
-	//freopen("output.txt", "w", stdout);
+	freopen("output.txt", "w", stdout);
 	::testing::InitGoogleTest(&argc, argv);
 	return RUN_ALL_TESTS();
 }

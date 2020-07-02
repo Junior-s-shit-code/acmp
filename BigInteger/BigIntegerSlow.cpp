@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <vector>
 #include <string>
 #include <algorithm>
@@ -22,7 +23,7 @@ public:
 		: sign(setSign)
 		, value(setValue) {}
 
-	BigInteger operator + (BigInteger second) {
+	BigInteger operator+(BigInteger second) {
 		if (sign == second.sign && sign == 1) {
 			BigInteger newValue;
 			int n1 = (int)value.size();
@@ -61,12 +62,12 @@ public:
 		}
 	}
 
-	BigInteger operator += (const BigInteger second) {
+	BigInteger operator+=(const BigInteger second) {
 		*this = *this + second;
 		return *this;
 	}
 
-	BigInteger operator -(BigInteger second) {
+	BigInteger operator-(BigInteger second) {
 		if (sign == second.sign && sign == -1) {
 			return (second.abs() - (this->abs()));
 		} else if (sign == second.sign) {
@@ -105,34 +106,34 @@ public:
 		}
 	}
 
-	BigInteger operator -= (const BigInteger second) {
+	BigInteger operator-=(const BigInteger second) {
 		*this = *this - second;
 		return *this;
 	}
 
-	BigInteger operator -() const {
+	BigInteger operator-() const {
 		return BigInteger { sign * -1, value };
 	}
 
-	BigInteger operator --() {
+	BigInteger operator--() {
 		*this = *this - BigInteger::valueOf(1);
 		return *this;
 	}
 
-	BigInteger operator ++() {
+	BigInteger operator++() {
 		*this = *this + BigInteger::valueOf(1);
 		return *this;
 	}
 
-	BigInteger operator --(int) {
+	BigInteger operator--(int) {
 		return -- * this;
 	}
 
-	BigInteger operator ++(int) {
+	BigInteger operator++(int) {
 		return ++ * this;
 	}
 
-	BigInteger operator *(const BigInteger second) {
+	BigInteger operator*(const BigInteger second) {
 		const BigInteger null = valueOf(0);
 		if (*this == null || second == null) {
 			return null;
@@ -157,12 +158,12 @@ public:
 		return newNum;
 	}
 
-	BigInteger operator *= (const BigInteger second) {
+	BigInteger operator*=(const BigInteger second) {
 		*this = *this * second;
 		return *this;
 	}
 
-	BigInteger operator /(BigInteger second) {
+	BigInteger operator/(BigInteger second) {
 		short newSign = sign * second.sign;
 		short selfSign = sign;
 		sign = second.sign = 1;
@@ -226,21 +227,21 @@ public:
 		return newValue;
 	}
 
-	BigInteger operator /= (const BigInteger second) {
+	BigInteger operator/=(const BigInteger second) {
 		*this = *this / second;
 		return *this;
 	}
 
-	BigInteger operator %(const BigInteger second) {
+	BigInteger operator%(const BigInteger second) {
 		return *this - ((*this / second) * second);
 	}
 
-	BigInteger operator %= (const BigInteger second) {
+	BigInteger operator%=(const BigInteger second) {
 		*this = *this % second;
 		return *this;
 	}
 
-	bool operator >(const BigInteger second) const {
+	bool operator>(const BigInteger second) const {
 		std::string str1 = "";
 		for (int i = (int)value.size() - 1; i >= 0; i--) {
 			str1 += (value[i] + '0');
@@ -259,23 +260,23 @@ public:
 		}
 	}
 
-	bool operator >=(const BigInteger second) const {
+	bool operator>=(const BigInteger second) const {
 		return (*this > second || *this == second);
 	}
 
-	bool operator <(const BigInteger second) const {
+	bool operator<(const BigInteger second) const {
 		return !(*this >= second);
 	}
 
-	bool operator <= (const BigInteger second) const {
+	bool operator<=(const BigInteger second) const {
 		return !(*this > second);
 	}
 
-	bool operator ==(const BigInteger second) const {
+	bool operator==(const BigInteger second) const {
 		return (sign == second.sign && value == second.value);
 	}
 
-	friend std::ostream &operator << (std::ostream &out, const BigInteger num) {
+	friend std::ostream &operator<<(std::ostream &out, const BigInteger num) {
 		std::string ans = num.toString();
 		out << ans;
 		return out;

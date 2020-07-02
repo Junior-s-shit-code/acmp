@@ -1,31 +1,20 @@
-#include <vector>
-#include <string>
-#include <algorithm>
-#include <cstdlib>
-#include <iostream>
-#include <cassert>
+#include "bigint.h"
 
-const long long mod = 1000000000;
-const int cellSize = 9;
+const long long BigInteger::mod = 1000000000;
+const int BigInteger::cellSize = 9;
+const BigInteger BigInteger::ZERO = BigInteger::valueOf("0");
+const BigInteger BigInteger::ONE = BigInteger::valueOf("1");
+const BigInteger BigInteger::TEN = BigInteger::valueOf("10");
 
-class BigInteger {
-
-private:
-
-	short sign = 1;
-	std::vector <long long> value;
-
-public:
-
-	BigInteger()
+BigInteger::BigInteger()
 		: sign(1)
 		, value(0) {}
 
-	BigInteger(const short &setSign, const std::vector <long long> &setValue)
+BigInteger::BigInteger(const short &setSign, const std::vector <long long> &setValue)
 		: sign(setSign)
 		, value(setValue) {}
 
-	BigInteger operator + (BigInteger second) {
+BigInteger BigInteger::operator+(BigInteger second) {
 		if (sign == second.sign && sign == 1) {
 			BigInteger newValue;
 			int n1 = (int)value.size();
@@ -64,17 +53,17 @@ public:
 		}
 	}
 
-	BigInteger operator += (const BigInteger second) {
+BigInteger BigInteger::operator+=(const BigInteger second) {
 		*this = *this + second;
 		return *this;
 	}
 
-	BigInteger operator -(BigInteger second) {
+BigInteger BigInteger::operator-(BigInteger second) {
 		if (sign == second.sign && sign == -1) {
 			return (second.abs() - (this->abs()));
 		} else if (sign == second.sign) {
 			if (*this == second) {
-				return BigInteger::valueOf(0);
+				return ZERO;
 			} else if (*this < second) {
 				return -(second - *this);
 			} else {
@@ -106,37 +95,36 @@ public:
 		}
 	}
 
-	BigInteger operator -= (const BigInteger second) {
+BigInteger BigInteger::operator-=(const BigInteger second) {
 		*this = *this - second;
 		return *this;
 	}
 
-	BigInteger operator -() const {
+BigInteger BigInteger::operator-() const {
 		return BigInteger { sign * -1, value };
 	}
 
-	BigInteger operator --() {
-		*this = *this - BigInteger::valueOf(1);
+BigInteger BigInteger::operator--() {
+		*this = *this - ONE;
 		return *this;
 	}
 
-	BigInteger operator ++() {
-		*this = *this + BigInteger::valueOf(1);
+BigInteger BigInteger::operator++() {
+		*this = *this + ONE;
 		return *this;
 	}
 
-	BigInteger operator --(int) {
+BigInteger BigInteger::operator--(int) {
 		return -- * this;
 	}
 
-	BigInteger operator ++(int) {
+BigInteger BigInteger::operator++(int) {
 		return ++ * this;
 	}
 
-	BigInteger operator *(const BigInteger second) {
-		const BigInteger null = valueOf(0);
-		if (*this == null || second == null) {
-			return null;
+BigInteger BigInteger::operator*(const BigInteger second) {
+		if (*this == ZERO || second == ZERO) {
+			return ZERO;
 		}
 		BigInteger newNum;
 		newNum.sign = sign * second.sign;
@@ -158,26 +146,26 @@ public:
 		return newNum;
 	}
 
-	BigInteger operator *= (const BigInteger second) {
+BigInteger BigInteger::operator*=(const BigInteger second) {
 		*this = *this * second;
 		return *this;
 	}
 
-	BigInteger operator /(BigInteger second) {
+BigInteger BigInteger::operator/(BigInteger second) {
 		short newSign = sign * second.sign;
 		short selfSign = sign;
 		sign = second.sign = 1;
 
-		if (second == valueOf("0")) {
+		if (second == ZERO) {
 			sign = selfSign;
 			printf("\nError! divisor is null\n");
-			return valueOf("0");
-		} else if (second == valueOf("1")) {
+			return ZERO;
+		} else if (second == ONE) {
 			sign = selfSign;
 			return *this;
 		} else if (*this < second) {
 			sign = selfSign;
-			return valueOf("0");
+			return ZERO;
 		}
 
 		std::string thisStr = this->toString();
@@ -198,7 +186,7 @@ public:
 		curDividend = valueOf(curDividendStr);
 		std::string ans = "";
 		while (start < thisSize) {
-			BigInteger curDivisor = valueOf("0");
+			BigInteger curDivisor = ZERO;
 			BigInteger nextDivisor = second;
 			int curAns = 0;
 			while (nextDivisor <= curDividend) {
@@ -229,21 +217,21 @@ public:
 		return newValue;
 	}
 
-	BigInteger operator /= (const BigInteger second) {
+BigInteger BigInteger::operator/=(const BigInteger second) {
 		*this = *this / second;
 		return *this;
 	}
 
-	BigInteger operator %(const BigInteger second) {
+BigInteger BigInteger::operator%(const BigInteger second) {
 		return *this - ((*this / second) * second);
 	}
 
-	BigInteger operator %= (const BigInteger second) {
+BigInteger BigInteger::operator%=(const BigInteger second) {
 		*this = *this % second;
 		return *this;
 	}
 
-	bool operator >(const BigInteger second) const {
+bool BigInteger::operator>(const BigInteger second) const {
 		std::string str1 = this->toString();
 		std::string str2 = second.toString();
 		int size1 = str1.length();
@@ -256,33 +244,33 @@ public:
 		}
 	}
 
-	bool operator >=(const BigInteger second) const {
+bool BigInteger::operator>=(const BigInteger second) const {
 		return (*this > second || *this == second);
 	}
 
-	bool operator <(const BigInteger second) const {
+bool BigInteger::operator<(const BigInteger second) const {
 		return !(*this >= second);
 	}
 
-	bool operator <= (const BigInteger second) const {
+bool BigInteger::operator<=(const BigInteger second) const {
 		return !(*this > second);
 	}
 
-	bool operator ==(const BigInteger second) const { 
+bool BigInteger::operator==(const BigInteger second) const {
 		return (sign == second.sign && value == second.value);
 	}
 
-	friend std::ostream &operator << (std::ostream &out, const BigInteger num) {
+std::ostream &operator<<(std::ostream &out, const BigInteger num) {
 		std::string ans = num.toString();
 		out << ans;
 		return out;
 	}
 
-	static BigInteger valueOf(const long long num) {
+BigInteger BigInteger::valueOf(const long long num) {
 		return valueOf(std::to_string(num));
 	}
 
-	static BigInteger valueOf(const std::string str) {
+BigInteger BigInteger::valueOf(const std::string str) {
 		BigInteger newNum;
 		for (int i = (int)str.length() - 1; i >= 0; i -= cellSize) {
 			std::string newCell = "";
@@ -304,11 +292,11 @@ public:
 		return newNum;
 	}
 
-	static BigInteger pow(BigInteger value, long long ext) {
+BigInteger BigInteger::pow(BigInteger value, long long ext) {
 		if (ext < 0) {
 			throw 1;
 		}
-		BigInteger ans = valueOf(1);
+		BigInteger ans = ONE;
 		while (ext) {
 			if (ext & 1) {
 				ans *= value;
@@ -319,7 +307,7 @@ public:
 		return ans;
 	}
 
-	std::string toString() const {
+std::string BigInteger::toString() const {
 		std::string ans = "";
 		for (int i = 0; i < (int) value.size(); i++) {
 			std::string newStr = std::to_string(value[i]);
@@ -336,15 +324,14 @@ public:
 		return ans;
 	}
 
-	int toInt() const {
+int BigInteger::toInt() const {
 		return std::atoi(toString().c_str());
 	}
 
-	long long toLong() const {
+long long BigInteger::toLong() const {
 		return std::atoll(toString().c_str());
 	}
 
-	BigInteger abs() const {
+BigInteger BigInteger::abs() const {
 		return BigInteger { 1, value };
 	}
-};
