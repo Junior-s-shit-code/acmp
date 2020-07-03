@@ -21,7 +21,6 @@ public:
 	static const BigInteger ONE;
 	static const BigInteger TEN;
 
-
 	BigInteger();
 
 	BigInteger(const short &setSign, const std::vector <long long> &setValue);
@@ -32,41 +31,41 @@ public:
 
 	BigInteger operator-(BigInteger second);
 
-	BigInteger operator -= (const BigInteger second);
+	BigInteger operator-=(const BigInteger second);
 
-	BigInteger operator -() const;
+	BigInteger operator-() const;
 
-	BigInteger operator --();
+	BigInteger operator--();
 
-	BigInteger operator ++();
+	BigInteger operator++();
 
-	BigInteger operator --(int);
+	BigInteger operator--(int);
 
-	BigInteger operator ++(int);
+	BigInteger operator++(int);
 
-	BigInteger operator *(const BigInteger second);
+	BigInteger operator*(const BigInteger second);
 
-	BigInteger operator *= (const BigInteger second);
+	BigInteger operator*=(const BigInteger second);
 
-	BigInteger operator /(BigInteger second);
+	BigInteger operator/(BigInteger second);
 
-	BigInteger operator /= (const BigInteger second);
+	BigInteger operator/=(const BigInteger second);
 
-	BigInteger operator %(const BigInteger second);
+	BigInteger operator%(const BigInteger second);
 
-	BigInteger operator %= (const BigInteger second);
+	BigInteger operator%=(const BigInteger second);
 
-	bool operator >(const BigInteger second) const;
+	bool operator>(const BigInteger second) const;
 
-	bool operator >=(const BigInteger second) const;
+	bool operator>=(const BigInteger second) const;
 
-	bool operator <(const BigInteger second) const;
+	bool operator<(const BigInteger second) const;
 
-	bool operator <= (const BigInteger second) const;
+	bool operator<=(const BigInteger second) const;
 
-	bool operator ==(const BigInteger second) const;
+	bool operator==(const BigInteger second) const;
 
-	friend std::ostream &operator << (std::ostream &out, const BigInteger num);
+	friend std::ostream &operator<<(std::ostream &out, const BigInteger num);
 
 	static BigInteger valueOf(const long long num);
 
