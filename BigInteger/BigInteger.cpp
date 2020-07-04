@@ -14,7 +14,8 @@ BigInteger::BigInteger(const short &setSign, const std::vector <long long> &setV
 	: sign(setSign)
 	, value(setValue) {}
 
-BigInteger BigInteger::operator+(BigInteger second) {
+BigInteger BigInteger::operator+(const BigInteger second) {
+	BigInteger sec = second;
 	if (sign == second.sign && sign == 1) {
 		BigInteger newValue;
 		int n1 = (int)value.size();
@@ -47,7 +48,7 @@ BigInteger BigInteger::operator+(BigInteger second) {
 	} else if (sign == second.sign) {
 		return -(this->abs() + second.abs());
 	} else if (sign == -1) {
-		return second - this->abs();
+		return sec - this->abs();
 	} else {
 		return *this - second.abs();
 	}
@@ -58,14 +59,15 @@ BigInteger BigInteger::operator+=(const BigInteger second) {
 	return *this;
 }
 
-BigInteger BigInteger::operator-(BigInteger second) {
+BigInteger BigInteger::operator-(const BigInteger second) {
+	BigInteger sec = second;
 	if (sign == second.sign && sign == -1) {
 		return (second.abs() - (this->abs()));
 	} else if (sign == second.sign) {
 		if (*this == second) {
 			return ZERO;
 		} else if (*this < second) {
-			return -(second - *this);
+			return -(sec - *this);
 		} else {
 			BigInteger newValue = *this;
 			for (int i = 0; i < (int)newValue.value.size(); i++) {
