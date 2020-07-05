@@ -13,8 +13,8 @@ private:
 
 public:
 
-	static const long long mod = 1000000000;
-	static const int cellSize = 9;
+	static const long long MOD = 1000000000;
+	static const int CELL_SIZE = 9;
 
 	BigInteger()
 		: sign(1)
@@ -56,14 +56,14 @@ public:
 				if (i < n2) {
 					curSum += second.value[i];
 				}
-				long long extra = curSum / mod;
-				curSum %= mod;
+				long long extra = curSum / MOD;
+				curSum %= MOD;
 				if (i >= (int)newValue.value.size()) {
 					newValue.value.push_back(curSum);
 				} else {
 					newValue.value[i] += curSum;
-					extra += newValue.value[i] / mod;
-					newValue.value[i] %= mod;
+					extra += newValue.value[i] / MOD;
+					newValue.value[i] %= MOD;
 				}
 
 				if (extra > 0 && i + 1 >= (int)newValue.value.size()) {
@@ -104,7 +104,7 @@ public:
 						newValue.value[i] -= second.value[i];
 					}
 					if (newValue.value[i] < 0) {
-						newValue.value[i] += mod;
+						newValue.value[i] += MOD;
 						newValue.value[i + 1]--;
 					}
 				}
@@ -165,8 +165,8 @@ public:
 					newNum.value.push_back(0);
 				}
 				newNum.value[i + j] += value[i] * second.value[j];
-				long long extra = newNum.value[i + j] / mod;
-				newNum.value[i + j] %= mod;
+				long long extra = newNum.value[i + j] / MOD;
+				newNum.value[i + j] %= MOD;
 				if (extra > 0 && i + j + 1 == (int)newNum.value.size()) {
 					newNum.value.push_back(extra);
 				} else if (extra > 0) {
@@ -298,10 +298,10 @@ public:
 
 	static BigInteger valueOf(const std::string str) {
 		BigInteger newNum;
-		for (int i = (int)str.length() - 1; i >= 0; i -= cellSize) {
+		for (int i = (int)str.length() - 1; i >= 0; i -= CELL_SIZE) {
 			std::string newCell = "";
 
-			for (int j = (i - cellSize + 1 < 0 ? i : cellSize - 1); j >= 0; j--) {
+			for (int j = (i - CELL_SIZE + 1 < 0 ? i : CELL_SIZE - 1); j >= 0; j--) {
 				newCell += str[i - j];
 			}
 			if (newCell == "-") {
@@ -338,7 +338,7 @@ public:
 		for (int i = 0; i < (int)value.size(); i++) {
 			std::string newStr = std::to_string(value[i]);
 			if (i < (int)value.size() - 1) {
-				while ((int)newStr.length() < cellSize) {
+				while ((int)newStr.length() < CELL_SIZE) {
 					newStr.insert(newStr.begin(), '0');
 				}
 			}
