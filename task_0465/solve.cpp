@@ -359,11 +359,11 @@ int main() {
 	freopen("output.txt", "w", stdout);
 	int n;
 	scanf("%d", &n);
-	std::vector <BigInteger> a(n + 2, BigInteger::ONE());
-	for (int i = 2; i <= n + 1; i++) {
-		BigInteger newValue = (a[i - 1] + a[i - 2]);
-		a[i] = newValue;
+	std::vector <BigInteger> a(n + 1, BigInteger::ONE());
+	a[1] = BigInteger::valueOf("2");
+	for (int i = 2; i <= n; i++) {
+		a[i] = a[i - 1] + a[i - 2];
 	}
-	printf("%s", a[n + 1].toString().c_str());
+	printf("%s", a[n].toString().c_str());
 	return 0;
 }
