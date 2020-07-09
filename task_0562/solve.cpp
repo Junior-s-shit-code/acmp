@@ -38,7 +38,8 @@ int main() {
 
 	int ans = 0;
 	for (int from = 0; from < n; from++) {
-		std::vector <int> d = edges[from];
+		std::vector <int> d(n, INF);
+		d[from] = 0;
 		std::vector <bool> was(n, false);
 		std::priority_queue <Vertex> q;
 		q.push(Vertex { from, d[from] });
@@ -57,10 +58,7 @@ int main() {
 
 			was[min.v] = true;
 			for (int to = 0; to < n; to++) {
-				int cost = edges[from][to];
-				if (cost == INF) {
-					continue;
-				}
+				int cost = edges[min.v][to];
 				if (min.dist + cost < d[to]) {
 					d[to] = min.dist + cost;
 					q.push(Vertex { to, d[to] });
@@ -69,9 +67,7 @@ int main() {
 		}
 		for (int i = 0; i < n; i++) {
 			ans = std::max(ans, d[i]);
-			printf("%d ", d[i]);
 		}
-		printf("\n");
 	}
 	printf("%d", ans);
 	return 0;
