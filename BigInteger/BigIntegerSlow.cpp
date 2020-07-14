@@ -23,7 +23,7 @@ public:
 		: sign(setSign)
 		, value(setValue) {}
 
-	BigInteger operator+(BigInteger second) {
+	BigInteger operator+(BigInteger second) const {
 		if (sign == second.sign && sign == 1) {
 			BigInteger newValue;
 			int n1 = (int)value.size();
@@ -67,7 +67,7 @@ public:
 		return *this;
 	}
 
-	BigInteger operator-(BigInteger second) {
+	BigInteger operator-(BigInteger second) const {
 		if (sign == second.sign && sign == -1) {
 			return (second.abs() - (this->abs()));
 		} else if (sign == second.sign) {
@@ -133,7 +133,7 @@ public:
 		return ++ * this;
 	}
 
-	BigInteger operator*(const BigInteger second) {
+	BigInteger operator*(const BigInteger second) const {
 		const BigInteger null = valueOf(0);
 		if (*this == null || second == null) {
 			return null;
@@ -163,26 +163,22 @@ public:
 		return *this;
 	}
 
-	BigInteger operator/(BigInteger second) {
+	BigInteger operator/(BigInteger second) const {
 		short newSign = sign * second.sign;
 		short selfSign = sign;
-		sign = second.sign = 1;
 
-		if (second == valueOf("0")) {
-			sign = selfSign;
+		if (second.abs() == valueOf("0")) {
 			printf("\nError! divisor is null\n");
 			return valueOf("0");
-		} else if (second == valueOf("1")) {
-			sign = selfSign;
+		} else if (second.abs() == valueOf("1")) {
 			return *this;
-		} else if (*this < second) {
-			sign = selfSign;
+		} else if (this->abs() < second.abs()) {
 			return valueOf("0");
 		}
 
 		BigInteger curDividend;
 		std::string curDividendStr = "";
-		std::string secondStr = second.toString();
+		std::string secondStr = second.abs().toString();
 		int secLen = (int)secondStr.length();
 		int start = 0;
 
@@ -197,11 +193,11 @@ public:
 		std::string ans = "";
 		while (start >= 0) {
 			BigInteger curDivisor = valueOf("0");
-			BigInteger nextDivisor = second;
+			BigInteger nextDivisor = second.abs();
 			int curAns = 0;
 			while (nextDivisor <= curDividend) {
 				curDivisor = nextDivisor;
-				nextDivisor += second;
+				nextDivisor += second.abs();
 				curAns++;
 			}
 
@@ -221,7 +217,6 @@ public:
 		while ((int)ans.length() > 1 && ans[0] == '0') {
 			ans.erase(ans.begin());
 		}
-		sign = selfSign;
 		BigInteger newValue = valueOf(ans);
 		newValue.sign = newSign;
 		return newValue;

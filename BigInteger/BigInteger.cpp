@@ -14,7 +14,7 @@ BigInteger::BigInteger(const short &setSign, const std::vector <long long> &setV
 	: sign(setSign)
 	, value(setValue) {}
 
-BigInteger BigInteger::operator+(const BigInteger second) {
+BigInteger BigInteger::operator+(const BigInteger second) const{
 	BigInteger sec = second;
 	if (sign == second.sign && sign == 1) {
 		BigInteger newValue;
@@ -59,7 +59,7 @@ BigInteger BigInteger::operator+=(const BigInteger second) {
 	return *this;
 }
 
-BigInteger BigInteger::operator-(const BigInteger second) {
+BigInteger BigInteger::operator-(const BigInteger second) const {
 	BigInteger sec = second;
 	if (sign == second.sign && sign == -1) {
 		return (second.abs() - (this->abs()));
@@ -124,7 +124,7 @@ BigInteger BigInteger::operator++(int) {
 	return ++ * this;
 }
 
-BigInteger BigInteger::operator*(const BigInteger second) {
+BigInteger BigInteger::operator*(const BigInteger second) const {
 	if (*this == ZERO || second == ZERO) {
 		return ZERO;
 	}
@@ -153,28 +153,22 @@ BigInteger BigInteger::operator*=(const BigInteger second) {
 	return *this;
 }
 
-BigInteger BigInteger::operator/(const BigInteger second) {
-	BigInteger sec = second;
-	short newSign = sign * sec.sign;
-	short selfSign = sign;
-	sign = sec.sign = 1;
+BigInteger BigInteger::operator/(const BigInteger second) const {
+	short newSign = sign * second.sign;
 
-	if (sec == ZERO) {
-		sign = selfSign;
+	if (second.abs() == ZERO) {
 		printf("\nError! divisor is null\n");
 		return ZERO;
-	} else if (sec == ONE) {
-		sign = selfSign;
+	} else if (second.abs() == ONE) {
 		return *this;
-	} else if (*this < sec) {
-		sign = selfSign;
+	} else if (this->abs() < second.abs()) {
 		return ZERO;
 	}
 
-	std::string thisStr = this->toString();
+	std::string thisStr = this->abs().toString();
 	BigInteger curDividend;
 	std::string curDividendStr = "";
-	std::string secondStr = sec.toString();
+	std::string secondStr = second.abs().toString();
 	int secLen = (int)secondStr.length();
 	int start = 0;
 	int thisSize = (int)thisStr.length();
@@ -190,11 +184,11 @@ BigInteger BigInteger::operator/(const BigInteger second) {
 	std::string ans = "";
 	while (start < thisSize) {
 		BigInteger curDivisor = ZERO;
-		BigInteger nextDivisor = sec;
+		BigInteger nextDivisor = second.abs();
 		int curAns = 0;
 		while (nextDivisor <= curDividend) {
 			curDivisor = nextDivisor;
-			nextDivisor += sec;
+			nextDivisor += second.abs();
 			curAns++;
 		}
 
@@ -214,7 +208,6 @@ BigInteger BigInteger::operator/(const BigInteger second) {
 	while ((int)ans.length() > 1 && ans[0] == '0') {
 		ans.erase(ans.begin());
 	}
-	sign = selfSign;
 	BigInteger newValue = valueOf(ans);
 	newValue.sign = newSign;
 	return newValue;

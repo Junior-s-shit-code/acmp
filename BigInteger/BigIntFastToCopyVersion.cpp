@@ -153,7 +153,7 @@ public:
 		return ++ * this;
 	}
 
-	BigInteger operator*(const BigInteger second) {
+	BigInteger operator*(const BigInteger second) const {
 		if (*this == ZERO() || second == ZERO()) {
 			return ZERO();
 		}
@@ -182,28 +182,23 @@ public:
 		return *this;
 	}
 
-	BigInteger operator/(const BigInteger second) {
-		BigInteger sec = second;
-		short newSign = sign * sec.sign;
+	BigInteger operator/(const BigInteger second) const {
+		short newSign = sign * second.sign;
 		short selfSign = sign;
-		sign = sec.sign = 1;
 
-		if (sec == ZERO()) {
-			sign = selfSign;
+		if (second.abs() == ZERO()) {
 			printf("\nError! divisor is null\n");
 			return ZERO();
-		} else if (sec == ONE()) {
-			sign = selfSign;
+		} else if (second.abs() == ONE()) {
 			return *this;
-		} else if (*this < sec) {
-			sign = selfSign;
+		} else if (this->abs() < second.abs()) {
 			return ZERO();
 		}
 
-		std::string thisStr = this->toString();
+		std::string thisStr = this->abs().toString();
 		BigInteger curDividend;
 		std::string curDividendStr = "";
-		std::string secondStr = sec.toString();
+		std::string secondStr = second.abs().toString();
 		int secLen = (int)secondStr.length();
 		int start = 0;
 		int thisSize = (int)thisStr.length();
@@ -219,11 +214,11 @@ public:
 		std::string ans = "";
 		while (start < thisSize) {
 			BigInteger curDivisor = ZERO();
-			BigInteger nextDivisor = sec;
+			BigInteger nextDivisor = second.abs();
 			int curAns = 0;
 			while (nextDivisor <= curDividend) {
 				curDivisor = nextDivisor;
-				nextDivisor += sec;
+				nextDivisor += second.abs();
 				curAns++;
 			}
 
@@ -243,7 +238,6 @@ public:
 		while ((int)ans.length() > 1 && ans[0] == '0') {
 			ans.erase(ans.begin());
 		}
-		sign = selfSign;
 		BigInteger newValue = valueOf(ans);
 		newValue.sign = newSign;
 		return newValue;

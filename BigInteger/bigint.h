@@ -25,11 +25,11 @@ public:
 
 	BigInteger(const short &setSign, const std::vector <long long> &setValue);
 
-	BigInteger operator+(const BigInteger second);
+	BigInteger operator+(const BigInteger second) const;
 
 	BigInteger operator+=(const BigInteger second);
 
-	BigInteger operator-(const BigInteger second);
+	BigInteger operator-(const BigInteger second) const;
 
 	BigInteger operator-=(const BigInteger second);
 
@@ -43,11 +43,11 @@ public:
 
 	BigInteger operator++(int);
 
-	BigInteger operator*(const BigInteger second);
+	BigInteger operator*(const BigInteger second) const;
 
 	BigInteger operator*=(const BigInteger second);
 
-	BigInteger operator/(const BigInteger second);
+	BigInteger operator/(const BigInteger second) const;
 
 	BigInteger operator/=(const BigInteger second);
 
