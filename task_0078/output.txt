@@ -1,5 +1,1 @@
-1 --- prevBottles: 1, extra: 4, sum before: 11
-2 --- prevBottles: 2, extra: 5, sum before: 19
-3 --- prevBottles: 5, extra: 4, sum before: 39
-4 --- prevBottles: 11, extra: 6, sum before: 83
 83
