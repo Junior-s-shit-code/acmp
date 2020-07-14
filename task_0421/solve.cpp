@@ -72,7 +72,7 @@ struct Triangle {
         return edge;
     }
 
-    int getSignedSquared() {
+    int getSignedSquare() {
         int e12 = p1.squareDist(p2);
         int e23 = p2.squareDist(p3);
         int e31 = p3.squareDist(p1);
@@ -121,7 +121,7 @@ struct Triangle {
             return true;
         }
 
-        return this->getSignedSquared() == second.getSignedSquared();
+        return this->getSignedSquare() == second.getSignedSquare();
     }
 };
 
