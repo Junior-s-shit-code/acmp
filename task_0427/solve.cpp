@@ -15,8 +15,7 @@ int main() {
     long long curSum = 1;
     for (int i = 0; i < n; i++) {
         if (curSum < a[i]) {
-            printf("%lld", curSum);
-            return 0;
+            break;
         }
         curSum += a[i];
     }
