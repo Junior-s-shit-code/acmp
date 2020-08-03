@@ -12,11 +12,11 @@ bool isSame(const std::string& sample, const std::string& str, const int i) {
             break;
         }
         char c = str[newId];
-        if ((c == ' ' || c == 9 || c == '\n') && isPrevSpace) {
+        if ((c == ' ' || c == '\t' || c == '\n') && isPrevSpace) {
             extraId++;
             j--;
             continue;
-        } else if (c == ' ' || c == 9 || c == '\n') {
+        } else if (c == ' ' || c == '\t' || c == '\n') {
             c = ' ';
             isPrevSpace = true;
         } else {
@@ -42,10 +42,10 @@ int main() {
         scanf("%c", &c);
         if (c == '\n') {
             break;
-        } else if ((c == 9 || c == ' ') && !isPrevSpace) {
+        } else if ((c == '\t' || c == ' ') && !isPrevSpace) {
             sample += ' ';
             isPrevSpace = true;
-        } else if (c == 9 || c == ' ') {
+        } else if (c == '\t' || c == ' ') {
             continue;
         } else {
             sample += std::tolower(c);
