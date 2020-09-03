@@ -10,26 +10,25 @@ struct Point {
     int j;
 };
 
-inline void check(const int di, const int dj, const int curI, const int curJ, const std::vector <std::vector <bool>>& field,
-                  std::queue <Point> &q, std::vector <std::vector <int>>& len) {
-    const int newI = curI + di;
-    const int newJ = curJ + dj;
-    if (field[newI][newJ] && len[newI][newJ] > len[curI][curJ] + 1) {
-        len[newI][newJ] = len[curI][curJ] + 1;
-        q.push(Point{ newI, newJ });
-    }
-}
-
-void solve(const Point &start, const std::vector <std::vector <bool>>& field, std::vector <std::vector <int>>& len) {
+void bfs(const Point &start, const std::vector <std::vector <bool>> &field, std::vector <std::vector <int>> &len) {
     std::queue <Point> q;
     q.push(start);
     while (!q.empty()) {
         Point cur = q.front();
         q.pop();
-        check(1, 0, cur.i, cur.j, field, q, len);
-        check(-1, 0, cur.i, cur.j, field, q, len);
-        check(0, 1, cur.i, cur.j, field, q, len);
-        check(0, -1, cur.i, cur.j, field, q, len);
+        for (int di = -1; di <= 1; di++) {
+            for (int dj = -1; dj <= 1; dj++) {
+                if (di * di + dj * dj != 1) {
+                    continue;
+                }
+                int newI = cur.i + di;
+                int newJ = cur.j + dj;
+                if (field[newI][newJ] && len[newI][newJ] > len[cur.i][cur.j] + 1) {
+                    len[newI][newJ] = len[cur.i][cur.j] + 1;
+                    q.push(Point{ newI, newJ });
+                }
+            }
+        }
     }
 }
 
@@ -51,13 +50,13 @@ int main() {
             }
         }
     }
-    const int INF = 1000000000;
+    const int INF = (int)1e9;
     std::vector <std::vector <int>> lenTiger(sizeI + 2, std::vector <int>(sizeJ + 2, INF));
     lenTiger[tiger.i][tiger.j] = 0;
-    solve(tiger, field, lenTiger);
+    bfs(tiger, field, lenTiger);
     std::vector <std::vector <int>> len(sizeI + 2, std::vector <int>(sizeJ + 2, INF));
     len[2][2] = 0;
-    solve(Point{ 2, 2 }, field, len);
+    bfs(Point{ 2, 2 }, field, len);
     printf("%d\n", len[sizeI - 1][sizeJ - 1]);
     if (len[sizeI - 1][sizeJ - 1] < lenTiger[sizeI - 1][sizeJ - 1]) {
         printf("Yes");
