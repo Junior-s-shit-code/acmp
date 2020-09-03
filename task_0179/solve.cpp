@@ -54,8 +54,7 @@ public:
 				curSum %= MOD;
 				if (i >= (int)newValue.value.size()) {
 					newValue.value.push_back(curSum);
-				}
-				else {
+				} else {
 					newValue.value[i] += curSum;
 					extra += newValue.value[i] / MOD;
 					newValue.value[i] %= MOD;
@@ -63,20 +62,16 @@ public:
 
 				if (extra > 0 && i + 1 >= (int)newValue.value.size()) {
 					newValue.value.push_back(extra);
-				}
-				else if (extra > 0) {
+				} else if (extra > 0) {
 					newValue.value[i + 1] += extra;
 				}
 			}
 			return newValue;
-		}
-		else if (sign == second.sign) {
+		} else if (sign == second.sign) {
 			return -(this->abs() + second.abs());
-		}
-		else if (sign == -1) {
+		} else if (sign == -1) {
 			return second - this->abs();
-		}
-		else {
+		} else {
 			return *this - second.abs();
 		}
 	}
@@ -85,16 +80,13 @@ public:
 		BigInteger sec = second;
 		if (sign == second.sign && sign == -1) {
 			return (second.abs() - (this->abs()));
-		}
-		else if (sign == second.sign) {
+		} else if (sign == second.sign) {
 			if (*this == second) {
 				BigInteger zero = ZERO();
 				return zero;
-			}
-			else if (*this < second) {
+			} else if (*this < second) {
 				return -(sec - *this);
-			}
-			else {
+			} else {
 				BigInteger newValue = *this;
 				for (int i = 0; i < (int)newValue.value.size(); i++) {
 					if (i < (int)second.value.size()) {
@@ -116,11 +108,9 @@ public:
 				}
 				return BigInteger{ 1, ans };
 			}
-		}
-		else if (sign == -1) {
+		} else if (sign == -1) {
 			return -(this->abs() + second);
-		}
-		else {
+		} else {
 			return *this + second.abs();
 		}
 	}
@@ -145,8 +135,7 @@ public:
 				newNum.value[i + j] %= MOD;
 				if (extra > 0 && i + j + 1 == (int)newNum.value.size()) {
 					newNum.value.push_back(extra);
-				}
-				else if (extra > 0) {
+				} else if (extra > 0) {
 					newNum.value[i + j + 1] += extra;
 				}
 			}
@@ -167,8 +156,7 @@ public:
 
 		if (sign != second.sign) {
 			return sign == 1;
-		}
-		else {
+		} else {
 			return (sign == 1) == ((size1 > size2) || (size1 == size2 && str1 > str2));
 		}
 	}
@@ -258,6 +246,7 @@ int main() {
     freopen("output.txt", "w", stdout);
 	int n;
 	scanf("%d", &n);
-	printf("%s", (BigInteger::pow(BigInteger::valueOf("3"), n) + BigInteger::ONE()).toString().c_str());
+	BigInteger ans = BigInteger::pow(BigInteger::valueOf("3"), n) + BigInteger::ONE();
+	printf("%s", ans.toString().c_str());
     return 0;
 }
