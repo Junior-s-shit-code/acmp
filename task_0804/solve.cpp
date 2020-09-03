@@ -55,8 +55,9 @@ int main() {
     lenTiger[tiger.i][tiger.j] = 0;
     bfs(tiger, field, lenTiger);
     std::vector <std::vector <int>> len(sizeI + 2, std::vector <int>(sizeJ + 2, INF));
-    len[2][2] = 0;
-    bfs(Point{ 2, 2 }, field, len);
+    Point slave = Point{ 2, 2 };
+    len[slave.i][slave.j] = 0;
+    bfs(slave, field, len);
     printf("%d\n", len[sizeI - 1][sizeJ - 1]);
     if (len[sizeI - 1][sizeJ - 1] < lenTiger[sizeI - 1][sizeJ - 1]) {
         printf("Yes");
