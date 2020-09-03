@@ -1,9 +1,8 @@
 #include <stdio.h>
 #include <vector>
-#include <algorithm>
 #include <string>
-#include <cstdlib>
-#include <iostream>
+#include <algorithm>
+#include <cstdio>
 
 class BigInteger {
 
@@ -14,36 +13,30 @@ private:
 
 public:
 
-	static const long long mod = 1000000000;
-	static const int cellSize = 9;
+	static const long long MOD = 1000000000;
+	static const int CELL_SIZE = 9;
 
 	BigInteger()
 		: sign(1)
 		, value(0) {}
 
-	BigInteger(const short &setSign, const std::vector <long long> &setValue)
+	BigInteger(const short& setSign, const std::vector <long long>& setValue)
 		: sign(setSign)
 		, value(setValue) {}
-	
-	static BigInteger ZERO()  {
+
+	static BigInteger ZERO() {
 		return valueOf("0");
 	}
-	
-	static BigInteger ONE()   {
+
+	static BigInteger ONE() {
 		return valueOf("1");
 	}
 
-	static BigInteger TEN()  {
+	static BigInteger TEN() {
 		return valueOf("10");
 	}
-	
-	BigInteger operator=(const BigInteger second) {
-		sign = second.sign;
-		value = second.value;
-		return *this;
-	}
 
-	BigInteger operator+(const BigInteger second) const{
+	BigInteger operator+(const BigInteger second) const {
 		BigInteger sec = second;
 		if (sign == second.sign && sign == 1) {
 			BigInteger newValue;
@@ -57,55 +50,58 @@ public:
 				if (i < n2) {
 					curSum += second.value[i];
 				}
-				long long extra = curSum / mod;
-				curSum %= mod;
+				long long extra = curSum / MOD;
+				curSum %= MOD;
 				if (i >= (int)newValue.value.size()) {
 					newValue.value.push_back(curSum);
-				} else {
+				}
+				else {
 					newValue.value[i] += curSum;
-					extra += newValue.value[i] / mod;
-					newValue.value[i] %= mod;
+					extra += newValue.value[i] / MOD;
+					newValue.value[i] %= MOD;
 				}
 
 				if (extra > 0 && i + 1 >= (int)newValue.value.size()) {
 					newValue.value.push_back(extra);
-				} else if (extra > 0) {
+				}
+				else if (extra > 0) {
 					newValue.value[i + 1] += extra;
 				}
 			}
 			return newValue;
-		} else if (sign == second.sign) {
+		}
+		else if (sign == second.sign) {
 			return -(this->abs() + second.abs());
-		} else if (sign == -1) {
+		}
+		else if (sign == -1) {
 			return second - this->abs();
-		} else {
+		}
+		else {
 			return *this - second.abs();
 		}
-	}
-
-	BigInteger operator+=(const BigInteger second) {
-		*this = *this + second;
-		return *this;
 	}
 
 	BigInteger operator-(const BigInteger second)const {
 		BigInteger sec = second;
 		if (sign == second.sign && sign == -1) {
 			return (second.abs() - (this->abs()));
-		} else if (sign == second.sign) {
+		}
+		else if (sign == second.sign) {
 			if (*this == second) {
 				BigInteger zero = ZERO();
 				return zero;
-			} else if (*this < second) {
+			}
+			else if (*this < second) {
 				return -(sec - *this);
-			} else {
+			}
+			else {
 				BigInteger newValue = *this;
 				for (int i = 0; i < (int)newValue.value.size(); i++) {
 					if (i < (int)second.value.size()) {
 						newValue.value[i] -= second.value[i];
 					}
 					if (newValue.value[i] < 0) {
-						newValue.value[i] += mod;
+						newValue.value[i] += MOD;
 						newValue.value[i + 1]--;
 					}
 				}
@@ -118,43 +114,22 @@ public:
 				for (int i = 0; i <= end; i++) {
 					ans[i] = newValue.value[i];
 				}
-				return BigInteger { 1, ans };
+				return BigInteger{ 1, ans };
 			}
-		} else if (sign == -1) {
+		}
+		else if (sign == -1) {
 			return -(this->abs() + second);
-		} else {
+		}
+		else {
 			return *this + second.abs();
 		}
 	}
-
-	BigInteger operator-=(const BigInteger second) {
-		*this = *this - second;
-		return *this;
-	}
-
+	
 	BigInteger operator-() const {
-		return BigInteger { sign * -1, value };
+		return BigInteger{ sign * -1, value };
 	}
 
-	BigInteger operator--() {
-		*this = *this - ONE();
-		return *this;
-	}
-
-	BigInteger operator++() {
-		*this = *this + ONE();
-		return *this;
-	}
-
-	BigInteger operator--(int) {
-		return -- * this;
-	}
-
-	BigInteger operator++(int) {
-		return ++ * this;
-	}
-
-	BigInteger operator*(const BigInteger second) {
+	BigInteger operator*(const BigInteger second) const {
 		if (*this == ZERO() || second == ZERO()) {
 			return ZERO();
 		}
@@ -166,11 +141,12 @@ public:
 					newNum.value.push_back(0);
 				}
 				newNum.value[i + j] += value[i] * second.value[j];
-				long long extra = newNum.value[i + j] / mod;
-				newNum.value[i + j] %= mod;
+				long long extra = newNum.value[i + j] / MOD;
+				newNum.value[i + j] %= MOD;
 				if (extra > 0 && i + j + 1 == (int)newNum.value.size()) {
 					newNum.value.push_back(extra);
-				} else if (extra > 0) {
+				}
+				else if (extra > 0) {
 					newNum.value[i + j + 1] += extra;
 				}
 			}
@@ -182,88 +158,7 @@ public:
 		*this = *this * second;
 		return *this;
 	}
-
-	BigInteger operator/(const BigInteger second) {
-		BigInteger sec = second;
-		short newSign = sign * sec.sign;
-		short selfSign = sign;
-		sign = sec.sign = 1;
-
-		if (sec == ZERO()) {
-			sign = selfSign;
-			printf("\nError! divisor is null\n");
-			return ZERO();
-		} else if (sec == ONE()) {
-			sign = selfSign;
-			return *this;
-		} else if (*this < sec) {
-			sign = selfSign;
-			return ZERO();
-		}
-
-		std::string thisStr = this->toString();
-		BigInteger curDividend;
-		std::string curDividendStr = "";
-		std::string secondStr = sec.toString();
-		int secLen = (int)secondStr.length();
-		int start = 0;
-		int thisSize = (int)thisStr.length();
-
-		for (start = 0; start < thisSize; start++) {
-			curDividendStr += thisStr[start];
-			int curDivLen = (int)curDividendStr.length();
-			if ((int)curDivLen > (int)secLen || (curDivLen == secLen && curDivLen >= secLen)) {
-				break;
-			}
-		}
-		curDividend = valueOf(curDividendStr);
-		std::string ans = "";
-		while (start < thisSize) {
-			BigInteger curDivisor = ZERO();
-			BigInteger nextDivisor = sec;
-			int curAns = 0;
-			while (nextDivisor <= curDividend) {
-				curDivisor = nextDivisor;
-				nextDivisor += sec;
-				curAns++;
-			}
-
-			ans += std::to_string(curAns);
-			start++;
-			if (start < thisSize) {
-				curDividend -= curDivisor;
-				curDividendStr = curDividend.toString();
-				char c = thisStr[start];
-				if (!(curDividendStr == "0" && c == '0')) {
-					curDividendStr += thisStr[start];
-				}
-				curDividend = valueOf(curDividendStr);
-			}
-
-		}
-		while ((int)ans.length() > 1 && ans[0] == '0') {
-			ans.erase(ans.begin());
-		}
-		sign = selfSign;
-		BigInteger newValue = valueOf(ans);
-		newValue.sign = newSign;
-		return newValue;
-	}
-
-	BigInteger operator/=(const BigInteger second) {
-		*this = *this / second;
-		return *this;
-	}
-
-	BigInteger operator%(const BigInteger second) {
-		return *this - ((*this / second) * second);
-	}
-
-	BigInteger operator%=(const BigInteger second) {
-		*this = *this % second;
-		return *this;
-	}
-
+	
 	bool operator>(const BigInteger second) const {
 		std::string str1 = this->toString();
 		std::string str2 = second.toString();
@@ -272,11 +167,12 @@ public:
 
 		if (sign != second.sign) {
 			return sign == 1;
-		} else {
+		}
+		else {
 			return (sign == 1) == ((size1 > size2) || (size1 == size2 && str1 > str2));
 		}
 	}
-
+	
 	bool operator>=(const BigInteger second) const {
 		return (*this > second || *this == second);
 	}
@@ -288,7 +184,7 @@ public:
 	bool operator<=(const BigInteger second) const {
 		return !(*this > second);
 	}
-
+	
 	bool operator==(const BigInteger second) const {
 		return (sign == second.sign && value == second.value);
 	}
@@ -299,10 +195,10 @@ public:
 
 	static BigInteger valueOf(const std::string str) {
 		BigInteger newNum;
-		for (int i = (int)str.length() - 1; i >= 0; i -= cellSize) {
+		for (int i = (int)str.length() - 1; i >= 0; i -= CELL_SIZE) {
 			std::string newCell = "";
 
-			for (int j = (i - cellSize + 1 < 0 ? i : cellSize - 1); j >= 0; j--) {
+			for (int j = (i - CELL_SIZE + 1 < 0 ? i : CELL_SIZE - 1); j >= 0; j--) {
 				newCell += str[i - j];
 			}
 			if (newCell == "-") {
@@ -339,7 +235,7 @@ public:
 		for (int i = 0; i < (int)value.size(); i++) {
 			std::string newStr = std::to_string(value[i]);
 			if (i < (int)value.size() - 1) {
-				while ((int)newStr.length() < cellSize) {
+				while ((int)newStr.length() < CELL_SIZE) {
 					newStr.insert(newStr.begin(), '0');
 				}
 			}
@@ -351,36 +247,17 @@ public:
 		return ans;
 	}
 
-	int toInt() const {
-		return std::atoi(toString().c_str());
-	}
-
-	long long toLong() const {
-		return std::atoll(toString().c_str());
-	}
-
 	BigInteger abs() const {
-		return BigInteger { 1, value };
+		return BigInteger{ 1, value };
 	}
-
+	
 };
 
 int main() {
-	freopen("input.txt", "r", stdin);
-	freopen("output.txt", "w", stdout);
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
 	int n;
 	scanf("%d", &n);
-	if (n == 0) {
-		printf("2");
-	} else {
-		BigInteger sumToNext = BigInteger::ZERO();
-		BigInteger ans = BigInteger::valueOf("4");
-		const BigInteger TWO = BigInteger::valueOf("2");
-		for (int step = 1; step < n; step++) {
-			sumToNext += BigInteger::valueOf("3") + (sumToNext * TWO);
-		}
-		ans = sumToNext * TWO + BigInteger::valueOf("4");
-		printf("%s", ans.toString().c_str());
-	}
-	return 0;
+	printf("%s", (BigInteger::pow(BigInteger::valueOf("3"), n) + BigInteger::ONE()).toString().c_str());
+    return 0;
 }
