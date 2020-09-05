@@ -44,12 +44,7 @@ int main() {
     bool first = true;
     for (auto kv : ansCount) {
         for (int i = 0; i < kv.second; i++) {
-            if (first) {
-                first = false;
-            } else {
-                printf(" ");
-            }
-            printf("%d", kv.first);
+            printf("%d ", kv.first);
         }
     }
     return 0;
