@@ -3,20 +3,48 @@
 #include <string>
 #include <algorithm>
 
+std::string decode(const std::string str) {
+    int left = 0;
+    int right = (int)str.length() - 1;
+    int curGroupSize = 1;
+    std::string leftStr;
+    std::string rightStr;
+    while (left <= right) {
+        int curLen = std::min(curGroupSize, right - left + 1);
+        if (curGroupSize % 2 == 1) {
+            leftStr += str.substr(right - curLen + 1, curLen);
+            right -= curLen;
+        } else {
+            rightStr = str.substr(left, curLen) + rightStr;
+            left += curLen;
+        }
+        curGroupSize++;
+    }
+    return leftStr + rightStr;
+}
+
+std::vector <bool> prime(const int nWord) {
+    std::vector <bool> isPrime(nWord + 1, true);
+    isPrime[0] = isPrime[1] = false;
+    for (int i = 2; i <= nWord; i++) {
+        if (isPrime[i]) {
+            if (1LL * i * i <= nWord) {
+                for (int j = 1LL * i * i; j <= nWord; j += i) {
+                    isPrime[j] = false;
+                }
+            }
+        }
+    }
+    return isPrime;
+}
+
 int main() {
     freopen("input.txt", "r", stdin);
     freopen("output.txt", "w", stdout);
-    const int maxSize = 500000;
-    char buf[1 + maxSize];
+    char buf[1 + 500000];
     scanf("%s", &buf);
     std::string str(buf);
-    int nWord = 0;
 
-    for (int i = 0; i < (int)str.length(); i++) {
-        if ('A' <= str[i] && str[i] <= 'Z') {
-            nWord++;
-        }
-    }
     int n = 0;
     int curSize = 1;
     for (int i = 0; i < (int)str.length(); curSize++) {
@@ -28,37 +56,17 @@ int main() {
         }
     }
 
-    int left = 0;
-    int right = (int)str.length() - 1;
-    int curGroupSize = 1;
-    std::vector <std::string> a(n);
-    while (left <= right) {
-        int curLen = std::min(curGroupSize, right - left + 1);
-        if (curGroupSize % 2 == 1) {
-            a[curGroupSize / 2] = str.substr(right - curLen + 1, curLen);
-            right -= curLen;
-        } else {
-            a[n - curGroupSize / 2] = str.substr(left, curLen);
-            left += curLen;
+    std::string newStr = decode(str);
+
+    int nWord = 0;
+    for (int i = 0; i < (int)newStr.length(); i++) {
+        if ('A' <= newStr[i] && newStr[i] <= 'Z') {
+            nWord++;
         }
-        curGroupSize++;
     }
     
-    std::string newStr = "";
-    for (int i = 0; i < n; i++) {
-        newStr += a[i];
-    }
-    std::vector <bool> isPrime(nWord + 1, true);
-    isPrime[0] = isPrime[1] = false;
-    for (int i = 2; i <= nWord; i++) {
-        if (isPrime[i]) {
-            if (1LL * i * i <= nWord) {
-                for (long long j = 1LL * i * i; j <= nWord; j += i) {
-                    isPrime[j] = false;
-                }
-            }
-        }
-    }
+    std::vector <bool> isPrime = prime(nWord);
+
     int count = 1;
     bool isPrint = false;
     for (int i = 0; i < (int)newStr.length(); i++) {
