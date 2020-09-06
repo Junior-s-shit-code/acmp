@@ -23,7 +23,7 @@ std::string decode(const std::string str) {
     return leftStr + rightStr;
 }
 
-std::vector <bool> prime(const int nWord) {
+std::vector <bool> generatePrimeTill(const int nWord) {
     std::vector <bool> isPrime(nWord + 1, true);
     isPrime[0] = isPrime[1] = false;
     for (int i = 2; i <= nWord; i++) {
@@ -45,17 +45,6 @@ int main() {
     scanf("%s", &buf);
     std::string str(buf);
 
-    int n = 0;
-    int curSize = 1;
-    for (int i = 0; i < (int)str.length(); curSize++) {
-        if (i < (int)str.length()) {
-            n++;
-            i += curSize;
-        } else {
-            break;
-        }
-    }
-
     std::string newStr = decode(str);
 
     int nWord = 0;
@@ -65,7 +54,7 @@ int main() {
         }
     }
     
-    std::vector <bool> isPrime = prime(nWord);
+    std::vector <bool> isPrime = generatePrimeTill(nWord);
 
     int count = 1;
     bool isPrint = false;
