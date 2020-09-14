@@ -1,17 +1,5 @@
 #include <stdio.h>
-#include <algorithm>
 #include <vector>
-
-inline int popCount(int value) {
-    int ans = 0;
-    while (value) {
-        if (value & 1) {
-            ans++;
-        }
-        value >>= 1;
-    }
-    return ans;
-}
 
 int main() {
     freopen("input.txt", "r", stdin);
@@ -39,12 +27,13 @@ int main() {
             }
         }
         if (isOk) {
-            int curBest = popCount(code);
+            int curBest = __builtin_popcount(code);
             if (curBest < best) {
                 best = curBest;
-                bestCount = 1;
+                bestCount = 0;
                 bestCode = code;
-            } else if (curBest == best) {
+            }
+            if (curBest == best) {
                 bestCount++;
             }
         }
@@ -52,8 +41,8 @@ int main() {
 
     printf("%d %d\n", best, bestCount);
     for (int i = 0; i < nStation; i++) {
-        if ((bestCode & (1 << i)) == 1) {
-            printf("%d", i + 1);
+        if (bestCode & (1 << i)) {
+            printf("%d ", i + 1);
         }
     }
     return 0;
