@@ -9,11 +9,11 @@ struct PreparedData {
 
     double frequency;
 
-    static PreparedData read() {
+    static PreparedData read(const int id) {
         char c;
         double frequency;
         scanf(" %c %lf", &c, &frequency);
-        return { 0, frequency };
+        return { id, frequency };
     }
 };
 
@@ -38,22 +38,21 @@ int main() {
     scanf("%d %d", &n, &m);
     std::vector <PreparedData> prepared(n);
     for (int i = 0; i < n; i++) {
-        prepared[i] = PreparedData::read();
-        prepared[i].id = i;
+        prepared[i] = PreparedData::read(i);
     }
     std::sort(prepared.begin(), prepared.end(), [](const PreparedData &left, const PreparedData &right) {
         return left.frequency > right.frequency;
     });
-    char buf[1 + (int)1e5];
+    char buf[1 + (int)100000];
     scanf("%s", &buf);
     std::string str(buf);
-    const int SIZE = 26;
-    std::vector <int> count(SIZE, 0);
+    const int SIZE_ALPHABET = 26;
+    std::vector <int> count(SIZE_ALPHABET, 0);
     for (int i = 0; i < (int)str.length(); i++) {
         count[str[i] - 'a']++;
     }
-    std::vector <RawData> raw(SIZE);
-    for (int i = 0; i < SIZE; i++) {
+    std::vector <RawData> raw(SIZE_ALPHABET);
+    for (int i = 0; i < SIZE_ALPHABET; i++) {
         raw[i] = RawData{ (char) ('a' + i), 1.0 * count[i] / (int)str.length() };
     }
     std::sort(raw.begin(), raw.end(), [](const RawData &left, const RawData &right) {
