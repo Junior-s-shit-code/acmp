@@ -43,7 +43,7 @@ int main() {
     std::sort(prepared.begin(), prepared.end(), [](const PreparedData &left, const PreparedData &right) {
         return left.frequency > right.frequency;
     });
-    char buf[1 + (int)100000];
+    char buf[1 + 100000];
     scanf("%s", &buf);
     std::string str(buf);
     const int SIZE_ALPHABET = 26;
