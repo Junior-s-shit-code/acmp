@@ -23,32 +23,32 @@ struct Rocket {
 int main() {
     freopen("input.txt", "r", stdin);
     freopen("output.txt", "w", stdout);
-    std::vector <Rocket> r(4);
-    long long FACTOR = 1;
+    std::vector <Rocket> rocket(4);
+    long long speedProd = 1;
     for (int i = 0; i < 4; i++) {
-        r[i] = Rocket::read(i);
-        FACTOR *= r[i].speed;
+        rocket[i] = Rocket::read(i);
+        speedProd *= rocket[i].speed;
     }
     long long moveTime, dist;
     scanf("%lld %lld", &moveTime, &dist);
-    moveTime *= FACTOR;
-    dist *= FACTOR;
+    moveTime *= speedProd;
+    dist *= speedProd;
     for (int i = 0; i < 4; i++) {
-        r[i].startTime *= FACTOR;
+        rocket[i].startTime *= speedProd;
     }
 
     for (int i = 0; i < 4; i++) {
-        r[i].impactTime = r[i].startTime + dist / r[i].speed;;
+        rocket[i].impactTime = rocket[i].startTime + dist / rocket[i].speed;;
     }
 
-    std::sort(r.begin(), r.end(), [](const Rocket &left, const Rocket &right) {
+    std::sort(rocket.begin(), rocket.end(), [](const Rocket &left, const Rocket &right) {
         return left.impactTime < right.impactTime;
     });
     for (int i = 1; i < 4; i++) {
-        long long diff = r[i].impactTime - r[i - 1].impactTime;
-        int k = ((r[i].id & 1) == (r[i - 1].id & 1)) ? 2 : 1;
-        if (diff < moveTime * k) {
-            if (i < 3 && k == 2 && r[i].impactTime == r[i + 1].impactTime && diff >= moveTime) {
+        long long diff = rocket[i].impactTime - rocket[i - 1].impactTime;
+        int nMoves = ((rocket[i].id & 1) == (rocket[i - 1].id & 1)) ? 2 : 1;
+        if (diff < moveTime * nMoves) {
+            if (i < 3 && nMoves == 2 && rocket[i].impactTime == rocket[i + 1].impactTime && diff >= moveTime) {
                 i++;
             }
             printf("%d", i);
