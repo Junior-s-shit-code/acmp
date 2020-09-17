@@ -3,7 +3,7 @@
 #include <vector>
 #include <algorithm>
 
-std::vector <int> prefix_function(std::string &str) {
+std::vector<int> getPrefixFunction(std::string &str) {
     int n = (int)str.length();
     std::vector <int> p(n);
     for (int i = 1; i < n; i++) {
@@ -23,12 +23,12 @@ int main() {
     freopen("input.txt", "r", stdin);
     freopen("output.txt", "w", stdout);
     char buf[1 + 50000];
-    char buf2[1 + 50000];
-    scanf("%s %s", &buf, &buf2);
+    scanf("%s", &buf);
     std::string str(buf);
-    std::string sample(buf2);
+    scanf("%s", &buf);
+    std::string sample(buf);
     std::string string = sample + "#" + str;
-    std::vector <int> p = prefix_function(string);
+    std::vector<int> p = getPrefixFunction(string);
     int rightLen = p[(int)p.size() - 1];
     std::string toEqual = str.substr((int)str.length() - rightLen, rightLen);
     std::string toReverse = str.substr(0, (int)str.length() - rightLen);
