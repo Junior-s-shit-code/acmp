@@ -5,7 +5,7 @@
 
 std::vector<int> getPrefixFunction(std::string &str) {
     int n = (int)str.length();
-    std::vector <int> p(n);
+    std::vector<int> p(n);
     for (int i = 1; i < n; i++) {
         int j = p[i - 1];
         while (j > 0 && str[i] != str[j]) {
