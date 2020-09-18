@@ -205,5 +205,5 @@ int main() {
 	scanf("%d", &n);
 	BigInteger ans = BigInteger::pow(BigInteger::valueOf("45"), n);
 	printf("%s", ans.toString().c_str());
-    return 0;
+	return 0;
 }
