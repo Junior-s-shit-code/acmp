@@ -71,7 +71,7 @@ int main() {
     freopen("input.txt", "r", stdin);
     freopen("output.txt", "w", stdout);
     int sizeI, sizeJ;
-	scanf("%d %d", &sizeI, &sizeJ);
+    scanf("%d %d", &sizeI, &sizeJ);
     int sum = 0;
     std::vector<std::vector<int>> field(sizeI + 2, std::vector<int>(sizeJ + 2, 0));
     for (int i = 1; i <= sizeI; i++) {
