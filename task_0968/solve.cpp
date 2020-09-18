@@ -12,20 +12,20 @@ int main() {
     scanf("%s", &buf);
     std::string str2(buf);
     const int ALPHABET_SIZE = 26;
-    std::vector<int> a(ALPHABET_SIZE, 0);
-    std::vector<int> b(ALPHABET_SIZE, 0);
+    std::vector<int> countSymbols1(ALPHABET_SIZE, 0);
+    std::vector<int> countSymbols2(ALPHABET_SIZE, 0);
     int n = (int)str1.length();
 
     for (int i = 0; i < n; i++) {
-        a[str1[i] - 'a']++;
-        b[str2[i] - 'a']++;
+        countSymbols1[str1[i] - 'a']++;
+        countSymbols2[str2[i] - 'a']++;
     }
     long long ans = 0;
     for (int i = 0; i < ALPHABET_SIZE; i++) {
         long long curSum = 0;
         for (int j = 0; j < ALPHABET_SIZE; j++) {
             int diff = std::abs(i - j);
-            curSum += 1LL * a[i] * b[j] * std::min(diff, 26 - diff);
+            curSum += 1LL * countSymbols1[i] * countSymbols2[j] * std::min(diff, 26 - diff);
         }
         ans += curSum * n;
     }
