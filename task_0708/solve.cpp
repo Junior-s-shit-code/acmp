@@ -2,14 +2,7 @@
 #include <vector>
 #include <algorithm>
 
-struct Point {
-
-    int i;
-
-    int j;
-};
-
-void moveRabbit(const int &sizeI, const int &sizeJ, int &ansRabbits, std::vector<std::vector<int>> &field) {
+int moveRabbit(const int &sizeI, const int &sizeJ, std::vector<std::vector<int>> &field) {
     int curJ = 1;
     int maxShrub = field[1][1];
     for (int j = 1; j <= sizeJ; j++) {
@@ -21,68 +14,63 @@ void moveRabbit(const int &sizeI, const int &sizeJ, int &ansRabbits, std::vector
     int ans = maxShrub;
     field[1][curJ] = 0; 
     for (int curI = 2; curI <= sizeI; curI++) {
-        int right = field[curI][curJ + 1];
-        int mid = field[curI][curJ];
-        int left = field[curI][curJ - 1];
-        if (curJ + 1 <= sizeJ && right >= mid && right >= left) { 
-            field[curI][curJ + 1] = 0;
-            ans += right;
-            curJ = curJ + 1;
-        } else if (mid >= right && mid >= left) {
-            field[curI][curJ] = 0;
-            ans += mid;
-        } else {
-            field[curI][curJ - 1] = 0;
-            ans += left;
-            curJ = curJ - 1;
+        int dj;
+        int maxValue = -1;
+        for (int d = -1; d <= 1; d++) {
+            if (curJ + d <= sizeJ && field[curI][curJ + d] >= maxValue) {
+                maxValue = field[curI][curJ + d];
+                dj = d;
+            }
         }
+        ans += maxValue;
+        curJ = curJ + dj;
+        field[curI][curJ] = 0;
     }
-    ansRabbits += ans;
+    return ans;
 }
 
-void moveHamster(const int &sizeI, const int &sizeJ, int &ansHamsters, std::vector<std::vector<int>> &field) {
-    std::vector<std::vector<int>> a(sizeI + 2, std::vector<int>(sizeJ + 2, 0));
-    std::vector<std::vector<Point>> prev(sizeI + 2, std::vector<Point>(sizeJ + 2, Point{ -1, -1 }));
+int moveHamster(const int &sizeI, const int &sizeJ, std::vector<std::vector<int>> &field) {
+    std::vector<std::vector<int>> bestWay(sizeI + 2, std::vector<int>(sizeJ + 2, 0));
     for (int j = 1; j <= sizeJ; j++) {
-        a[sizeI][j] = field[sizeI][j];
+        bestWay[sizeI][j] = field[sizeI][j];
     }
     for (int i = sizeI - 1; i >= 1; i--) {
         for (int j = 1; j <= sizeJ; j++) {
-            int left = a[i + 1][j - 1];
-            int mid = a[i + 1][j];
-            int right = a[i + 1][j + 1];
-            if (right >= mid && right >= left) {
-                a[i][j] = field[i][j] + right;
-                prev[i][j] = Point{ i + 1, j + 1 };
-            } else if (mid >= right && mid >= left) {
-                a[i][j] = field[i][j] + mid;
-                prev[i][j] = Point{ i + 1, j };
-            } else {
-                a[i][j] = field[i][j] + left;
-                prev[i][j] = Point{ i + 1, j - 1 };
+            bestWay[i][j] = field[i][j] + std::max({ 
+                bestWay[i + 1][j - 1],
+                bestWay[i + 1][j],
+                bestWay[i + 1][j + 1] 
+            });
+        }
+    }
+
+    int curJ = 0;
+    int ans = 0;
+    for (int j = 1; j <= sizeJ; j++) {
+        if (bestWay[1][j] >= ans) {
+            ans = bestWay[1][j];
+            curJ = j;
+        }
+    }
+    
+    for (int curI = 1; curI <= sizeI; curI++) {
+        for (int dj = 1; dj >= -1; dj--) {
+            if (curJ + dj <= sizeJ &&
+                bestWay[curI][curJ] - field[curI][curJ] == bestWay[curI + 1][curJ + dj]) {
+                field[curI][curJ] = 0;
+                curJ += dj;
+                break;
             }
         }
     }
-    int startJ = 0;
-    int ans = 0;
-    for (int j = 1; j <= sizeJ; j++) {
-        if (a[1][j] >= ans) {
-            ans = a[1][j];
-            startJ = j;
-        }
-    }
-    ansHamsters += ans;
-    Point toNull = { 1, startJ };
-    while (!(toNull.i == -1 || toNull.j == -1)) {
-        field[toNull.i][toNull.j] = 0;
-        toNull = prev[toNull.i][toNull.j];
-    }
+
+    return ans;
 }
 
 int main() {
     freopen("input.txt", "r", stdin);
     freopen("output.txt", "w", stdout);
-	int sizeI, sizeJ;
+    int sizeI, sizeJ;
 	scanf("%d %d", &sizeI, &sizeJ);
     int sum = 0;
     std::vector<std::vector<int>> field(sizeI + 2, std::vector<int>(sizeJ + 2, 0));
@@ -96,9 +84,9 @@ int main() {
     int ansRabbits = 0, ansHamsters = 0;
     for (int move = 0; ansRabbits + ansHamsters < sum; move = (move + 1) % 2) {
         if (move == 0) {
-            moveRabbit(sizeI, sizeJ, ansRabbits, field);
+            ansRabbits += moveRabbit(sizeI, sizeJ, field);
         } else {
-            moveHamster(sizeI, sizeJ, ansHamsters, field);
+            ansHamsters += moveHamster(sizeI, sizeJ, field);
         }
     }
     printf("%d %d", ansRabbits, ansHamsters);
