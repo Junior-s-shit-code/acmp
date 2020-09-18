@@ -23,7 +23,7 @@ struct Rocket {
 int main() {
     freopen("input.txt", "r", stdin);
     freopen("output.txt", "w", stdout);
-    std::vector <Rocket> rocket(4);
+    std::vector<Rocket> rocket(4);
     long long speedProd = 1;
     for (int i = 0; i < 4; i++) {
         rocket[i] = Rocket::read(i);
