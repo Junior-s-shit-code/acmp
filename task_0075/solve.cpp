@@ -199,8 +199,8 @@ public:
 };
 
 int main() {
-    freopen("input.txt", "r", stdin);
-    freopen("output.txt", "w", stdout);
+	freopen("input.txt", "r", stdin);
+	freopen("output.txt", "w", stdout);
 	int n;
 	scanf("%d", &n);
 	BigInteger ans = BigInteger::pow(BigInteger::valueOf("45"), n);
