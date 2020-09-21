@@ -12,7 +12,7 @@ int main() {
 		scanf("%d", &a[i]);
 	}
 	const int INF = 2000000 + 1;
-	std::vector<std::vector<int>> minScore(n, std::vector<int> (n));
+	std::vector<std::vector<int>> minScore(n, std::vector<int>(n));
 	for (int len = 2; len <= n; len++) {
 		for (int left = 0; left + len - 1 < n; left++) {
 			int right = left + len - 1;
