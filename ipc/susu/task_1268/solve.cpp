@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <vector>
 
+const int SIZE = 7;
+
 std::vector<int> createPlayerField() {
-    std::vector<int> a(7, 3);
-    a[6] = 0;
+    std::vector<int> a(SIZE, 3);
+    a[SIZE - 1] = 0;
     return a;
 }
 
@@ -21,21 +23,21 @@ void moveOneHalf(int &index, int &stones, const int maxIndex, std::vector<int> &
     }
 }
 
-bool move(int index, std::vector<int> &p1, std::vector<int> &p2) {
+bool isMoveAgain(int index, std::vector<int> &p1, std::vector<int> &p2) {
     int stones = p1[index];
     p1[index] = 0;
     index++;
     while (stones > 0) {
-        moveOneHalf(index, stones, 7, p1);
-        int rIndex = 6 - index;
-        if (index == 7) {
+        moveOneHalf(index, stones, SIZE, p1);
+        int rIndex = SIZE - index - 1;
+        if (index == SIZE) {
             return true;
         } else if (p1[index - 1] == 1 && p2[rIndex] != 0) {
             p1[index - 1] = 0;
-            p1[6] += p2[rIndex] + 1;
+            p1[SIZE - 1] += p2[rIndex] + 1;
             p2[rIndex] = 0;
         }
-        moveOneHalf(index, stones, 6, p2);
+        moveOneHalf(index, stones, SIZE - 1, p2);
     }
     return false;
 }
@@ -43,7 +45,6 @@ bool move(int index, std::vector<int> &p1, std::vector<int> &p2) {
 int main() {
     freopen("input.txt", "r", stdin);
     freopen("output.txt", "w", stdout);
-    const int SIZE = 7;
     int n;
     scanf("%d", &n);
     std::vector<int> a(n);
@@ -54,11 +55,11 @@ int main() {
         int start;
         scanf("%d", &start);
         if (isPlayerMove) {
-            if (move(start - 1, player1, player2)) {
+            if (isMoveAgain(start - 1, player1, player2)) {
                 continue;
             }
         } else {
-            if (move(start - 1, player2, player1)) {
+            if (isMoveAgain(start - 1, player2, player1)) {
                 continue;
             }
         }
