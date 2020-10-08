@@ -3,6 +3,10 @@
 #include <algorithm>
 #include <queue>
 
+const int INF = (int)1e9;
+const int WALL = -1;
+const int WAY = 0;
+
 struct Point {
     
     int i;
@@ -16,10 +20,7 @@ struct Point {
     }
 };
 
-int bfs(const int startI, const int startJ, const int sizeI, const int sizeJ, const std::vector<std::vector<int>> &a) {
-    const int INF = (int)1e9;
-    const int WALL = -1;
-    const int WAY = 0;
+int bfs(const int startI, const int startJ, const int sizeI, const int sizeJ, const std::vector<std::vector<int>> &field) {
     std::vector<std::vector<int>> len(sizeI + 2, std::vector<int>(sizeJ + 2, INF));
     std::queue<Point> q;
     q.push(Point{ startI, startJ });
@@ -34,9 +35,9 @@ int bfs(const int startI, const int startJ, const int sizeI, const int sizeJ, co
                 }
                 int newI = cur.i + di;
                 int newJ = cur.j + dj;
-                if (a[newI][newJ] != WALL && len[newI][newJ] > len[cur.i][cur.j] + 1) {
+                if (field[newI][newJ] != WALL && len[newI][newJ] > len[cur.i][cur.j] + 1) {
                     len[newI][newJ] = len[cur.i][cur.j] + 1;
-                    if (a[newI][newJ] == WAY) {
+                    if (field[newI][newJ] == WAY) {
                         q.push(Point{ newI, newJ });
                     }
                 }
@@ -46,8 +47,8 @@ int bfs(const int startI, const int startJ, const int sizeI, const int sizeJ, co
     int ans = 0;
     for (int i = 1; i <= sizeI; i++) {
         for (int j = 1; j <= sizeJ; j++) {
-            if (a[i][j] > 0) {
-                ans += std::max(0, a[i][j] - len[i][j] + 1);
+            if (field[i][j] > 0) {
+                ans += std::max(0, field[i][j] - len[i][j] + 1);
             }
         }
     }
@@ -59,7 +60,7 @@ int main() {
     freopen("output.txt", "w", stdout);
     int sizeI, sizeJ;
     scanf("%d %d", &sizeI, &sizeJ);
-    std::vector<std::vector<int>> field(sizeI + 2, std::vector<int>(sizeJ + 2, -1));
+    std::vector<std::vector<int>> field(sizeI + 2, std::vector<int>(sizeJ + 2, WALL));
     for (int i = 1; i <= sizeI; i++) {
         for (int j = 1; j <= sizeJ; j++) {
             scanf("%d", &field[i][j]);
@@ -70,7 +71,7 @@ int main() {
     int ansJ;
     for (int i = 1; i <= sizeI; i++) {
         for (int j = 1; j <= sizeJ; j++) {
-            if (field[i][j] == 0) {
+            if (field[i][j] == WAY) {
                 int value = bfs(i, j, sizeI, sizeJ, field);
                 if (value > bestSum) {
                     bestSum = value;
