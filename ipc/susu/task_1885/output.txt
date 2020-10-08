@@ -1,0 +1,34 @@
+left: 1, len: 1
+str: b
+---
+left: 2, len: 1
+str: a
+---
+left: 0, len: 3
+str: aba
+---
+left: 3, len: 1
+str: c
+---
+left: 4, len: 1
+str: a
+---
+left: 2, len: 3
+str: aca
+---
+left: 5, len: 1
+str: b
+---
+left: 1, len: 5
+str: bacab
+---
+left: 6, len: 1
+str: a
+---
+left: 4, len: 3
+str: aba
+---
+left: 0, len: 7
+str: abacaba
+---
+7
