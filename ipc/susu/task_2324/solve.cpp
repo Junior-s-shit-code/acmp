@@ -1,9 +1,6 @@
 #include <stdio.h>
 #include <algorithm>
 #include <vector>
-#include <unordered_set>
-#include <set>
-
 
 int main() {
 	freopen("input.txt", "r", stdin);
