@@ -72,7 +72,7 @@ long long getPriority(
             for (int iEvent = 0; iEvent + 1 < 2 * nRouters; iEvent++) {
                 if (routers[events[iEvent].iRouter].leftTop.i <= iLine[i] &&
                     iLine[i + 1] <= routers[events[iEvent].iRouter].rightBot.i
-                    ) {
+                ) {
                     countRouters += events[iEvent].type;
                 }
                 if (events[iEvent].j < events[iEvent + 1].j && countRouters > 0) {
