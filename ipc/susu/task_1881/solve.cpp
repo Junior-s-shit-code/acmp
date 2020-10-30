@@ -28,7 +28,7 @@ int main() {
 		if (limit  >= 0) {
 			printf("%d ", i + 1);
 		}
-		limit -= diff[i]; //limit += (diff[i] * -1)
+		limit -= diff[i];
 	}
 	return 0;
 }
