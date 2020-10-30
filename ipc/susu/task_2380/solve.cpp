@@ -4,7 +4,7 @@
 #include <unordered_set>
 
 long long gcd(long long a, long long b) {
-    while (b) {
+    while (b > 0) {
         a %= b;
         std::swap(a, b);
     }
@@ -14,10 +14,11 @@ long long gcd(long long a, long long b) {
 int main() {
     freopen("input.txt", "r", stdin);
     freopen("output.txt", "w", stdout);
+    const int MAX_VALUES = 64;
     int n;
     scanf("%d", &n);
     std::unordered_set<long long> set;
-    std::vector<long long> a(64, 0);
+    std::vector<long long> a(MAX_VALUES, 0);
     int iElement = 0;
     int left = 0;
     for (int i = 0; i < n; i++) {
