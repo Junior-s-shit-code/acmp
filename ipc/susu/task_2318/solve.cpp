@@ -4,19 +4,33 @@
 int main() {
 	freopen("input.txt", "r", stdin);
 	freopen("output.txt", "w", stdout);
-	int a, b, c, d;
-	scanf("%d %d %d %d", &a, &b, &c, &d);
+	int start1, end1, start2, end2;
+	scanf("%d %d %d %d", &start1, &end1, &start2, &end2);
 	int ans;
-	if (((c <= a && a <= d) || (c >= a && a >= d)) && ((a < b && c < d) || (a > b && c > d))) {
-		if ((c <= b && b <= d) || (c >= b && b >= d)) {
-			ans = std::abs(a - c) + std::abs(b - a) + 2;
+	if (((start2 <= start1 && start1 <= end2) ||
+		 (start1 <= start2 && end2 <= start1)) &&
+		((start1 < end1 && start2 < end2) ||
+		 (end1 < start1 && end2 < start2))
+		) {
+		if ((start2 <= end1 && end1 <= end2) ||
+			(end1 <= start2 && end2 <= end1)
+			) {
+			ans = 
+				std::abs(start1 - start2) + 
+				std::abs(end1 - start1) + 2;
 		} else {
-			ans = std::abs(a - c) + std::abs(d - a) + std::abs(b - d) + 3;
+			ans = 
+				std::abs(start1 - start2) + 
+				std::abs(end2 - start1) +
+				std::abs(end1 - end2) + 3;
 		}
 	} else {
-		ans = std::abs(d - c) + std::abs(a - d) + std::abs(b - a) + 3;
+		ans = 
+			std::abs(end2 - start2) + 
+			std::abs(start1 - end2) + 
+			std::abs(end1 - start1) + 3;
 	}
-	if (a == d) {
+	if (start1 == end2) {
 		ans--;
 	}
 	printf("%d", ans);
