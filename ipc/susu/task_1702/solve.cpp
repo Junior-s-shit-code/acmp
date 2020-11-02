@@ -27,8 +27,8 @@ int main() {
     long long ans = LIMIT;
     while (true) {
         bool isAdd = false;
-        const int aSize = (int)defaultNumbers.size();
-        const int setSize = (int)allNumbers.size();
+        const int nDefaultNumbers = (int)defaultNumbers.size();
+        const int nAllNumbers = (int)allNumbers.size();
         int i = 0;
         for (long long item : allNumbers) {
             if (num <= item && item < ans) {
@@ -36,13 +36,14 @@ int main() {
             }
             for (long long mult : defaultNumbers) {
                 if (item <= LIMIT / mult && item * mult < ans &&
-                    allNumbers.find(item * mult) == allNumbers.end()) {
+                    allNumbers.find(item * mult) == allNumbers.end()
+                ) {
                     allNumbers.insert(item * mult);
                     isAdd = true;
                 }
             }
             i++;
-            if (i >= setSize) {
+            if (i >= nAllNumbers) {
                 break;
             }
         }
