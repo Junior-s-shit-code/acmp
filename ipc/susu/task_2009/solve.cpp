@@ -10,7 +10,7 @@ int main() {
     int n;
     scanf("%d", &n);
     std::stack<long long> s;
-    long long curK = 1;
+    long long curCoefficient = 1;
     long long ans = 0;
     bool was = false;
     for (int i = 0; i < n * 2; i++) {
@@ -21,14 +21,14 @@ int main() {
             long long value;
             scanf("%lld", &value);
             s.push(value);
-            curK *= value;
+            curCoefficient *= value;
             was = false;
         } else {
             if (!was) {
-                ans += curK;
+                ans += curCoefficient;
             }
             was = true;
-            curK /= s.top();
+            curCoefficient /= s.top();
             s.pop();
         }
     }
