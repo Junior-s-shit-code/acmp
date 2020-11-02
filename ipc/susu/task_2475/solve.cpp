@@ -16,7 +16,7 @@ struct Sensor {
 		return Sensor{ i,j, dist};
 	}
 
-	bool isIntersectsWith(const Sensor &second) const{
+	bool intersectsWith(const Sensor &second) const{
 		int di = i - second.i;
 		int dj = j - second.j;
 		return di * di + dj * dj <= (dist + second.dist) * (dist + second.dist);
@@ -30,20 +30,20 @@ void dfs(const int v,
 		 const std::vector<Sensor> &sensors,
 		 std::vector<bool> &was) {
 	was[v] = true;
-	if (sensors[v].isIntersectsWith(Sensor{ 0, sensors[v].j, 0 })) {
+	if (sensors[v].intersectsWith(Sensor{ 0, sensors[v].j, 0 })) {
 		top = true;
 	} 
-	if (sensors[v].isIntersectsWith(Sensor{ sizeI, sensors[v].j, 0 })) {
+	if (sensors[v].intersectsWith(Sensor{ sizeI, sensors[v].j, 0 })) {
 		bot = true;
 	}
-	if (sensors[v].isIntersectsWith(Sensor{ sensors[v].i, 0, 0 })) {
+	if (sensors[v].intersectsWith(Sensor{ sensors[v].i, 0, 0 })) {
 		left = true;
 	}
-	if (sensors[v].isIntersectsWith(Sensor{ sensors[v].i, sizeJ, 0 })) {
+	if (sensors[v].intersectsWith(Sensor{ sensors[v].i, sizeJ, 0 })) {
 		right = true;
 	}
 	for (int i = 0; i < (int)was.size(); i++) {
-		if (!was[i] && sensors[v].isIntersectsWith(sensors[i])) {
+		if (!was[i] && sensors[v].intersectsWith(sensors[i])) {
 			dfs(i, left, right, top, bot, sizeI, sizeJ, sensors, was);
 		}
 	}
