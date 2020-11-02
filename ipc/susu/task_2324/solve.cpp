@@ -24,8 +24,6 @@ int main() {
 			if (curLen < bestLen) {
 				bestLen = curLen;
 				startI = r[curSum] + 1;
-			} else if (curLen == bestLen) {
-				startI = std::min(startI, r[curSum] + 1);
 			}
 		}
 		r[curSum] = i;
