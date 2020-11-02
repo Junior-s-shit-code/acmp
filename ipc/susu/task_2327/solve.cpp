@@ -36,7 +36,7 @@ int main() {
 					if (nextSum <= maxSum && 
 						countBestRate[iType + 1][nextSum] <
 						countBestRate[iType][sum] + types[iType][iComponent].rate
-						) {
+					) {
 						countBestRate[iType + 1][nextSum] = countBestRate[iType][sum] + types[iType][iComponent].rate;
 						usedComponent[iType + 1][nextSum] = iComponent;
 					}
