@@ -7,10 +7,9 @@ int main() {
     freopen("output.txt", "w", stdout);
     int h, m;
     scanf("%d %d", &h, &m);
-    int a = (h % 12) * 5 + m / 12;
-    int b = m;
-    int value = std::abs(a - b);
-    int ans = std::min(value, 60 - value);
-    printf("%d", ans * 6);
+    int a = (h % 12) * 30 + (m / 12) * 6;
+    int b = m * 6;
+    int angle = std::abs(a - b);
+    printf("%d", std::min(angle, 360 - angle));
     return 0;
 }
