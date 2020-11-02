@@ -20,12 +20,12 @@ struct Animal {
     }
 };
 
-void dfs(int v, const int &dist, std::vector<bool> &was, const std::vector<Animal> &a) {
+void dfs(int v, const int &dist2, std::vector<bool> &was, const std::vector<Animal> &a) {
     Animal cur = a[v];
     was[v] = true;
     for (int i = 0; i < (int)a.size(); i++) {
-        if (!was[i] && cur.distTo(a[i]) <= dist) {
-            dfs(i, dist, was, a);
+        if (!was[i] && cur.distTo(a[i]) <= dist2) {
+            dfs(i, dist2, was, a);
         }
     }
 }
