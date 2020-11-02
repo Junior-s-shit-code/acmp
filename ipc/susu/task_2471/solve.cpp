@@ -1,27 +1,25 @@
 #include <stdio.h>
+#include <algorithm>
 
 int main() {
 	freopen("input.txt", "r", stdin);
 	freopen("output.txt", "w", stdout);
 	int n;
 	scanf("%d", &n);
-	int counter = 0;
-	while (n % 10 == 0) {
-		n /= 10;
-		counter++;
-	}
+	int count2 = 0;
+	int count5 = 0;
 	while (n % 5 == 0) {
 		n /= 5;
-		counter++;
+		count5++;
 	}
 	while (n % 2 == 0) {
 		n /= 2;
-		counter++;
+		count2++;
 	}
 	if (n != 1) {
 		printf("NO");
 	} else {
-		printf("%d", counter);
+		printf("%d", std::max(count2, count5));
 	}
 	return 0;
 }
