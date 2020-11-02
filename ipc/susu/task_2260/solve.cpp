@@ -78,6 +78,6 @@ int main() {
             minDist = std::min(minDist, d1 + len[i][j] + d2);
         }
     }
-    printf("%lf", minDist);
+    printf("%.6lf", minDist);
     return 0;
 }
