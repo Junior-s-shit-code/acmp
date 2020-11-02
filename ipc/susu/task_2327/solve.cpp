@@ -23,19 +23,21 @@ int main() {
 		types[type - 1].push_back(Component{ cost, rate, i + 1});
 	}
 	scanf("%d", &maxSum);
-	std::vector<std::vector<int>> d(nTypes + 1, std::vector<int>(maxSum + 1, -1));
+	std::vector<std::vector<int>> countBestRate(nTypes + 1, std::vector<int>(maxSum + 1, -1));
 	for (int i = 0; i < maxSum; i++) {
-		d[0][i] = 0;
+		countBestRate[0][i] = 0;
 	}
 	std::vector<std::vector<int>> usedComponent(nTypes + 1, std::vector<int>(maxSum + 1));
 	for (int iType = 0; iType < nTypes; iType++) {
 		for (int sum = 0; sum < maxSum; sum++) {
 			for (int iComponent = 0; iComponent < (int)types[iType].size(); iComponent++) {
-				if (iType == 0 || d[iType][sum] != 0) {
+				if (iType == 0 || countBestRate[iType][sum] != 0) {
 					int nextSum = sum + types[iType][iComponent].cost;
 					if (nextSum <= maxSum && 
-						d[iType + 1][nextSum] < d[iType][sum] + types[iType][iComponent].rate) {
-						d[iType + 1][nextSum] = d[iType][sum] + types[iType][iComponent].rate;
+						countBestRate[iType + 1][nextSum] <
+						countBestRate[iType][sum] + types[iType][iComponent].rate
+						) {
+						countBestRate[iType + 1][nextSum] = countBestRate[iType][sum] + types[iType][iComponent].rate;
 						usedComponent[iType + 1][nextSum] = iComponent;
 					}
 				}
@@ -45,8 +47,8 @@ int main() {
 	int bestRate = -1;
 	int ansSum = -1;
 	for (int i = 0; i <= maxSum; i++) {
-		if (bestRate < d[nTypes][i]) {
-			bestRate = d[nTypes][i];
+		if (bestRate < countBestRate[nTypes][i]) {
+			bestRate = countBestRate[nTypes][i];
 			ansSum = i;
 		}
 	}
