@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <string>
 
-int sumDigits(int num) {
+int sumDigitsSquare(int num) {
 	int ans = 0;
 	while (num > 0) {
 		int d = num % 10;
@@ -13,11 +13,11 @@ int sumDigits(int num) {
 	return ans;
 }
 
-bool isWanted(int num, std::vector<bool> &is, std::vector<bool> &was) {
+bool isGoodNumber(int num, std::vector<bool> &is, std::vector<bool> &was) {
 	if (!was[num]) {
 		was[num] = true;
 		is[num] = false;
-		if (isWanted(sumDigits(num), is, was)) {
+		if (isGoodNumber(sumDigitsSquare(num), is, was)) {
 			is[num] = true;
 		}
 	}
@@ -41,6 +41,6 @@ int main() {
 		int val = c - '0';
 		curNum += val * val;
 	}
-	printf(isWanted(curNum, is, was) ? "YES" : "NO");
+	printf(isGoodNumber(curNum, is, was) ? "YES" : "NO");
 	return 0;
 }
