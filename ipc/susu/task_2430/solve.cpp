@@ -2,6 +2,10 @@
 #include <vector>
 #include <algorithm>
 
+const int NOT_GOOD = -1;
+const int UNKNOWN = 0;
+const int GOOD = 1;
+
 int sumDigitsSquare(long long num) {
 	int ans = 0;
 	while (num > 0) {
@@ -12,18 +16,20 @@ int sumDigitsSquare(long long num) {
 	return ans;
 }
 
-bool isWanted(int num, std::vector<bool> &is, std::vector<bool> &was) {
-	if (!was[num]) {
-		was[num] = true;
-		is[num] = false;
-		if (isWanted(sumDigitsSquare(num), is, was)) {
-			is[num] = true;
+int isWanted(int num, std::vector<int> &numberType) {
+	if (numberType[num] == UNKNOWN) {
+		numberType[num] = NOT_GOOD;
+		if (isWanted(sumDigitsSquare(num), numberType)) {
+			numberType[num] = GOOD;
 		}
 	}
-	return is[num];
+	return numberType[num];
 }
 
-long long countGoodTill(long long value, const int maxSum, std::vector<bool> &is, std::vector<bool> &was, const std::vector<std::vector<long long>> &countGood) {
+long long countGoodTill(long long value,
+						const int maxSum,
+						std::vector<int> &numberType,
+						const std::vector<std::vector<long long>> &countGood) {
 	std::vector<long long> sum(maxSum + 1, 0);
 	sum[sumDigitsSquare(value)] = 1;
 
@@ -41,18 +47,21 @@ long long countGoodTill(long long value, const int maxSum, std::vector<bool> &is
 
 	long long ans = 0;
 	for (int value = 0; value <= maxSum; value++) {
-		if (isWanted(value, is, was)) {
+		if (isWanted(value, numberType) == GOOD) {
 			ans += sum[value];
 		}
 	}
 	return ans;
 }
 
-void preCalculations(const int maxSum, const int maxDigits, std::vector<bool> &is, std::vector<bool> &was, std::vector<std::vector<long long>> &countGood) {
-	was[0] = was[1] = true;
-	is[1] = true;
+void preCalculations(const int maxSum,
+					 const int maxDigits,
+					 std::vector<int> &numberType,
+					 std::vector<std::vector<long long>> &countGood) {
+	numberType[0] = NOT_GOOD;
+	numberType[1] = GOOD;
 	for (int value = 0; value <= maxSum; value++) {
-		isWanted(value, is, was);
+		isWanted(value, numberType);
 	}
 	countGood[0][0] = 1;
 	for (int len = 1; len <= maxDigits; len++) {
@@ -70,12 +79,14 @@ int main() {
 	freopen("output.txt", "w", stdout);
 	const int MAX_DIGITS = 18;
 	const int MAX_SUM = MAX_DIGITS * 81;
-	std::vector<bool> is(MAX_SUM + 1, false);
-	std::vector<bool> was(MAX_SUM + 1, false);
+	std::vector<int> numberType(MAX_SUM + 1, UNKNOWN);
 	std::vector<std::vector<long long>> countGood(MAX_DIGITS + 1, std::vector<long long>(MAX_SUM + 1, 0));
-	preCalculations(MAX_SUM, MAX_DIGITS, is, was, countGood);
+	preCalculations(MAX_SUM, MAX_DIGITS, numberType, countGood);
 	long long left, right;
 	scanf("%lld %lld", &left, &right);
-	printf("%lld", countGoodTill(right, MAX_SUM, is, was, countGood) - countGoodTill(left - 1, MAX_SUM, is, was, countGood));
+	printf("%lld", 
+		   countGoodTill(right, MAX_SUM, numberType, countGood) - 
+		   countGoodTill(left - 1, MAX_SUM, numberType, countGood)
+	);
 	return 0;
 }
