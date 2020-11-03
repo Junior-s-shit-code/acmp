@@ -32,7 +32,7 @@ int main() {
         p[i] = Point::read();
     }
     double bestDist = (double)1e9;
-    int midId1, midId2;
+    int minId1, minId2;
     for (int capital2 = 1; capital2 < n; capital2++) {
         for (int capital1 = 0; capital1 < capital2; capital1++) {
             Point c1 = p[capital1];
@@ -45,11 +45,11 @@ int main() {
             }
             if (curDist < bestDist) {
                 bestDist = curDist;
-                midId1 = capital1;
-                midId2 = capital2;
+                minId1 = capital1;
+                minId2 = capital2;
             }
         }
     }
-    printf("%d %d", midId1 + 1, midId2 + 1);
+    printf("%d %d", minId1 + 1, minId2 + 1);
     return 0;
 }
