@@ -14,8 +14,7 @@ struct Num {
     std::string strNum;
 };
 
-void fillNumbers(const int number, const std::string toParse, std::vector<int> &minLen, std::vector<Num> &nums) {
-    minLen[0] = 0;
+void fillNumbers(const int number, const std::string toParse, std::vector<Num> &nums) {
     for (int len = 1; len <= 6; len++) {
         for (int start = 0; start + len <= (int)toParse.length(); start++) {
             std::string str = toParse.substr(start, len);
@@ -28,9 +27,6 @@ void fillNumbers(const int number, const std::string toParse, std::vector<int> &
             }
             add += '+';
             nums.push_back(Num{ value, (int)add.length(), add });
-            if (value <= number) {
-                minLen[value] = (int)add.length();
-            }
         }
     }
     std::sort(nums.begin(), nums.end(), [](const Num &left, const Num &right) {
@@ -47,18 +43,21 @@ int main() {
     std::string toParse = "123456789";
     std::vector<Num> nums;
     std::vector<int> minLen(number + 1, INF);
-    fillNumbers(number, toParse, minLen, nums);
-
+    //fill numbers
+    fillNumbers(number, toParse, nums);
+    minLen[0] = 0;
+    //calc dp vector
     int nNumbers = (int)nums.size();
-    for (int i = 1; i < number; i++) {
-        for (int j = 0; j < nNumbers; j++) {
-            int curLen = minLen[i] + nums[j].len;
-            int nextValue = i + nums[j].fullNum;
+    for (int curNum = 0; curNum < number; curNum++) {
+        for (int addNum = 0; addNum < nNumbers; addNum++) {
+            int curLen = minLen[curNum] + nums[addNum].len;
+            int nextValue = curNum + nums[addNum].fullNum;
             if (nextValue <= number && curLen < minLen[nextValue]) {
                 minLen[nextValue] = curLen;
             }
         }
     }
+    //get answer
     std::multiset<std::string> ans;
     while (number > 0) {
         for (int i = 0; i < nNumbers; i++) {
