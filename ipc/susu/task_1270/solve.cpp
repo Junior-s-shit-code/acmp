@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <vector>
-#include <cassert>
 #include <string>
 #include <algorithm>
 #include <cstdlib>
+#include <set>
 
 struct Num {
 
@@ -14,15 +14,7 @@ struct Num {
     std::string strNum;
 };
 
-int main() {
-    freopen("input.txt", "r", stdin);
-    freopen("output.txt", "w", stdout);
-    const int INF = (int)1e6;
-    int number;
-    scanf("%d", &number);
-    std::string toParse = "123456789";
-    std::vector<Num> nums;
-    std::vector<int> minLen(number + 1, INF);
+void fillNumbers(const int number, const std::string toParse, std::vector<int> &minLen, std::vector<Num> &nums) {
     minLen[0] = 0;
     for (int len = 1; len <= 6; len++) {
         for (int start = 0; start + len <= (int)toParse.length(); start++) {
@@ -44,9 +36,22 @@ int main() {
     std::sort(nums.begin(), nums.end(), [](const Num &left, const Num &right) {
         return std::to_string(left.fullNum) < std::to_string(right.fullNum);
     });
-    int n = (int)nums.size();
+}
+
+int main() {
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+    const int INF = (int)1e6;
+    int number;
+    scanf("%d", &number);
+    std::string toParse = "123456789";
+    std::vector<Num> nums;
+    std::vector<int> minLen(number + 1, INF);
+    fillNumbers(number, toParse, minLen, nums);
+
+    int nNumbers = (int)nums.size();
     for (int i = 1; i < number; i++) {
-        for (int j = 0; j < n; j++) {
+        for (int j = 0; j < nNumbers; j++) {
             int curLen = minLen[i] + nums[j].len;
             int nextValue = i + nums[j].fullNum;
             if (nextValue <= number && curLen < minLen[nextValue]) {
@@ -54,22 +59,21 @@ int main() {
             }
         }
     }
-    std::vector<std::string> ans;
+    std::multiset<std::string> ans;
     while (number > 0) {
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < nNumbers; i++) {
             int newNumber = number - nums[i].fullNum;
             if (newNumber >= 0 && minLen[number] == nums[i].len + minLen[newNumber]) {
-                ans.push_back(nums[i].strNum);
+                ans.insert(nums[i].strNum);
                 number = newNumber;
                 break;
             }
         }
     }
 
-    std::sort(ans.begin(), ans.end());
     std::string ansStr = "";
-    for (int i = 0; i < (int)ans.size(); i++) {
-        ansStr += ans[i];
+    for (std::string item : ans) {
+        ansStr += item;
     }
     ansStr.erase(ansStr.end() - 1);
     printf("%s", ansStr.c_str());
