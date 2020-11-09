@@ -17,14 +17,14 @@ int sumDigitsSquare(int num) {
 	return ans;
 }
 
-int isWanted(int num, std::vector<int> &numberType) {
+bool isWanted(int num, std::vector<int> &numberType) {
 	if (numberType[num] == UNKNOWN) {
 		numberType[num] = NOT_GOOD;
-		if (isWanted(sumDigitsSquare(num), numberType) == GOOD) {
+		if (isWanted(sumDigitsSquare(num), numberType)) {
 			numberType[num] = GOOD;
 		}
 	}
-	return numberType[num];
+	return numberType[num] == GOOD;
 }
 
 int getNumber() {
@@ -47,6 +47,6 @@ int main() {
 	numberType[0] = NOT_GOOD;
 	numberType[1] = GOOD;
 	int number = getNumber();
-	printf(isWanted(number, numberType) == GOOD ? "YES" : "NO");
+	printf(isWanted(number, numberType) ? "YES" : "NO");
 	return 0;
 }
