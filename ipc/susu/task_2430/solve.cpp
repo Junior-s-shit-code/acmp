@@ -16,14 +16,14 @@ int sumDigitsSquare(long long num) {
 	return ans;
 }
 
-int isWanted(int num, std::vector<int> &numberType) {
+bool isWanted(int num, std::vector<int> &numberType) {
 	if (numberType[num] == UNKNOWN) {
 		numberType[num] = NOT_GOOD;
 		if (isWanted(sumDigitsSquare(num), numberType)) {
 			numberType[num] = GOOD;
 		}
 	}
-	return numberType[num];
+	return numberType[num] == GOOD;
 }
 
 long long countGoodTill(long long value,
@@ -47,7 +47,7 @@ long long countGoodTill(long long value,
 
 	long long ans = 0;
 	for (int value = 0; value <= maxSum; value++) {
-		if (isWanted(value, numberType) == GOOD) {
+		if (isWanted(value, numberType)) {
 			ans += sum[value];
 		}
 	}
