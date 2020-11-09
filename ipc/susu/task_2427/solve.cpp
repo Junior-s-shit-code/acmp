@@ -3,6 +3,10 @@
 #include <algorithm>
 #include <string>
 
+const int NOT_GOOD = -1;
+const int UNKNOWN = 0;
+const int GOOD = 1;
+
 int sumDigitsSquare(int num) {
 	int ans = 0;
 	while (num > 0) {
@@ -13,34 +17,36 @@ int sumDigitsSquare(int num) {
 	return ans;
 }
 
-bool isGoodNumber(int num, std::vector<bool> &is, std::vector<bool> &was) {
-	if (!was[num]) {
-		was[num] = true;
-		is[num] = false;
-		if (isGoodNumber(sumDigitsSquare(num), is, was)) {
-			is[num] = true;
+int isWanted(int num, std::vector<int> &numberType) {
+	if (numberType[num] == UNKNOWN) {
+		numberType[num] = NOT_GOOD;
+		if (isWanted(sumDigitsSquare(num), numberType) == GOOD) {
+			numberType[num] = GOOD;
 		}
 	}
-	return is[num];
+	return numberType[num];
+}
+
+int getNumber() {
+	char buf[1 + 100];
+	scanf("%s", &buf);
+	std::string number(buf);
+	int sumDigits2 = 0;
+	for (int i = 0; i < (int)number.length(); i++) {
+		int d = number[i] - '0';
+		sumDigits2 += d * d;
+	}
+	return sumDigits2;
 }
 
 int main() {
 	freopen("input.txt", "r", stdin);
 	freopen("output.txt", "w", stdout);
-	std::vector<bool> is(81 * 100 + 2, false);
-	std::vector<bool> was(81 * 100 + 2, false);
-	was[0] = was[1] = true;
-	is[1] = true;
-	int curNum = 0;
-	char c;
-	while (true) {
-		int code = scanf(" %c", &c);
-		if (code == EOF) {
-			break;
-		}
-		int val = c - '0';
-		curNum += val * val;
-	}
-	printf(isGoodNumber(curNum, is, was) ? "YES" : "NO");
+	const int SIZE = 81 * 100 + 1;
+	std::vector<int> numberType(SIZE, UNKNOWN);
+	numberType[0] = NOT_GOOD;
+	numberType[1] = GOOD;
+	int number = getNumber();
+	printf(isWanted(number, numberType) == GOOD ? "YES" : "NO");
 	return 0;
 }
