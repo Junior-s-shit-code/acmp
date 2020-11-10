@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <vector>
 #include <algorithm>
-#include <cassert>
 
 const int LIMIT = (int)1e8;
 
@@ -62,8 +61,7 @@ int main() {
             break;
         }
         int index = binSearch(value, pairs);
-        assert(0 <= index && index < (int)pairs.size());
-        Pair ans = pairs[binSearch(value, pairs)];
+        Pair ans = pairs[index];
         printf("%d %d\n", ans.a, ans.b);
     }
     return 0;
