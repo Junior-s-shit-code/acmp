@@ -9,22 +9,26 @@ int main() {
 	if (a > b) {
 		std::swap(a, b);
 	}
+	const int COUNT_BURGERS_FOR_BEST_ANS = 10;
 	int ans = 0;
-	int bestTime = time;
-	for (int i = 0; i < 10; i++) {
+	int minTimeRemain = time;
+	
+	for (int i = 0; i < COUNT_BURGERS_FOR_BEST_ANS; i++) {
 		int curValue = (time - b * i) / a + i;
 		int curTime = (time - b * i) % a;
 		if (curTime < 0) {
 			continue;
 		}
-		if ((bestTime > curTime) || (bestTime == curTime && curValue > ans)) {
+		if (minTimeRemain > curTime || 
+			(minTimeRemain == curTime && curValue > ans)
+		) {
 			ans = curValue;
-			bestTime = curTime;
+			minTimeRemain = curTime;
 		}
 	}
 	printf("%d", ans);
-	if (bestTime) {
-		printf(" %d", bestTime);
+	if (minTimeRemain > 0) {
+		printf(" %d", minTimeRemain);
 	}
 	return 0;
 }
