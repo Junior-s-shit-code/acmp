@@ -25,18 +25,27 @@ int main() {
 		if (str[i] == 'F') {
 			if (i + 1 < len && str[i + 1] == '*') {
 				i++;
-				while (0 <= iRobot + move && iRobot + move < n && h[iRobot + move] == h[iRobot]) {
+				while (0 <= iRobot + move &&
+					   iRobot + move < n &&
+					   h[iRobot + move] == h[iRobot]
+				) {
 					iRobot += move;
 				}
 			} else {
-				if (0 <= iRobot + move && iRobot + move < n && h[iRobot + move] == h[iRobot]) {
+				if (0 <= iRobot + move &&
+					iRobot + move < n &&
+					h[iRobot + move] == h[iRobot]
+				) {
 					iRobot += move;
 				}
 			}
 		} else if (str[i] == 'R') {
 			move *= -1;
 		} else if (str[i] == 'T') {
-			if (!isTake && 0 <= iRobot + move && iRobot + move < n) {
+			if (!isTake &&
+				0 <= iRobot + move &&
+				iRobot + move < n
+			) {
 				int diffH = h[iRobot + move] - h[iRobot];
 				if (0 <= diffH && diffH <= 2) {
 					h[iRobot + move]--;
@@ -44,7 +53,10 @@ int main() {
 				}
 			}
 		} else if (str[i] == 'D') {
-			if (isTake && 0 <= iRobot + move && iRobot + move < n) {
+			if (isTake &&
+				0 <= iRobot + move &&
+				iRobot + move < n
+			) {
 				int diffH = h[iRobot + move] - h[iRobot];
 				if (-1 <= diffH && diffH <= 1) {
 					h[iRobot + move]++;
@@ -52,7 +64,9 @@ int main() {
 				}
 			}
 		} else if (str[i] == 'C') {
-			if (0 <= iRobot + move && iRobot + move < n) {
+			if (0 <= iRobot + move &&
+				iRobot + move < n
+			) {
 				int diffH = std::abs(h[iRobot + move] - h[iRobot]);
 				if (diffH == 1) {
 					iRobot += move;
