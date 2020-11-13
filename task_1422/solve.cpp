@@ -3,6 +3,11 @@
 #include <cstdlib>
 #include <queue>
 
+const short RIGHT = 1;
+const short UP = 2;
+const short LEFT = 3;
+const short DOWN = 4;
+
 struct Point {
 
     int i;
@@ -15,13 +20,13 @@ struct Point {
 };
 
 Point getNextPoint(int i, int j, const short type) {
-    if (type == 1) {
+    if (type == RIGHT) {
         j++;
-    } else if (type == 2) {
+    } else if (type == UP) {
         i--;
-    } else if (type == 3) {
+    } else if (type == LEFT) {
         j--;
-    } else if (type == 4) {
+    } else if (type == DOWN) {
         i++;
     }
     return Point{ i, j };
@@ -33,18 +38,18 @@ int main() {
     const short INF = SHRT_MAX;
     int sizeI, sizeJ;
     scanf("%d %d", &sizeI, &sizeJ);
-    std::vector<std::vector<short>> field(sizeI + 2, std::vector<short>(sizeJ + 2, INF));
+    std::vector<std::vector<short>> field(1 + sizeI + 1, std::vector<short>(1 + sizeJ + 1, INF));
     std::queue<Point> q;
     for (int i = 1; i <= sizeI; i++) {
         for (int j = 1; j <= sizeJ; j++) {
             short type;
             scanf("%hd", &type);
             field[i][j] = type;
-            if ((i == 1 && type == 2) ||
-                (j == 1 && type == 3) ||
-                (i == sizeI && type == 4) ||
-                (j == sizeJ && type == 1)
-                ) {
+            if ((i == 1 && type == UP) ||
+                (j == 1 && type == LEFT) ||
+                (i == sizeI && type == DOWN) ||
+                (j == sizeJ && type == RIGHT)
+            ) {
                 q.push(Point{ i, j });
             }
 
