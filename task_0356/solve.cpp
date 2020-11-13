@@ -31,13 +31,13 @@ int main() {
 	std::vector<int> maxCost(weight + 1, 0);
 	std::vector<int> minCost(weight + 1, INF);
 	minCost[0] = 0;
-	for (int i = 0; i <= weight; i++) {
-		if (minCost[i] != INF) {
-			for (int j = 0; j < nCoins; j++) {
-				int newInd = i + coins[j].weight;
+	for (int iWeight = 0; iWeight <= weight; iWeight++) {
+		if (minCost[iWeight] != INF) {
+			for (int iCoin = 0; iCoin < nCoins; iCoin++) {
+				int newInd = iWeight + coins[iCoin].weight;
 				if (newInd <= weight) {
-					minCost[newInd] = std::min(minCost[newInd], minCost[i] + coins[j].cost);
-					maxCost[newInd] = std::max(maxCost[newInd], maxCost[i] + coins[j].cost);
+					minCost[newInd] = std::min(minCost[newInd], minCost[iWeight] + coins[iCoin].cost);
+					maxCost[newInd] = std::max(maxCost[newInd], maxCost[iWeight] + coins[iCoin].cost);
 				}
 			}
 		}
