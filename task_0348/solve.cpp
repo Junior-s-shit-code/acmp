@@ -14,6 +14,7 @@ struct Point {
 	}
 };
 
+
 long long getArea(Point p1, Point p2, Point p3) {
 	return (p2.x - p1.x) * (p3.y - p1.y) - 1LL * (p2.y - p1.y) * (p3.x - p1.x);
 }
@@ -28,21 +29,32 @@ bool isOkaySegments(long long a, long long b, long long c, long long d) {
 	return std::max(a, c) <= std::min(b, d);
 }
 
-bool isIntersect(Point p1, Point p2, Point p3, Point p4) {
-	return (isOkaySegments(p1.x, p2.x, p3.x, p4.x) &&
-			isOkaySegments(p1.y, p2.y, p3.y, p4.y) && 
-			getArea(p1, p2, p3) * getArea(p1, p2, p4) <= 0 &&
-			getArea(p3, p4, p1) * getArea(p3, p4, p2) <= 0);
-}
+struct Segment {
+
+	Point p1;
+
+	Point p2;
+
+	static Segment read() {
+		Point p1 = Point::read();
+		Point p2 = Point::read();
+		return Segment{ p1, p2 };
+	}
+	
+	bool intersectsWith(const Segment &second) const{
+		return (isOkaySegments(p1.x, p2.x, second.p1.x, second.p2.x) &&
+				isOkaySegments(p1.y, p2.y, second.p1.y, second.p2.y) &&
+				getArea(p1, p2, second.p1) * getArea(p1, p2, second.p2) <= 0 && 
+				getArea(second.p1, second.p2, p1) * getArea(second.p1, second.p2, p2) <= 0);
+	}
+};
 
 int main() {
 	freopen("input.txt", "r", stdin);
 	freopen("output.txt", "w", stdout);
-	Point p1 = Point::read();
-	Point p2 = Point::read();
-	Point p3 = Point::read();
-	Point p4 = Point::read();
-	if (isIntersect(p1, p2, p3, p4)) {
+	Segment s1 = Segment::read();
+	Segment s2 = Segment::read();
+	if (s1.intersectsWith(s2)) {
 		printf("Yes");
 	} else {
 		printf("No");
