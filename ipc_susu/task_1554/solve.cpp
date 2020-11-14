@@ -1,33 +1,35 @@
 #include <stdio.h>
 #include <vector>
 #include <algorithm>
-#include <iterator>
 #include <set>
 
 const int INF = (int)1e8;
 
-void findCutPoints(int v, int parent, 
-         int &curTime,
-         std::vector<int> &time,
-         std::vector<int> &minTime,
-         const std::vector<std::vector<int>> &g, 
-         std::set<int> &ans
+void findCutPoints(
+    int v,
+    int prevV, 
+    int &curTime,
+    std::vector<int> &time,
+    std::vector<int> &minTime,
+    const std::vector<std::vector<int>> &g, 
+    std::set<int> &ans
 ) {
-    time[v] = minTime[v] = curTime;
+    time[v] = curTime;
+    minTime[v] = curTime;
     curTime++;
     int childCount = 0;
     for (int next : g[v]) {
-        if (next == parent) {
+        if (next == prevV) {
             continue;
         }
-        if (time[next] < INF) {
+        if (time[next] != INF) {
             minTime[v] = std::min(minTime[v], minTime[next]);
         } else {
             findCutPoints(next, v, curTime, time, minTime, g, ans);
             minTime[v] = std::min(minTime[v], minTime[next]);
             childCount++;
-            if (parent < 0 && childCount > 1 ||
-                parent >= 0 && minTime[next] >= time[v]) {
+            if (prevV < 0 && childCount > 1 ||
+                prevV >= 0 && minTime[next] >= time[v]) {
                 ans.insert(v);
             }
         }
@@ -49,7 +51,8 @@ int main() {
         g[to].push_back(from);
     }
 
-    std::vector<int> time(nV, INF), minTime(nV, INF);
+    std::vector<int> time(nV, INF);
+    std::vector<int> minTime(nV, INF);
     std::set<int> ans;
     int curTime = 0;
     findCutPoints(0, -1, curTime, time, minTime, g, ans);
