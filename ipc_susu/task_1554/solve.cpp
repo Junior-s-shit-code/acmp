@@ -1,35 +1,36 @@
 #include <stdio.h>
 #include <vector>
 #include <algorithm>
-#include <iterator>
 #include <set>
 
-const int INF = (int)1e8;
-
-void findCutPoints(int v, int parent, 
-         int &curTime,
-         std::vector<int> &time,
-         std::vector<int> &minTime,
-         const std::vector<std::vector<int>> &g, 
-         std::set<int> &ans
+void findCutPoints(
+    int curV,
+    int prevV, 
+    int &curTime,
+    std::vector<int> &time,
+    std::vector<int> &minTime,
+    const std::vector<std::vector<int>> &g, 
+    std::set<int> &cutPoints
 ) {
-    time[v] = minTime[v] = curTime;
+    time[curV] = curTime;
+    minTime[curV] = curTime;
     curTime++;
     int childCount = 0;
-    for (int next : g[v]) {
-        if (next == parent) {
+    for (int nextV : g[curV]) {
+        if (nextV == prevV) {
             continue;
         }
-        if (time[next] < INF) {
-            minTime[v] = std::min(minTime[v], minTime[next]);
-        } else {
-            findCutPoints(next, v, curTime, time, minTime, g, ans);
-            minTime[v] = std::min(minTime[v], minTime[next]);
+        if (time[nextV] == -1) {
+            findCutPoints(nextV, curV, curTime, time, minTime, g, cutPoints);
             childCount++;
-            if (parent < 0 && childCount > 1 ||
-                parent >= 0 && minTime[next] >= time[v]) {
-                ans.insert(v);
+            if (prevV != -1 && minTime[nextV] >= time[curV] ||
+                prevV == -1 && childCount > 1
+            ) {
+                cutPoints.insert(curV);
             }
+            minTime[curV] = std::min(minTime[curV], minTime[nextV]);
+        } else {
+            minTime[curV] = std::min(minTime[curV], time[nextV]);
         }
     }
 }
@@ -49,7 +50,8 @@ int main() {
         g[to].push_back(from);
     }
 
-    std::vector<int> time(nV, INF), minTime(nV, INF);
+    std::vector<int> time(nV, -1);
+    std::vector<int> minTime(nV, -1);
     std::set<int> ans;
     int curTime = 0;
     findCutPoints(0, -1, curTime, time, minTime, g, ans);
