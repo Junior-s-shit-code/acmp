@@ -1,93 +1,100 @@
 #include <stdio.h>
 #include <vector>
 #include <algorithm>
-#include <string>
-#include <cassert>
 #include <iterator>
 
-void build(const int left,
-		   const int right,
-		   const int pos,
-		   const std::vector<int> &a,
-		   std::vector<std::vector<int>> &tree) {
-	if (left == right) {
-		tree[pos] = std::vector<int>{ a[left] };
-	} else {
-		int leftEnd = (left + right) >> 1;
-		int rightBegin = leftEnd + 1;
-		int iLeft = (pos << 1) + 1;
-		int iRight = (pos << 1) + 2;
-		build(left, leftEnd, iLeft, a, tree);
-		build(rightBegin, right, iRight, a, tree);
-		tree[pos].reserve((int)tree[iLeft].size() + (int)tree[iRight].size());
-		std::merge(tree[iLeft].begin(), tree[iLeft].end(),
-				   tree[iRight].begin(), tree[iRight].end(),
-				   std::back_inserter(tree[pos]));
-	}
-}
+class SegmentTree {
 
-int getLower(const int value,
-			 int qLeft, int qRight,
-			 const int pos,
-			 int left, int right,
-			 std::vector<std::vector<int>> &tree) {
-	if (qLeft > qRight) {
-		return 0;
-	}
-	qLeft = std::max(qLeft, left);
-	qRight = std::min(qRight, right);
-	if (qLeft == left && qRight == right) {
-		return std::upper_bound(tree[pos].begin(), tree[pos].end(), value) - tree[pos].begin();
-	} else {
-		int leftEnd = (left + right) >> 1;
-		int rightBegin = leftEnd + 1;
-		int iLeft = (pos << 1) + 1;
-		int iRight = (pos << 1) + 2;
-		return getLower(value, qLeft, qRight, (pos << 1) + 1, left, leftEnd, tree) + 
-			getLower(value, qLeft, qRight, (pos << 1) + 2, rightBegin, right, tree);
-	}
-}
+    int size;
 
-int getUpper(const int value,
-			 int qLeft, int qRight,
-			 const int pos,
-			 int left, int right,
-			 std::vector<std::vector<int>> &tree) {
-	if (qLeft > qRight) {
-		return 0;
-	}
-	qLeft = std::max(qLeft, left);
-	qRight = std::min(qRight, right);
-	if (qLeft == left && qRight == right) {
-		return (int)tree[pos].size() - (std::upper_bound(tree[pos].begin(), tree[pos].end(), value - 1) - tree[pos].begin());
-	} else {
-		int leftEnd = (left + right) >> 1;
-		int rightBegin = leftEnd + 1;
-		int iLeft = (pos << 1) + 1;
-		int iRight = (pos << 1) + 2;
-		return getUpper(value, qLeft, qRight, (pos << 1) + 1, left, leftEnd, tree) +
-			getUpper(value, qLeft, qRight, (pos << 1) + 2, rightBegin, right, tree);
-	}
-}
+    std::vector<std::vector<int>> t;
 
+    void build(int pos, int left, int right, const std::vector<int> &a) {
+        if (left == right) {
+            t[pos].push_back(a[left]);
+            return;
+        }
+        int mid = left + ((right - left) >> 1);
+        build((pos << 1) + 1, left, mid, a);
+        build((pos << 1) + 2, mid + 1, right, a);
+        std::merge(
+            t[(pos << 1) + 1].begin(), t[(pos << 1) + 1].end(),
+            t[(pos << 1) + 2].begin(), t[(pos << 1) + 2].end(),
+            std::back_inserter(t[pos])
+        );
+    }
+
+    int queryGreaterOrEqual(int pos, int left, int right, int qLeft, int qRight, int qValue) const {
+        if (qRight < left || right < qLeft) {
+            return 0;
+        }
+        if (qLeft <= left && right <= qRight) {
+            return t[pos].end() - std::lower_bound(t[pos].begin(), t[pos].end(), qValue);
+        }
+        int mid = left + ((right - left) >> 1);
+        int countLeft = queryGreaterOrEqual((pos << 1) + 1, left, mid, qLeft, qRight, qValue);
+        int countRight = queryGreaterOrEqual((pos << 1) + 2, mid + 1, right, qLeft, qRight, qValue);
+        return countLeft + countRight;
+    }
+
+    int queryLessOrEqual(int pos, int left, int right, int qLeft, int qRight, int qValue) const {
+        if (qRight < left || right < qLeft) {
+            return 0;
+        }
+        if (qLeft <= left && right <= qRight) {
+            return std::upper_bound(t[pos].begin(), t[pos].end(), qValue) - t[pos].begin();
+        }
+        int mid = left + ((right - left) >> 1);
+        int countLeft = queryLessOrEqual((pos << 1) + 1, left, mid, qLeft, qRight, qValue);
+        int countRight = queryLessOrEqual((pos << 1) + 2, mid + 1, right, qLeft, qRight, qValue);
+        return countLeft + countRight;
+    }
+
+public:
+
+    SegmentTree(const std::vector<int> &a) {
+        size = (int)a.size();
+        t.resize(4 * size);
+        build(0, 0, size - 1, a);
+    }
+
+    int queryGreaterOrEqual(int qLeft, int qRight, int qValue) const {
+        return queryGreaterOrEqual(0, 0, size - 1, qLeft, qRight, qValue);
+    }
+
+    int queryLessOrEqual(int qLeft, int qRight, int qValue) const {
+        return queryLessOrEqual(0, 0, size - 1, qLeft, qRight, qValue);
+    }
+
+};
 
 int main() {
-	freopen("input.txt", "r", stdin);
-	freopen("output.txt", "w", stdout);
-	int n;
-	scanf("%d", &n);
-	std::vector<int> a(n);
-	for (int i = 0; i < n; i++) {
-		scanf("%d", &a[i]);
-	}
-	std::vector<std::vector<int>> tree(4 * n);
-	build(0, n -1, 0, a, tree);
-	for (int i = 0; i < n; i++) {
-		if (getLower(a[i], 0, i - 1, 0, 0, n - 1, tree) >=
-			getUpper(a[i], i + 1, n - 1, 0, 0, n - 1, tree)) {
-			printf("%d", i + 1);
-			return 0;
-		}
-	}
-	return 0;
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+    int n;
+    scanf("%d", &n);
+    std::vector<int> a(n);
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &a[i]);
+    }
+    SegmentTree tree(a);
+    for (int i = 0; i < n; i++) {
+        int countLessLeft;
+        if (i == 0) {
+            countLessLeft = 0;
+        } else {
+            countLessLeft = tree.queryLessOrEqual(0, i - 1, a[i]);
+        }
+        int countGreaterRight;
+        if (i == n - 1) {
+            countGreaterRight = 0;
+        } else {
+            countGreaterRight = tree.queryGreaterOrEqual(i + 1, n - 1, a[i]);
+        }
+        if (countLessLeft >= countGreaterRight) {
+            printf("%d", i + 1);
+            return 0;
+        }
+    }
+    return 0;
 }
