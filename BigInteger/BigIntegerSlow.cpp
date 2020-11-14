@@ -23,7 +23,7 @@ public:
 		: sign(setSign)
 		, value(setValue) {}
 
-	BigInteger operator+(BigInteger second) const {
+	BigInteger operator+(const BigInteger second) const {
 		if (sign == second.sign && sign == 1) {
 			BigInteger newValue;
 			int n1 = (int)value.size();
@@ -67,7 +67,7 @@ public:
 		return *this;
 	}
 
-	BigInteger operator-(BigInteger second) const {
+	BigInteger operator-(const BigInteger second) const {
 		if (sign == second.sign && sign == -1) {
 			return (second.abs() - (this->abs()));
 		} else if (sign == second.sign) {
@@ -163,7 +163,7 @@ public:
 		return *this;
 	}
 
-	BigInteger operator/(BigInteger second) const {
+	BigInteger operator/(const BigInteger second) const {
 		short newSign = sign * second.sign;
 		short selfSign = sign;
 
@@ -227,7 +227,7 @@ public:
 		return *this;
 	}
 
-	BigInteger operator%(const BigInteger second) {
+	BigInteger operator%(const BigInteger second) const {
 		return *this - ((*this / second) * second);
 	}
 

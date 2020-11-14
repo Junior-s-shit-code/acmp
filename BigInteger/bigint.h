@@ -51,7 +51,7 @@ public:
 
 	BigInteger operator/=(const BigInteger second);
 
-	BigInteger operator%(const BigInteger second);
+	BigInteger operator%(const BigInteger second) const;
 
 	BigInteger operator%=(const BigInteger second);
 

@@ -218,7 +218,7 @@ BigInteger BigInteger::operator/=(const BigInteger second) {
 	return *this;
 }
 
-BigInteger BigInteger::operator%(const BigInteger second) {
+BigInteger BigInteger::operator%(const BigInteger second) const{
 	return *this - ((*this / second) * second);
 }
 

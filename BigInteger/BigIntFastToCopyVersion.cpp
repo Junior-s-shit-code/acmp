@@ -248,7 +248,7 @@ public:
 		return *this;
 	}
 
-	BigInteger operator%(const BigInteger second) {
+	BigInteger operator%(const BigInteger second) const {
 		return *this - ((*this / second) * second);
 	}
 
