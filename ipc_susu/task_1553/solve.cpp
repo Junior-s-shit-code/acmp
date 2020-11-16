@@ -10,13 +10,14 @@ struct Edge {
 	int id;
 };
 
-void findBridges(int curV,
-				 int prevV,
-				 int &curTime,
-				 std::vector<int> &time,
-				 std::vector<int> &minTime,
-				 std::vector<std::vector<Edge>> &g,
-				 std::set<int> &bridges
+void findBridges(
+	int curV,
+	int prevV,
+	int &curTime,
+	std::vector<int> &time,
+	std::vector<int> &minTime,
+	std::vector<std::vector<Edge>> &g,
+	std::set<int> &bridges
 ) {
 	time[curV] = curTime;
 	minTime[curV] = curTime;
