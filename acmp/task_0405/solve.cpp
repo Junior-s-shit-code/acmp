@@ -26,8 +26,7 @@ void findCutPoints(
 			int after = curTime;
 			childCount++;
 			if (
-				(prevV == -1 && childCount > 1) ||
-				(prevV != -1 && minTime[nextV] >= time[curV])
+				prevV == -1 && childCount > 1 || prevV != -1 && minTime[nextV] >= time[curV]
 			) {
 				sizes[curV].push_back(after - before);
 			}
@@ -54,7 +53,7 @@ int main() {
 	}
 	std::vector<int> time(nV, -1);
 	std::vector<int> minTime(nV, -1);
-	std::vector<std::vector<int>> sizes(nV); //[v] -> list of sizes the minimum size of the connectivity component in which this point lies
+	std::vector<std::vector<int>> sizes(nV); //[v] -> min size of component, in which 'v' point consist
 	int curTime = 0;
 	findCutPoints(0, -1, curTime, time, minTime, g, sizes);
 	for (int iV = 0; iV < nV; iV++) {
