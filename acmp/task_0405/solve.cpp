@@ -26,7 +26,8 @@ void findCutPoints(
 			int after = curTime;
 			childCount++;
 			if (
-				prevV == -1 && childCount > 1 || prevV != -1 && minTime[nextV] >= time[curV]
+				prevV == -1 && childCount > 1 ||
+				prevV != -1 && minTime[nextV] >= time[curV]
 			) {
 				sizes[curV].push_back(after - before);
 			}
