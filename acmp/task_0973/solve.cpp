@@ -1,7 +1,5 @@
 #include <stdio.h>
 #include <vector>
-#include <algorithm>
-#include <cassert>
 #include <queue>
 #include <set>
 
@@ -59,7 +57,7 @@ void findBridges(
 	}
 }
 
-void dijkstra(
+void useDijkstraAlgorithm(
 	const int nV,
 	std::vector<int> &d,
 	const std::vector<std::vector<Edge>> &g
@@ -117,7 +115,7 @@ int main() {
 	}
 
 	std::vector<int> d(nV, INF);
-	dijkstra(nV, d, g);
+	useDijkstraAlgorithm(nV, d, g);
 	
 	std::vector<bool> visitedBackward(nV, false);
 	{
@@ -132,7 +130,6 @@ int main() {
 		walkBackward(nV - 1, visitedBackward, backwardOptimalEdges);
 	}
 
-	
 	std::set<int> ans;
 	{
 		std::vector<std::vector<Edge>> optimalEdges(nV);
