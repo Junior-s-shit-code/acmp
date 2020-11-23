@@ -15,7 +15,7 @@ void readMatrix(
 	}
 }
 
-char useOperation(const bool &a, const bool &b, const std::vector<char> &returnedType) {
+char useOperation(const bool a, const bool b, const std::vector<char> &returnedType) {
 	int id = (a << 1) + b;
 	return returnedType[id];
 }
