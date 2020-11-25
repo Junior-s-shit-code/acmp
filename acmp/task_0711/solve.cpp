@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <vector>
 #include <string>
-#include <algorithm>
 
 struct Man {
 
