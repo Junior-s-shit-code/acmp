@@ -16,7 +16,6 @@ int main() {
     int n, pos, minWantedGcd;
     scanf("%d %d %d", &n, &pos, &minWantedGcd);
     std::vector<int> a(n);
-    const int SIZE = 1 << n;
     for (int i = 0; i < n; i++) {
         scanf("%d", &a[i]);
     }
@@ -51,7 +50,7 @@ int main() {
 
     int rem = (1 << n) - 1;
     std::vector<int> answer(n);
-    for (int i = 0; i < n; i++) {//answer position
+    for (int i = 0; i < n; i++) { // answer position 
         bool found = false;
         for (int j = 0; j < n; j++) {
             if (((rem >> j) & 1) == 1 &&
