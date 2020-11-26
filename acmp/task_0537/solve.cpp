@@ -16,7 +16,7 @@ int main() {
     int n, pos, minWantedGcd;
     scanf("%d %d %d", &n, &pos, &minWantedGcd);
     std::vector<int> a(n);
-    const int SIZE = (1 << n);
+    const int SIZE = 1 << n;
     for (int i = 0; i < n; i++) {
         scanf("%d", &a[i]);
     }
@@ -24,11 +24,11 @@ int main() {
     std::vector<std::vector<bool>> pair(n, std::vector<bool>(n, false));
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            pair[i][j] = (gcd(a[i], a[j]) >= minWantedGcd);
+            pair[i][j] = gcd(a[i], a[j]) >= minWantedGcd;
         }
     }
 
-    const int MAX_CODE = (1 << n);
+    const int MAX_CODE = 1 << n;
     std::vector<std::vector<long long>> count(n, std::vector<long long>(MAX_CODE, 0));
 
     for (int code = 1; code < MAX_CODE; code++) {
@@ -51,17 +51,17 @@ int main() {
 
     int rem = (1 << n) - 1;
     std::vector<int> answer(n);
-    for (int i = 0; i < n; i++) { //answer position
+    for (int i = 0; i < n; i++) {//answer position
         bool found = false;
-        for (int j = 0; j < n; j++) { //a[j] to the ans[i]
-            if (((rem >> j) & 1) == 1 && // !used[j]
+        for (int j = 0; j < n; j++) {
+            if (((rem >> j) & 1) == 1 &&
                 (i == 0 || gcd(answer[i - 1], a[j]) >= minWantedGcd)
             ) {
                 if (count[j][rem] < pos) {
                     pos -= count[j][rem];
                 } else {
                     answer[i] = a[j];
-                    rem -= (1 << j);
+                    rem -= 1 << j;
                     found = true;
                     break;
                 }
