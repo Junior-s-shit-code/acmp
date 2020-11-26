@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <vector>
 #include <string>
+#include <climits>
 
 struct Man {
 
@@ -28,7 +29,7 @@ int main() {
     scanf("%d %d", &nMen, &nCircles);
     std::vector<Man> a(nMen);
     std::string ans = "";
-    int minTime = (int)1e9;
+    int minTime = INT_MAX;
     for (int i = 0; i < nMen; i++) {
         a[i] = Man::read(nCircles);
         if (a[i].time < minTime) {
