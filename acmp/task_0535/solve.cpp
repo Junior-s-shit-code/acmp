@@ -13,7 +13,7 @@ long long getSum(long long num1, long long num2) {
 	return std::atoll(ans.c_str());
 }
 
-long long assumingWithPriority(long long num1, long long num2, long long num3) {
+long long getTripleSum(long long num1, long long num2, long long num3) {
 	return getSum(getSum(num1, num2), num3);
 }
 
@@ -23,9 +23,9 @@ int main() {
 	int a, b, c;
 	scanf("%d %d %d", &a, &b, &c);
 	std::set<long long> ans;
-	ans.insert(assumingWithPriority(a, b, c));
-	ans.insert(assumingWithPriority(a, c, b));
-	ans.insert(assumingWithPriority(b, c, a));
+	ans.insert(getTripleSum(a, b, c));
+	ans.insert(getTripleSum(a, c, b));
+	ans.insert(getTripleSum(b, c, a));
 	printf((int)ans.size() == 1 ? "NO\n" : "YES\n");
 	for (long long item : ans) {
 		printf("%lld\n", item);
