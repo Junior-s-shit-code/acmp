@@ -8,10 +8,10 @@ int main() {
     double left = 30.0;
     double right = 4000.0;
     double cur, prev;
-    char buf[10];
     int n;
     scanf("%d %lf", &n, &prev);
     for (int i = 0; i + 1 < n; i++) {
+        char buf[10];
         scanf("%lf %s", &cur, &buf);
         bool closer = std::string(buf) == "closer";
         if (cur > prev && closer ||
