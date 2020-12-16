@@ -20,7 +20,7 @@ int main() {
     scanf("%d", &n);
     int f[2][2];
     scanf("%1d%1d%1d%1d", &f[0][0], &f[0][1], &f[1][0], &f[1][1]);
-    std::vector<std::vector<Info>> info(2, std::vector <Info>(1 + n, Info{ false, 0, -1, -1 })); 
+    std::vector<std::vector<Info>> info(2, std::vector<Info>(1 + n, Info{ false, 0, -1, -1 })); 
     info[0][1] = Info{ true, 0, 0, -1 };
     info[1][1] = Info{ true, 1, 1, -1 };
     for (int len = 2; len <= n; len++) {
