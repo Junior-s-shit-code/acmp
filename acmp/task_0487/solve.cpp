@@ -1,11 +1,10 @@
 #include <stdio.h>
 
 bool badMove(int n, int maxTake, int value) {
-    if (n <= maxTake && value < n) {
+    if (n <= maxTake && value < n ||
+        n % (maxTake + 1) != 0 && (n - value) % (maxTake + 1) != 0) {
         return true;
-    } else if (n > maxTake && n % (maxTake + 1) != 0 && (n - value) % (maxTake + 1) != 0) {
-        return true;
-    }
+    } 
     return false;
 }
 
