@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <algorithm>
 #include <vector>
-#include <functional>
 
 int gcd(int a, int b) {
     while (b > 0) {
@@ -10,8 +9,6 @@ int gcd(int a, int b) {
     }
     return a;
 }
-
-int total = 0;
 
 void count(int lastD,
            int p,
@@ -70,7 +67,7 @@ int main() {
             }
         }
     }
-   
+    int total = 0;
     for (int d = 0; d < nD; d++) {
         count(d, divisors[d], nMult - 1, nD, n, total, minProduct, coprime, divisors);
     }
