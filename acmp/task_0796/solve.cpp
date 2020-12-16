@@ -16,20 +16,20 @@ void nextChar() {
     }
 }
 
-bool text() {
+bool isText() {
     return 'A' <= c && c <= 'Z' ||
         'a' <= c && c <= 'z' ||
         '0' <= c && c <= '9';
 }
 
-bool punctuation() {
+bool isPunctuationSign() {
     return c == '.' ||
         c == ',' ||
         c == '?' ||
         c == '!' ||
         c == '-' ||
         c == ':' ||
-        c == 39; // 39 == ' char
+        c == '\'';
 }
 
 bool willNewLine() {
@@ -44,7 +44,7 @@ bool willNewLine() {
 
 std::string getWord() {
     std::string word = "";
-    while (text()) {
+    while (isText()) {
         word += c;
         nextChar();
     }
@@ -77,16 +77,16 @@ int main() {
             printNewParagraph(nWhitespaces);
             curLineLen = nWhitespaces;
         }
-        if (text()) {
+        if (isText()) {
             std::string word = getWord();
             bool wasNewLine = false;
-            while (!text() && code != EOF) {
+            while (!isText() && code != EOF) {
                 if (c == '\n' && wasNewLine) {
                     nextWillNewParagraph = true; 
                     break;
                 } else if (c == '\n') {
                     wasNewLine = true;
-                } else if (punctuation()) {
+                } else if (isPunctuationSign()) {
                     word.insert(word.end(), c);
                     wasNewLine = false;
                 }
@@ -96,7 +96,7 @@ int main() {
 
             std::string whitespace = "";
             int whitespaceLen = 0;
-            if (whitespaceBefore) {
+            if (whitespaceBefore) { // add whitespace before word
                 whitespace = " ";
                 whitespaceLen = 1;
             }
