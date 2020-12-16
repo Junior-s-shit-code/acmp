@@ -23,7 +23,7 @@ struct City {
 
     int timeIn;
 
-    bool operator<(const City &second) const{
+    bool operator<(const City &second) const {
         if (timeIn != second.timeIn) {
             return timeIn > second.timeIn;
         }
@@ -61,7 +61,6 @@ int main() {
             if (cur.timeIn <= way.timeStart && way.timeEnd < time[way.to]) {
                 time[way.to] = way.timeEnd;
                 q.push(City{ way.to, way.timeEnd });
-
             }
         }
     }
