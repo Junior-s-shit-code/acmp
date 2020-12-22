@@ -13,7 +13,7 @@ int main() {
         printf("%d", MAX_SPEED);
     } else {
         double actualTime = minTime + redTime - extraTime;
-        printf("%lf", dist / actualTime);
+        printf("%.9lf", 1.0 * dist / actualTime);
     }
     return 0;
 }
