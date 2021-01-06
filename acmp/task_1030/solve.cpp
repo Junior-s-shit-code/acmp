@@ -8,6 +8,11 @@ int main() {
     long long a, b, c, d;
     scanf("%lld %lld %lld %lld", &a, &b, &c, &d);
     long double sum = std::min(a, b) + std::min(c, d);
-    printf("%d", (int) std::sqrt(sum));
+    long double sumSqrt = std::sqrt(sum);
+    long long ans = sumSqrt + 1;
+    while (ans * ans > sum) {
+        ans--;
+    }
+    printf("%lld", ans);
     return 0;
 }
