@@ -10,7 +10,8 @@ int main() {
     std::string type(buf);
     if (type == "auto" ||
         type == "freeze" && end < start ||
-        type == "heat" && start < end) {
+        type == "heat" && start < end
+    ) {
         printf("%d", end);
     } else {
         printf("%d", start);
