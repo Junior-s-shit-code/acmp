@@ -35,16 +35,15 @@ int main() {
     int twoCount = 0;
     int maxNumberId = 0;
     long long ans = 0;
-    n = (int)a.size();
-
-    for (int i = 0; i + 1 < n; i++) {
+    int nInfo = (int)a.size();
+    for (int i = 0; i + 1 < nInfo; i++) {
         if (a[i].counter >= 3) {
             ans++;
         }
         if (i > 0 && a[i].counter >= 2) {
             twoCount--;
         }
-        while (maxNumberId + 1 < n && 1LL * a[i].value * mult >= (long long) a[maxNumberId + 1].value) {
+        while (maxNumberId + 1 < nInfo && 1LL * a[i].value * mult >=  a[maxNumberId + 1].value) {
             maxNumberId++;
             if (a[maxNumberId].counter >= 2) {
                 twoCount++;
@@ -59,7 +58,7 @@ int main() {
         }
         ans += ABCsum + ABBsum + AABsum;
     }
-    if (a[n - 1].counter >= 3) {
+    if (a[nInfo - 1].counter >= 3) {
         ans++;
     }
     printf("%lld", ans);
