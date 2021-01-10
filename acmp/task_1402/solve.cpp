@@ -2,12 +2,12 @@
 #include <vector>
 #include <algorithm>
 #include <string>
-#include <unordered_set>
-#include <cassert>
-#include <climits>
 
-std::vector<std::vector<int>> cnk(1 + 109, std::vector<int>(1 + 8, 0));
 const int MOD = (int)1e9 + 7;
+const int MAX_K = 8;
+const int MAX_N = 100 + MAX_K;
+
+std::vector<std::vector<int>> cnk(1 + MAX_N, std::vector<int>(1 + MAX_K, 0));
 
 int c(int n, int k) {
     if (k == 0 || k == n) {
