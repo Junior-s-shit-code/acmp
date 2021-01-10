@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-long long getBlockId (
+long long getBlockId(
     long long room,
     const long long kExtra,
     const long long x,
