@@ -16,7 +16,7 @@ int main() {
     } else {
         a = b - 1;
         c = b + 2;
-        b++; \
+        b++;
     }
     printf("%d %d %d", a, b, c);
     return 0;
