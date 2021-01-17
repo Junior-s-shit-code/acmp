@@ -3,8 +3,9 @@
 int main() {
     freopen("input.txt", "r", stdin);
     freopen("output.txt", "w", stdout);
-    long long n, k;
-    scanf("%lld %lld", &n, &k);
+    long long n;
+    int k;
+    scanf("%lld %d", &n, &k);
     int ans = 0;
     while (n >= k) {
         ans++;
