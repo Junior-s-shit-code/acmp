@@ -3,8 +3,8 @@
 
 bool canDrive(
     double time,
-    const int &fineId,
-    const int &nSegments,
+    const int fineId,
+    const int nSegments,
     const std::vector<int> &maxSegmentSpeed,
     const std::vector<int> &speedLimits,
     const std::vector<int> &segmentLen
