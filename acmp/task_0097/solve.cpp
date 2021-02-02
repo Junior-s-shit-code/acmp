@@ -67,7 +67,7 @@ public:
         }
     }
 
-    int getSets(int v) {
+    int getSet(int v) {
         while (v != parent[v]) {
             parent[v] = parent[parent[v]];
             v = parent[v];
@@ -76,8 +76,8 @@ public:
     }
 
     bool unionSets(int a, int b) {
-        a = getSets(a);
-        b = getSets(b);
+        a = getSet(a);
+        b = getSet(b);
         if (a == b) {
             return false;
         }
