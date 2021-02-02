@@ -48,63 +48,64 @@ struct Rect {
     }
 };
 
-void dsuMake(
-    int v,
-    std::vector<int> &parent,
-    std::vector<int> &rank
-) {
-    parent[v] = v;
-    rank[v] = 0;
-}
+class DSU {
 
-int dsuGet(
-    int v,
-    std::vector<int> &parent,
-    std::vector<int> &rank
-) {
-    while (v != parent[v]) {
-        v = parent[v];
-    }
-    return v;
-}
+private:
 
-bool dsuUnion(
-    int a,
-    int b,
-    std::vector<int> &parent,
-    std::vector<int> &rank
-) {
-    a = dsuGet(a, parent, rank);
-    b = dsuGet(b, parent, rank);
-    if (a != b) {
-        if (rank[a] < rank[b]) {
-            std::swap(a, b);
+    std::vector<int> parent;
+
+    std::vector<int> rank;
+
+public:
+
+    DSU(const int n) {
+        parent.resize(n);
+        rank.resize(n);
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+            rank[i] = 0;
         }
-        parent[b] = a;
-        if (rank[a] == rank[b]) {
-            rank[a]++;
-        }
-        return true;
     }
-    return false;
-}
+
+    int get(int v) {
+        while (v != parent[v]) {
+            parent[v] = parent[parent[v]];
+            v = parent[v];
+        }
+        return v;
+    }
+
+    bool unionSets(int a, int b) {
+        a = get(a);
+        b = get(b);
+        if (a != b) {
+            if (rank[a] < rank[b]) {
+                std::swap(a, b);
+            }
+            parent[b] = a;
+            if (rank[a] == rank[b]) {
+                rank[a]++;
+            }
+            return true;
+        }
+        return false;
+    }
+};
 
 int main() {
     freopen("input.txt", "r", stdin);
     freopen("output.txt", "w", stdout);
     int n;
     scanf("%d", &n);
-    std::vector<int> parent(n, -1);
-    std::vector<int> rank(n, -1);
+    DSU dsu(n);
     std::vector<Rect> r(n);
     for (int i = 0; i < n; i++) {
         r[i] = Rect::read();
-        dsuMake(i, parent, rank);
     }
     int nComponents = n;
     for (int v1 = 0; v1 < n; v1++) {
         for (int v2 = v1 + 1; v2 < n; v2++) {
-            if (r[v1].intersect(r[v2]) && dsuUnion(v1, v2, parent, rank)) {
+            if (r[v1].intersect(r[v2]) && dsu.unionSets(v1, v2)) {
                 nComponents--;
             }
         }
