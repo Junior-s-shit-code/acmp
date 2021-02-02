@@ -67,7 +67,7 @@ public:
         }
     }
 
-    int get(int v) {
+    int getSets(int v) {
         while (v != parent[v]) {
             parent[v] = parent[parent[v]];
             v = parent[v];
@@ -76,19 +76,19 @@ public:
     }
 
     bool unionSets(int a, int b) {
-        a = get(a);
-        b = get(b);
-        if (a != b) {
-            if (rank[a] < rank[b]) {
-                std::swap(a, b);
-            }
-            parent[b] = a;
-            if (rank[a] == rank[b]) {
-                rank[a]++;
-            }
-            return true;
+        a = getSets(a);
+        b = getSets(b);
+        if (a == b) {
+            return false;
         }
-        return false;
+        if (rank[a] < rank[b]) {
+            std::swap(a, b);
+        }
+        parent[b] = a;
+        if (rank[a] == rank[b]) {
+            rank[a]++;
+        }
+        return true;
     }
 };
 
