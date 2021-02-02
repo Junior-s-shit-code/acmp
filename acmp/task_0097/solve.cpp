@@ -48,26 +48,35 @@ struct Rect {
     }
 };
 
-std::vector<int> parent;
-std::vector<int> rank;
-
-void makeSet(int v) {
+void dsuMake(
+    int v,
+    std::vector<int> &parent,
+    std::vector<int> &rank
+) {
     parent[v] = v;
     rank[v] = 0;
 }
 
-int findSet(int v) {
-    if (v == parent[v]) {
-        return v;
+int dsuGet(
+    int v,
+    std::vector<int> &parent,
+    std::vector<int> &rank
+) {
+    while (v != parent[v]) {
+        v = parent[v];
     }
-    return parent[v] = findSet(parent[v]);
+    return v;
 }
 
-void unionSets(int a, int b, int &counter) {
-    a = findSet(a);
-    b = findSet(b);
+bool dsuUnion(
+    int a,
+    int b,
+    std::vector<int> &parent,
+    std::vector<int> &rank
+) {
+    a = dsuGet(a, parent, rank);
+    b = dsuGet(b, parent, rank);
     if (a != b) {
-        counter--;
         if (rank[a] < rank[b]) {
             std::swap(a, b);
         }
@@ -75,7 +84,9 @@ void unionSets(int a, int b, int &counter) {
         if (rank[a] == rank[b]) {
             rank[a]++;
         }
+        return true;
     }
+    return false;
 }
 
 int main() {
@@ -83,25 +94,22 @@ int main() {
     freopen("output.txt", "w", stdout);
     int n;
     scanf("%d", &n);
-    parent = rank = std::vector<int>(n, -1);
-    rank = std::vector<int>(n, -1);
+    std::vector<int> parent(n, -1);
+    std::vector<int> rank(n, -1);
     std::vector<Rect> r(n);
     for (int i = 0; i < n; i++) {
         r[i] = Rect::read();
-        makeSet(i);
+        dsuMake(i, parent, rank);
     }
-    int counter = n;
-    for (int v = 0; v < n; v++) {
-        for (int v2 = 0; v2 < n; v2++) {
-            if (v == v2) {
-                continue;
-            }
-            if (r[v].intersect(r[v2]) || r[v2].intersect(r[v])) {
-                unionSets(v, v2, counter);
+    int nComponents = n;
+    for (int v1 = 0; v1 < n; v1++) {
+        for (int v2 = v1 + 1; v2 < n; v2++) {
+            if ((r[v1].intersect(r[v2]) || r[v2].intersect(r[v1])) && dsuUnion(v1, v2, parent, rank)) {
+                nComponents--;
             }
         }
     }
 
-    printf("%d", counter);
+    printf("%d", nComponents);
     return 0;
 }
