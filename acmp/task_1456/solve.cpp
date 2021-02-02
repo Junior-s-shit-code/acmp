@@ -1,32 +1,20 @@
 #include <stdio.h>
 
-int binSearch(
-    long long value,
-    long long nFloors,
-    long long kExtra,
-    long long xExtra,
-    long long x
+long long getBlockId (
+    long long room,
+    const long long kExtra,
+    const long long x,
+    const long long roomsPerEntrance,
+    const long long roomsPerBlock
 ) {
-    int left = 1;
-    int right = (int) nFloors;
-    while (left < right) {
-        int mid = (left + right) >> 1;
-        long long maxFlat = mid * x + (xExtra - x) * (mid / kExtra);
-        long long minFlat = maxFlat + 1;
-        if (mid % kExtra == 0) {
-            minFlat -= xExtra;
-        } else {
-            minFlat -= x;
-        }
-        if (value > maxFlat) {
-            left = mid + 1;
-        } else if (value < minFlat) {
-            right = mid;
-        } else {
-            return mid;
-        }
+    room %= roomsPerEntrance;
+    long long block = room / roomsPerBlock;
+    room %= roomsPerBlock;
+    long long floor = room / x;
+    if (floor > kExtra - 1) {
+        floor = kExtra - 1;
     }
-    return left;
+    return block * kExtra + floor + 1;
 }
 
 int main() {
@@ -34,15 +22,15 @@ int main() {
     freopen("output.txt", "w", stdout);
     long long nFloors, kExtra, xExtra, x;
     scanf("%lld %lld %lld %lld", &nFloors, &kExtra, &xExtra, &x);
-    long long flatsInHouse = nFloors * x + (xExtra - x) * (nFloors / kExtra);
+    long long roomsPerEntrance = (nFloors / kExtra) * xExtra + (nFloors - nFloors / kExtra) * x;
+    long long roomsPerBlock = (kExtra - 1) * x + xExtra;
     int nQ;
     scanf("%d", &nQ);
-    for (int q = 0; q < nQ; q++) {
-        long long num;
-        scanf("%lld", &num);
-        num--;
-        num %= flatsInHouse;
-        printf("%d\n", binSearch(num + 1, nFloors, kExtra, xExtra, x));
+    for (int i = 0; i < nQ; i++) {
+        long long room;
+        scanf("%lld", &room);
+        long long ans = getBlockId(room - 1, kExtra, x, roomsPerEntrance, roomsPerBlock);
+        printf("%lld\n", ans);
     }
     return 0;
 }
