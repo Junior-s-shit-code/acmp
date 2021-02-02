@@ -45,17 +45,18 @@ int main() {
         int start, end;
         scanf("%d %d", &start, &end);
         int time = end - start;
-        int left = 0;
+        int left = -1;
         int right = nSpeedLimits;
-        while (left < right) {
+        while (left + 1 < right) {
             int mid = (left + right) >> 1;
             if (canDrive(time, mid, nSegments, maxSegmentSpeed, speedLimits, segmentLen)) { 
                 right = mid;
             } else {
-                left = mid + 1;
+                left = mid;
             }
         }
-        int maxCost = violationCost[left];
+
+        int maxCost = violationCost[right];
         printf("%d\n", maxCost);
     }
     return 0;
