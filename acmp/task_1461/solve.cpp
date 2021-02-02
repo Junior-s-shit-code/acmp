@@ -3,14 +3,16 @@
 #include <stack>
 #include <algorithm>
 
-const bool PRINT = true;
-const bool ANNIHILATION = false;
+enum Options {
+    ANNIHILATION,
+    PRINT
+};
 
 struct Event {
 
     int time;
 
-    bool type;
+    Options type;
 };
 
 struct Info {
