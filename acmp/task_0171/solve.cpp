@@ -4,7 +4,7 @@
 int main() {
     freopen("input.txt", "r", stdin);
     freopen("output.txt", "w", stdout);
-    const int maxDivisors = 1000;;
+    const int maxDivisors = 1000;
     long long num;
     scanf("%lld", &num);
     long long ans = 1;
