@@ -66,7 +66,6 @@ int main() {
         for (char newC : chars) {
             if (newC != oldC) {
                 c = newC;
-
                 if (isValid(str)) {
                     printf("%s", str.c_str());
                     return 0;
