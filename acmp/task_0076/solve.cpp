@@ -2,6 +2,12 @@
 #include <vector>
 #include <algorithm>
 
+int getTime() {
+    int h, m;
+    scanf("%d:%d", &h, &m);
+    return h * 60 + m;
+}
+
 int main() {
     freopen("input.txt", "r", stdin);
     freopen("output.txt", "w", stdout);
@@ -11,13 +17,8 @@ int main() {
     std::vector<int> in(MAX_TIME, 0);
     std::vector<int> out(MAX_TIME, 0);
     for (int i = 0; i < n; i++) {
-        int h, m;
-        scanf("%d:%d", &h, &m);
-        int curTime = h * 60 + m;
-        in[curTime]++;
-        scanf("%d:%d", &h, &m);
-        curTime = h * 60 + m;
-        out[curTime]++;
+        in[getTime()]++;
+        out[getTime()]++;
     }
     int maxVisitors = 0;
     int curVisitors = 0;
