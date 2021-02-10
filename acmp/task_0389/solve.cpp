@@ -2,37 +2,40 @@
 #include <vector>
 #include <algorithm>
 
-void update(
-    int id,
-    int n,
+void updateSegment(
     int &goodSegments,
-    std::vector<bool> &goodCode,
+    const int value,
+    const int id,
     const std::vector<bool> &goodXor,
-    const std::vector<int> &a
+    std::vector<bool> &code
 ) {
+    if (goodXor[value] != code[id]) {
+        code[id] = !code[id];
+        if (code[id]) {
+            goodSegments++;
+        } else {
+            goodSegments--;
+        }
+    }
+}
+
+void update(
+    int &goodSegments,
+    const int id,
+    const int n,
+    const std::vector<bool> &goodXor,
+    const std::vector<int> &a, 
+    std::vector<bool> &code
+) {
+    int curValue = a[id];
+
     int leftId = id;
+    int leftValue = a[(id - 1 + n) % n];
+    updateSegment(goodSegments, curValue ^ leftValue, leftId, goodXor, code);
+
     int rightId = (id + 1) % n;
-    int leftVal = a[(id - 1 + n) % n];
-    int rightVal = a[rightId];
-    int curVal = a[id];
-
-    if (goodXor[leftVal ^ curVal] != goodCode[leftId]) {
-        goodCode[leftId] = !goodCode[leftId];
-        if (goodCode[leftId]) {
-            goodSegments++;
-        } else {
-            goodSegments--;
-        }
-    }
-
-    if (goodXor[rightVal ^ curVal] != goodCode[rightId]) {
-        goodCode[rightId] = !goodCode[rightId];
-        if (goodCode[rightId]) {
-            goodSegments++;
-        } else {
-            goodSegments--;
-        }
-    }
+    int rightValue = a[rightId];
+    updateSegment(goodSegments, curValue ^ rightValue, rightId, goodXor, code);
 }
 
 int main() {
@@ -43,9 +46,9 @@ int main() {
         goodXor[val] = true;
     }
 
-    int exp;
-    scanf("%d", &exp);
-    int n = 1 << exp;
+    int binPow;
+    scanf("%d", &binPow);
+    int n = 1 << binPow;
     std::vector<int> a(n);
     for (int i = 0; i < n; i++) {
         scanf("%d", &a[i]);
@@ -65,8 +68,8 @@ int main() {
         int id1, id2;
         scanf("%d %d", &id1, &id2);
         std::swap(a[id1], a[id2]);
-        update(id1, n, goodSegments, goodCode, goodXor, a);
-        update(id2, n, goodSegments, goodCode, goodXor, a);
+        update(goodSegments, id1, n, goodXor, a, goodCode);
+        update(goodSegments, id2, n, goodXor, a, goodCode);
         if (goodSegments == n) {
             printf("Yes\n");
         } else {
