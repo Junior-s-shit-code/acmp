@@ -43,7 +43,7 @@ void bfs(
                     ) {
                         isDamaged = true;
                     }
-                    map[newI][newJ] = '-';
+                    map[newI][newJ] = FREE;
                 }
             }
         }
