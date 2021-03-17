@@ -20,7 +20,7 @@ int main() {
     char buf[1 + 1000000];
     scanf("%d %s", &n, &buf);
     std::string s(buf);
-    for (int i = 0; i < (int)s.length(); i++) {
+    for (int i = 0; i < (int)s.length() / 2; i++) {
         if (s[i] != getComplimentar(s[n - i - 1])) {
             printf("NO");
             return 0;
