@@ -19,7 +19,7 @@ bool build(
         posJ < 0 || posJ >= n ||
         was[posI][posJ] ||
         a[posI][posJ] != s[id]
-    ) {
+        ) {
         return false;
     }
     was[posI][posJ] = true;
@@ -30,7 +30,14 @@ bool build(
             }
             int newI = posI + di;
             int newJ = posJ + dj;
-            if (build(id + 1, newI, newJ, s, a, was)) {
+
+            if (id + 1 == (int)s.length() || 
+                0 <= newI && newI < n &&
+                0 <= newJ && newJ < n &&
+                !was[newI][newJ] &&
+                a[newI][newJ] == s[id + 1] &&
+                build(id + 1, newI, newJ, s, a, was)
+            ) {
                 return true;
             }
         }
