@@ -8,9 +8,11 @@ int main() {
     int n;
     scanf("%d", &n);
     std::vector<std::vector<int>> a(n, std::vector<int>(n));
+    int totalSum = 0;
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             scanf("%d", &a[i][j]);
+            totalSum += a[i][j];
         }
     }
 
@@ -22,23 +24,19 @@ int main() {
     }
     int minSum = INT_MAX;
     std::vector<int> ans;
-
-    for (int iPermutation = 0; iPermutation < nPermutations; iPermutation++) {
-        int curSum = 0;
+    
+    do {
+        int staySum = 0;
         for (int i = 0; i < n; i++) {
-            int stay = pos[i];
-            for (int j = 0; j < n; j++) {
-                if (j != stay) {
-                    curSum += a[i][j];
-                }
-            }
+            staySum += a[i][pos[i]];
         }
+        int curSum = totalSum - staySum;
         if (curSum < minSum) {
             minSum = curSum;
             ans = pos;
         }
-        std::next_permutation(pos.begin(), pos.end());
-    }
+    } while (std::next_permutation(pos.begin(), pos.end()));
+
     for (int i = 0; i < n; i++) {
         printf("%c", 'A' + ans[i]);
     }
