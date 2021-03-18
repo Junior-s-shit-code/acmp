@@ -12,17 +12,9 @@ bool build(
     const std::vector<std::string> &a,
     std::vector<std::vector<bool>> &was
 ) {
-    if (id == (int)s.length()) {
+    if (id + 1 == (int)s.length()) {
         return true;
     }
-    if (posI < 0 || posI >= n ||
-        posJ < 0 || posJ >= n ||
-        was[posI][posJ] ||
-        a[posI][posJ] != s[id]
-        ) {
-        return false;
-    }
-    was[posI][posJ] = true;
     for (int di = -1; di <= 1; di++) {
         for (int dj = -1; dj <= 1; dj++) {
             if (di * di + dj * dj != 1) {
@@ -31,18 +23,19 @@ bool build(
             int newI = posI + di;
             int newJ = posJ + dj;
 
-            if (id + 1 == (int)s.length() || 
-                0 <= newI && newI < n &&
+            if (0 <= newI && newI < n &&
                 0 <= newJ && newJ < n &&
                 !was[newI][newJ] &&
-                a[newI][newJ] == s[id + 1] &&
-                build(id + 1, newI, newJ, s, a, was)
+                a[newI][newJ] == s[id + 1]
             ) {
-                return true;
+                was[newI][newJ] = true;
+                if (build(id + 1, newI, newJ, s, a, was)) {
+                    return true;
+                }
+                was[newI][newJ] = false;
             }
         }
     }
-    was[posI][posJ] = false;
     return false;
 }
 
@@ -66,9 +59,11 @@ int main() {
         bool findWord = false;
         for (int i = 0; i < n && !findWord; i++) {
             for (int j = 0; j < n && !findWord; j++) {
-                if (build(0, i, j, s, a, was)) {
+                was[i][j] = true;
+                if (a[i][j] == s[0] && build(0, i, j, s, a, was)) {
                     findWord = true;
                 }
+                was[i][j] = false;
             }
         }
         printf(findWord ? "YES\n" : "NO\n");
