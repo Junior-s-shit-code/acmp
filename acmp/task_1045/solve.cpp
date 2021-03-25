@@ -1,22 +1,24 @@
 #include <stdio.h>
 #include <vector>
-#include <algorithm>
 
 int main() {
 	freopen("input.txt", "r", stdin);
 	freopen("output.txt", "w", stdout);
-	const int INF = 5000;
 	int n;
 	scanf("%d", &n);
-	std::vector<int> a(n + 1, INF);
+	std::vector<int> a(n + 1);
 	a[1] = 1;
-	for (int num = 2; num <= n; num++) {
-		for (int prev = num - 1; prev >= 1; prev--) {
-			if (num % prev == 0) {
-				int d = num / prev;
-				a[num] = std::min(a[num], a[prev] + a[d]);
+	int best = 1;
+	int id = 1;
+	for (int i = 2; i <= n; i++) {
+		a[i] = best + i - id;
+
+		for (int j = 2; j * j <= i; j++) {
+			if (i % j == 0 && a[i] > a[j] + a[i / j]) {
+				a[i] = a[j] + a[i / j];
+				best = a[i];
+				id = i;
 			}
-			a[num] = std::min(a[num], a[prev] + num - prev);
 		}
 	}
 	printf("%d", a[n]);
