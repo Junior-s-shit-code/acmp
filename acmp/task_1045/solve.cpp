@@ -9,15 +9,15 @@ int main() {
 	std::vector<int> a(n + 1);
 	a[1] = 1;
 	int best = 1;
-	int id = 1;
+	int bestId = 1;
 	for (int i = 2; i <= n; i++) {
-		a[i] = best + i - id;
+		a[i] = best + i - bestId;
 
 		for (int j = 2; j * j <= i; j++) {
 			if (i % j == 0 && a[i] > a[j] + a[i / j]) {
 				a[i] = a[j] + a[i / j];
 				best = a[i];
-				id = i;
+				bestId = i;
 			}
 		}
 	}
