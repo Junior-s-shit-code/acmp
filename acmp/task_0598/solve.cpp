@@ -21,20 +21,6 @@ bool check(int iComb, const std::vector<std::vector<bool>> &friends) {
     return true;
 }
 
-void print(int iComb, int groupSize, int n) {
-    printf("%d\n", n - groupSize + 1);
-    int id = 2;
-    for (int i = 0; i < n; i++) {
-        if ((iComb & 1) == 1) {
-            printf("%d ", 1);
-        } else {
-            printf("%d ", id);
-            id++;
-        }
-        iComb >>= 1;
-    }
-}
-
 int main() {
     freopen("input.txt", "r", stdin);
     freopen("output.txt", "w", stdout);
@@ -50,19 +36,30 @@ int main() {
         }
     }
 
-    int maxComb = (1 << n);
     int bestGroupSize = 0;
     int bestComb = -1;
-    for (int iComb = 0; iComb < maxComb; iComb++) {
+    for (int iComb = 0; iComb < (1 << n); iComb++) {
         int curGroupSize = __builtin_popcount(iComb);
         if (curGroupSize <= MAX_GROUP &&
             curGroupSize > bestGroupSize &&
             check(iComb, friends)
-            ) {
+        ) {
             bestComb = iComb;
             bestGroupSize = curGroupSize;
         }
     }
-    print(bestComb, bestGroupSize, n);
+
+    printf("%d\n", n - bestGroupSize + 1);
+    int id = 2;
+    for (int i = 0; i < n; i++) {
+        if ((bestComb & 1) == 1) {
+            printf("%d ", 1);
+        } else {
+            printf("%d ", id);
+            id++;
+        }
+        bestComb >>= 1;
+    }
+
     return 0;
 }
