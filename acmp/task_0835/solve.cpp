@@ -60,21 +60,6 @@ int chooseCombination(
     return __builtin_popcount(combination1) < __builtin_popcount(combination2) ? combination1 : combination2;
 }
 
-void print(
-    int num,
-    const long long value,
-    const int n
-) {
-    int nElements = __builtin_popcount(num);
-    printf("%d %lld\n", nElements, value);
-    for (int i = 1; i <= n; i++) {
-        if ((num & 1) == 1) {
-            printf("%d ", i);
-        }
-        num >>= 1;
-    }
-}
-
 int main() {
     freopen("input.txt", "r", stdin);
     freopen("output.txt", "w", stdout);
@@ -85,11 +70,10 @@ int main() {
     for (int i = 0; i < n; i++) {
         a[i] = Item::read(i);
     }
-    int MAX_COMBINATIONS = (1 << n);
     
     int bestCombination = 0;
     long long bestValue = 0;
-    for (int iCombination = 0; iCombination < MAX_COMBINATIONS; iCombination++) {
+    for (int iCombination = 0; iCombination < (1 << n); iCombination++) {
         long long curValue = getSetValue(iCombination, n, maxWeight, a);
         if (curValue > bestValue) {
             bestValue = curValue;
@@ -98,6 +82,14 @@ int main() {
             bestCombination = chooseCombination(bestCombination, iCombination, n);
         }
     }
-    print(bestCombination, bestValue, n);
+    
+    int nElements = __builtin_popcount(bestCombination);
+    printf("%d %lld\n", nElements, bestValue);
+    for (int i = 1; i <= n; i++) {
+        if ((bestCombination & 1) == 1) {
+            printf("%d ", i);
+        }
+        bestCombination >>= 1;
+    }
     return 0;
 }
