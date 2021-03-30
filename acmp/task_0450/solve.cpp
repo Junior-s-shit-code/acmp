@@ -15,12 +15,10 @@ int main() {
             totalSum += a[i][j];
         }
     }
-
-    int nPermutations = 1;
+    
     std::vector<int> pos(n);
     for (int i = 0; i < n; i++) {
         pos[i] = i;
-        nPermutations *= (i + 1);
     }
     int minSum = INT_MAX;
     std::vector<int> ans;
