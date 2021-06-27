@@ -4,10 +4,6 @@
 int main() {
     freopen("input.txt", "r", stdin);
     freopen("output.txt", "w", stdout);
-    std::vector<int> tenPow(10, 1);
-    for (int i = 1; i < 10; i++) {
-        tenPow[i] = tenPow[i - 1] * 10;
-    }
     const int MAX_LEN = 50000;
     int n, maxNum, ansModDigits;
     scanf("%d %d %d", &n, &maxNum, &ansModDigits);
@@ -23,12 +19,13 @@ int main() {
         scanf(" %c", &c);
         a[i] = c - '0';
         long long value = 0;
+        int tenPow = 1;
         for (int j = 0; j < std::min(10, i); j++) {
+            value = 1LL * tenPow * a[i - j] + value;
+            tenPow *= 10;
             if (j > 0 && a[i - j] == 0) {
                 continue;
-            }
-            value = 1LL * tenPow[j] * a[i - j] + value;
-            if (value <= maxNum) {
+            } else if (value <= maxNum) {
                 ans[i] += ans[i - j - 1];
                 ans[i] %= mod;
             } else {
