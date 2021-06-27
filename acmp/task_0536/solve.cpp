@@ -1,51 +1,41 @@
 #include <stdio.h>
-#include <string>
 #include <vector>
-#include <cstdlib>
 
 int main() {
     freopen("input.txt", "r", stdin);
     freopen("output.txt", "w", stdout);
-    const int MAX_LEN = 10;
-    int n, max, ext;
-    scanf("%d %d %d", &n, &max, &ext);
+    std::vector<int> tenPow(10, 1);
+    for (int i = 1; i < 10; i++) {
+        tenPow[i] = tenPow[i - 1] * 10;
+    }
+    const int MAX_LEN = 50000;
+    int n, maxNum, ansModDigits;
+    scanf("%d %d %d", &n, &maxNum, &ansModDigits);
     long long mod = 1;
-    for (int i = 0; i < ext; i++) {
+    for (int i = 0; i < ansModDigits; i++) {
         mod *= 10;
     }
-    std::vector<long long> a(n + 1, 0);
-    char buf[1 + 50000];
-    scanf("%s", &buf);
-    std::string s(buf);
-
-    std::string str;
-    for (int len = 1; len < MAX_LEN && len <= n; len++) {
-        str.insert(str.end(), s[len - 1]);
-        if (str.length() > 1 && str[0] == '0' ||
-            std::atoll(str.c_str()) > max
-            ) {
-            continue;
-        }
-        a[len] = 1;
-    }
-
+    std::vector<long long> ans(n + 1, 0);
+    ans[0] = 1;
+    std::vector<int> a(n + 1, 0);
     for (int i = 1; i <= n; i++) {
-        long long newValue = 0;
-        long long ext = 1;
-        for (int j = i; j > 0 && i - j < MAX_LEN; j--) {
-            int add = s[j - 1] - '0';
-            newValue = add * ext + newValue;
-            ext *= 10;
-            if (newValue > max) {
+        char c;
+        scanf(" %c", &c);
+        a[i] = c - '0';
+        long long value = 0;
+        for (int j = 0; j < std::min(10, i); j++) {
+            if (j > 0 && a[i - j] == 0) {
+                continue;
+            }
+            value = 1LL * tenPow[j] * a[i - j] + value;
+            if (value <= maxNum) {
+                ans[i] += ans[i - j - 1];
+                ans[i] %= mod;
+            } else {
                 break;
             }
-            if (add > 0 || ext == 10) {
-                a[i] += a[j - 1];
-                a[i] %= mod;
-            }
         }
     }
-
-    printf("%lld", a[n]);
+    printf("%lld", ans[n]);
     return 0;
 }
