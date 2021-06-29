@@ -102,8 +102,8 @@ int dfs(
 }
 
 int main() {
-    //freopen("input.txt", "r", stdin);
-    //freopen("output.txt", "w", stdout);
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
     std::vector<std::vector<char>> a(n, std::vector<char>(n));
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
