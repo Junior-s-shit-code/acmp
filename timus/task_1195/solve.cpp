@@ -6,17 +6,49 @@ const int n = 3;
 const char FREE = '#';
 const int DRAW = 4;
 
-bool win(const std::vector<std::vector<char>> &a) {
-    return a[0][0] == a[0][1] && a[0][1] == a[0][2] && a[0][0] != FREE ||
-        a[1][0] == a[1][1] && a[1][1] == a[1][2] && a[1][0] != FREE ||
-        a[2][0] == a[2][1] && a[2][1] == a[2][2] && a[2][0] != FREE ||
+bool win(const int n, const std::vector<std::vector<char>> &a) {
+    for (int i = 0; i < n; i++) {
+        bool good = (a[i][0] != FREE);
+        for (int j = 1; j < n; j++) {
+            if (a[i][j] != a[i][j - 1]) {
+                good = false;
+            }
+        }
+        if (good) {
+            return true;
+        }
+    }
 
-        a[0][0] == a[1][0] && a[1][0] == a[2][0] && a[0][0] != FREE ||
-        a[0][1] == a[1][1] && a[1][1] == a[2][1] && a[0][1] != FREE ||
-        a[0][2] == a[1][2] && a[1][2] == a[2][2] && a[0][2] != FREE ||
-
-        a[0][0] == a[1][1] && a[1][1] == a[2][2] && a[1][1] != FREE ||
-        a[2][0] == a[1][1] && a[1][1] == a[0][2] && a[1][1] != FREE;
+    for (int i = 0; i < n; i++) {
+        bool good = (a[0][i] != FREE);
+        for (int j = 1; j < n; j++) {
+            if (a[j][i] != a[j - 1][i]) {
+                good = false;
+            }
+        }
+        if (good) {
+            return true;
+        }
+    }
+    bool good = (a[0][0] != FREE);
+    for (int i = 1; i < n; i++) {
+        if (a[i][i] != a[i - 1][i - 1]) {
+            good = false;
+        }
+    }
+    if (good) {
+        return true;
+    }
+    good = (a[n - 1][0] != FREE);
+    for (int i = 1; i < n; i++) {
+        if (a[i - 1][n - i] != a[i][n - i - 1]) {
+            good = false;
+        }
+    }
+    if (good) {
+        return true;
+    }
+    return false;
 }
 
 int dfs(
@@ -24,7 +56,7 @@ int dfs(
     const std::vector<char> &move,
     std::vector<std::vector<char>> &a
 ) {
-    if (win(a)) {
+    if (win(3, a)) {
         return step;
     } else if (step == 3) {
         return DRAW;
@@ -70,8 +102,8 @@ int dfs(
 }
 
 int main() {
-    freopen("input.txt", "r", stdin);
-    freopen("output.txt", "w", stdout);
+    //freopen("input.txt", "r", stdin);
+    //freopen("output.txt", "w", stdout);
     std::vector<std::vector<char>> a(n, std::vector<char>(n));
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
