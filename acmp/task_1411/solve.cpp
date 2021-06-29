@@ -12,7 +12,7 @@ int main() {
     scanf("%d", &nQ);
     for (int q = 0; q < nQ; q++) {
         long long hash = 0;
-        long long pow = 1;
+        long long powBase = 1;
         int type;
         scanf("%d", &type);
         if (type == 1) {
@@ -20,8 +20,8 @@ int main() {
             scanf("%s", &buf);
             std::string s(buf);
             for (int i = 0; i < (int)s.length(); i++) {
-                hash += pow * (s[i] - 'a' + 1) % MOD;
-                pow = pow * PRIME % MOD;
+                hash += powBase * (s[i] - 'a' + 1) % MOD;
+                powBase = powBase * PRIME % MOD;
                 mp[i][hash]++;
             }
         } else if (type == 2) {
@@ -29,14 +29,14 @@ int main() {
             scanf("%s", &buf);
             std::string s(buf);
             for (int i = 0; i < (int)s.length(); i++) {
-                hash += pow * (s[i] - 'a' + 1) % MOD;
-                pow = pow * PRIME % MOD;
+                hash += powBase * (s[i] - 'a' + 1) % MOD;
+                powBase = powBase * PRIME % MOD;
                 mp[i][hash]--;
                 if (mp[i][hash] == 0) {
                     mp[i].erase(hash);
                 }
             }
-        } else if (type) {
+        } else {
             int len;
             scanf("%d", &len);
             printf("%d\n", (int)mp[len - 1].size());
