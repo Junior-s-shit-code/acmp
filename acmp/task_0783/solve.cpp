@@ -1,96 +1,72 @@
 #include <stdio.h>
 #include <vector>
-#include <set>
+#include <queue>
 
-const char UNDEF = '#';
-const int WALL = -1;
-const int FREE = 0;
-const int SIZE = 8;
+struct Pos {
 
+    int i;
 
-int countColors(const std::vector<std::vector<int>> &color) {
-    std::set<int> s;
-    for (int i = 1; i <= SIZE; i++) {
-        for (int j = 1; j <= SIZE; j++) {
-            s.insert(color[i][j]);
-        }
-    }
-    return (int)s.size();
-}
-
-
-void rePaint(
-    const int i,
-    const int j,
-    const int oldId,
-    const int newId,
-    std::vector<std::vector<int>> &color
-) {
-    color[i][j] = newId;
-    for (int di = -1; di <= 1; di++) {
-        for (int dj = -1; dj <= 1; dj++) {
-            if (di * di + dj * dj != 1) {
-                continue;
-            }
-            int newI = i + di;
-            int newJ = j + dj;
-            if (color[newI][newJ] == oldId) {
-                rePaint(newI, newJ, oldId, newId, color);
-            }
-        }
-    }
-}
-
-void dfs(
-    const int i,
-    const int j,
-    int &id,
-    std::vector<std::vector<char>> &a,
-    std::vector<std::vector<int>> &color
-) {
-    color[i][j] = id;
-    for (int di = -1; di <= 1; di++) {
-        for (int dj = -1; dj <= 1; dj++) {
-            if (di * di + dj * dj != 1) {
-                continue;
-            }
-            int newI = i + di;
-            int newJ = j + dj;
-
-            if (color[newI][newJ] == WALL) {
-                continue;
-            }
-
-            if (color[newI][newJ] == FREE) {
-                if (a[i][j] != a[newI][newJ]) {
-                    dfs(newI, newJ, id, a, color);
-                } else {
-                    id++;
-                    dfs(newI, newJ, id, a, color);
-                }
-            } else if (color[i][j] != color[newI][newJ] &&
-                       a[i][j] != a[newI][newJ]
-            ) {
-                rePaint(i, j, color[i][j], color[newI][newJ], color);
-            }
-        }
-    }
-}
+    int j;
+};
 
 int main() {
     freopen("input.txt", "r", stdin);
     freopen("output.txt", "w", stdout);
-    std::vector<std::vector<char>> a(1 + SIZE + 1, std::vector<char>(1 + SIZE + 1, UNDEF));
-    std::vector<std::vector<int>> color(1 + SIZE + 1, std::vector<int>(1 + SIZE + 1, WALL));
+    const int SIZE = 8;
+    const char WALL = '#';
+    const int UNDEF = -1;
+    const int CHECKED = 0;
+    std::vector<std::vector<char>> a(1 + SIZE + 1, std::vector<char>(1 + SIZE + 1, WALL));
+    std::vector<std::vector<int>> color(1 + SIZE + 1, std::vector<int>(1 + SIZE + 1, UNDEF));
     for (int i = 1; i <= SIZE; i++) {
         for (int j = 1; j <= SIZE; j++) {
             scanf(" %c", &a[i][j]);
-            color[i][j] = FREE;
         }
     }
-
-    int id = 1;
-    dfs(1, 1, id, a, color);
-    printf("%d", countColors(color));
+    int newColor = 1;
+    std::queue<Pos> newSquare;
+    newSquare.push(Pos{ 1, 1 });
+    color[1][1] = CHECKED;
+    while (!newSquare.empty()) {
+        Pos start = newSquare.front();
+        newSquare.pop();
+        if (color[start.i][start.j] != CHECKED) {
+             continue;
+        }
+        std::queue<Pos> q;
+        q.push(start);
+        while (!q.empty()) {
+            Pos cur = q.front();
+            q.pop();
+            if (color[cur.i][cur.j] != CHECKED) {
+                continue;
+            }
+            color[cur.i][cur.j] = newColor;
+            for (int di = -1; di <= 1; di++) {
+                for (int dj = -1; dj <= 1; dj++) {
+                    if (di * di + dj * dj != 1) {
+                        continue;
+                    }
+                    int newI = cur.i + di;
+                    int newJ = cur.j + dj;
+                    if (a[cur.i][cur.j] != a[newI][newJ] &&
+                        a[newI][newJ] != WALL &&
+                        (color[newI][newJ] == UNDEF ||
+                         color[newI][newJ] == CHECKED)
+                    ) {
+                        q.push(Pos{ newI, newJ });
+                        color[newI][newJ] = CHECKED;
+                    } else if (a[cur.i][cur.j] == a[newI][newJ] && 
+                               color[newI][newJ] == UNDEF
+                    ) {
+                        newSquare.push(Pos{ newI, newJ });
+                        color[newI][newJ] = CHECKED;
+                    }
+                }
+            }
+        }
+        newColor++;
+    }
+    printf("%d", newColor - 1);
     return 0;
 }
