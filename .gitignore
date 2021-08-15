@@ -352,3 +352,7 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+solve.cpp
+output.txt
+input.txt
+solve
