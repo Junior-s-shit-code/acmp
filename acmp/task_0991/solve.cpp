@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <vector>
-#include <cassert>
 
 int main() {
     freopen("input.txt", "r", stdin);
@@ -20,7 +19,9 @@ int main() {
         fileOnClients[iFile].push_back(0);
         hasFile[0][iFile] = true;
     }
-    for (int time = 1; ; time++) {
+    int time = 0;
+    while (fullClients < nClients){
+        time++;
         // pre-round and choose fragment
         // O(n * m)
         std::vector<int> clientWannaFile(nClients, -1);
@@ -50,10 +51,10 @@ int main() {
             int bestClient = 0;
             int minFilesHasSecondClient = MAX_FILES;
             for (int iSecondClient : fileOnClients[clientWannaFile[iClient]]) {
-                if ((int) clientHasFiles[iSecondClient].size() < minFilesHasSecondClient) {
+                if ((int)clientHasFiles[iSecondClient].size() < minFilesHasSecondClient) {
                     minFilesHasSecondClient = (int)clientHasFiles[iSecondClient].size();
                     bestClient = iSecondClient;
-                } else if ((int) clientHasFiles[iSecondClient].size() == minFilesHasSecondClient && 
+                } else if ((int)clientHasFiles[iSecondClient].size() == minFilesHasSecondClient && 
                     iSecondClient < bestClient
                 ) {
                     bestClient = iSecondClient;
@@ -104,12 +105,9 @@ int main() {
                 fullClients++;
             }
         }
-        if (fullClients == nClients) {
-            for (int iClient = 1; iClient < nClients; iClient++) {
-                printf("%d ", clientTime[iClient]);
-            }
-            break;
-        }
+    }
+    for (int iClient = 1; iClient < nClients; iClient++) {
+        printf("%d ", clientTime[iClient]);
     }
     return 0;
 }
