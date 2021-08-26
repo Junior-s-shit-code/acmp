@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <vector>
 #include <algorithm>
-#include <cassert>
 
 std::vector<std::vector<bool>> readMatrix() {
     int sizeI, sizeJ;
@@ -110,4 +109,3 @@ int main() {
     }
     return 0;
 }
-
