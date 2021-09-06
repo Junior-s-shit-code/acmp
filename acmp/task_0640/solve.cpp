@@ -82,11 +82,10 @@ int main() {
     int sizeJ_B = (int)b.size() != 0 ? (int)b[0].size() : 0;
 
     for (int iReflection = 0; iReflection < 2; iReflection++) {
-        for (int iCount = 0; iCount < 4; iCount++)
-        {
+        for (int iCount = 0; iCount < 4; iCount++) {
             if (sizeI_A == sizeI_B && sizeJ_A == sizeJ_B &&
-                compare(sizeI_A, sizeJ_A, a, b))
-            {
+                compare(sizeI_A, sizeJ_A, a, b)
+            ) {
                 printf("Yes");
                 return 0;
             }
