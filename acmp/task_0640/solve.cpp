@@ -34,7 +34,7 @@ std::vector<std::vector<bool>> readMatrix() {
     return newMatrix;
 }
 
-bool check(
+bool compare(
     const int sizeI,
     const int sizeJ,
     const std::vector<std::vector<bool>> &a,
@@ -64,28 +64,7 @@ void rotate(
     a = b;
 }
 
-bool checkAndRotate(
-    std::vector<std::vector<bool>> &a,
-    std::vector<std::vector<bool>> &b
-) {
-    int sizeI_A = (int)a.size();
-    int sizeJ_A = (int)a.size() != 0 ? (int)a[0].size() : 0;
-    int sizeI_B = (int)b.size();
-    int sizeJ_B = (int)b.size() != 0 ? (int)b[0].size() : 0;
-    for (int iCount = 0; iCount < 4; iCount++) {
-        if (sizeI_A == sizeI_B && sizeJ_A == sizeJ_B && 
-            check(sizeI_A, sizeJ_A, a, b)
-        ) {
-            return true;
-        }
-        rotate(sizeI_A, sizeJ_A, a);
-        sizeI_A = (int)a.size();
-        sizeJ_A = (int)a.size() != 0 ? (int)a[0].size() : 0;
-    }
-    return false;
-}
-
-void mirror(std::vector<std::vector<bool>> &a) {
+void reflect(std::vector<std::vector<bool>> &a) {
     int sizeI = (int)a.size();
     for (int i = 0; i < sizeI/ 2; i++) {
         std::swap(a[i], a[sizeI - i - 1]);
@@ -97,15 +76,26 @@ int main() {
     freopen("output.txt", "w", stdout);
     std::vector<std::vector<bool>> a = readMatrix();
     std::vector<std::vector<bool>> b = readMatrix();
-    if (checkAndRotate(a, b)) {
-        printf("Yes");
-        return 0;
+    int sizeI_A = (int)a.size();
+    int sizeJ_A = (int)a.size() != 0 ? (int)a[0].size() : 0;
+    int sizeI_B = (int)b.size();
+    int sizeJ_B = (int)b.size() != 0 ? (int)b[0].size() : 0;
+
+    for (int iReflection = 0; iReflection < 2; iReflection++) {
+        for (int iCount = 0; iCount < 4; iCount++)
+        {
+            if (sizeI_A == sizeI_B && sizeJ_A == sizeJ_B &&
+                compare(sizeI_A, sizeJ_A, a, b))
+            {
+                printf("Yes");
+                return 0;
+            }
+            rotate(sizeI_A, sizeJ_A, a);
+            sizeI_A = (int)a.size();
+            sizeJ_A = (int)a.size() != 0 ? (int)a[0].size() : 0;
+        }
+        reflect(a);
     }
-    mirror(a);
-    if (checkAndRotate(a, b)) {
-        printf("Yes");
-    } else {
-        printf("No");
-    }
+    printf("No");
     return 0;
 }
