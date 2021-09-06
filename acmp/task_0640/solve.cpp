@@ -5,7 +5,7 @@
 std::vector<std::vector<bool>> readMatrix() {
     int sizeI, sizeJ;
     scanf("%d %d", &sizeI, &sizeJ);
-    std::vector<std::vector<bool>> matrix(sizeI, std::vector<bool> (sizeJ, false));
+    std::vector<std::vector<bool>> matrix(sizeI, std::vector<bool>(sizeJ, false));
     int minI = sizeI;
     int maxI = 0;
     int minJ = sizeJ;
@@ -25,7 +25,7 @@ std::vector<std::vector<bool>> readMatrix() {
     }
     int newSizeI = maxI - minI + 1;
     int newSizeJ = maxJ - minJ + 1;
-    std::vector<std::vector<bool>> newMatrix(newSizeI, std::vector<bool> (newSizeJ));
+    std::vector<std::vector<bool>> newMatrix(newSizeI, std::vector<bool>(newSizeJ));
     for (int i = 0; i < newSizeI; i++) {
         for (int j = 0; j < newSizeJ; j++) {
             newMatrix[i][j] = matrix[minI + i][minJ + j];
@@ -55,7 +55,7 @@ void rotate(
     const int sizeJ,
     std::vector<std::vector<bool>> &a
 ) {
-    std::vector<std::vector<bool>> b(sizeJ, std::vector<bool> (sizeI));
+    std::vector<std::vector<bool>> b(sizeJ, std::vector<bool>(sizeI));
     for (int i = 0; i < sizeI; i++) {
         for (int j = 0; j < sizeJ; j++) {
             b[sizeJ - j - 1][i] = a[i][j];
@@ -66,7 +66,7 @@ void rotate(
 
 void reflect(std::vector<std::vector<bool>> &a) {
     int sizeI = (int)a.size();
-    for (int i = 0; i < sizeI/ 2; i++) {
+    for (int i = 0; i < sizeI / 2; i++) {
         std::swap(a[i], a[sizeI - i - 1]);
     }
 }
