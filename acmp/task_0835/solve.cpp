@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <vector>
-#include <algorithm>
 
 struct Item {
 
@@ -8,88 +7,59 @@ struct Item {
 
     int value;
 
-    int id;
-
-    static Item read(const int id) {
+    static Item read() {
         int weight, value;
         scanf("%d %d", &weight, &value);
-        return Item{ weight, value, id };
-    }
+        return Item{ weight, value };
+    };
 };
-
-long long getSetValue(
-    int iCombination,
-    const int n,
-    const long long maxWeight,
-    const std::vector<Item> &a
-) {
-    long long sumValue = 0;
-    long long sumWeight = 0;
-    for (int iItem = 0; iItem < n; iItem++) {
-        if ((iCombination & 1) == 1) {
-            sumValue += a[iItem].value;
-            sumWeight += a[iItem].weight;
-        }
-        iCombination >>= 1;
-    }
-    return sumWeight <= maxWeight ? sumValue : -1;
-}
-
-int chooseCombination(
-    const int combination1,
-    const int combination2,
-    const int n
-) {
-    int value1 = combination1;
-    int value2 = combination2;
-    if (__builtin_popcount(value1) == __builtin_popcount(value2)) {
-        int counter1 = 0;
-        int counter2 = 0;
-        while (value1 > 0 && value2 > 0) {
-            int dig1 = (value1 & 1);
-            int dig2 = (value2 & 1);
-            if (dig1 == 1 && dig2 == 0) {
-                return combination1;
-            } else if (dig1 == 0 && dig2 == 1) {
-                return combination2;
-            }
-            value1 >>= 1;
-            value2 >>= 1;
-        }
-    }
-    return __builtin_popcount(combination1) < __builtin_popcount(combination2) ? combination1 : combination2;
-}
 
 int main() {
     freopen("input.txt", "r", stdin);
     freopen("output.txt", "w", stdout);
-    int n;
-    long long maxWeight;
+    int n, maxWeight;
     scanf("%d %d", &n, &maxWeight);
     std::vector<Item> a(n);
     for (int i = 0; i < n; i++) {
-        a[i] = Item::read(i);
+        a[i] = Item::read();
     }
-    
-    int bestCombination = 0;
+    int bestN = n + 1;
     long long bestValue = 0;
-    for (int iCombination = 0; iCombination < (1 << n); iCombination++) {
-        long long curValue = getSetValue(iCombination, n, maxWeight, a);
-        if (curValue > bestValue) {
+    long long bestCode = 0;
+    for (int code = 1; code < (1 << 21); code++) {
+        int curN = 0;
+        long long curWeight = 0;
+        long long curValue = 0;
+        for (int i = 0; i < n; i++) {
+            if (((code >> (n - i - 1)) & 1) > 0) {
+                curN++;
+                curWeight += a[i].weight;
+                curValue += a[i].value;
+            }
+        }
+        if (curWeight > maxWeight)  {
+            continue;
+        }
+        else if (curValue > bestValue)  {
+            bestN = curN;
             bestValue = curValue;
-            bestCombination = iCombination;
-        } else if (curValue == bestValue) {
-            bestCombination = chooseCombination(bestCombination, iCombination, n);
+            bestCode = code;
+        }
+        else if (curValue == bestValue && curN < bestN)  {
+            bestN = curN;
+            bestCode = code;
+        }
+        else if (curValue == bestValue && 
+            curN == bestN && code > bestCode
+        ) {
+            bestCode = code;
         }
     }
-    
-    int nElements = __builtin_popcount(bestCombination);
-    printf("%d %lld\n", nElements, bestValue);
-    for (int i = 1; i <= n; i++) {
-        if ((bestCombination & 1) == 1) {
-            printf("%d ", i);
+    printf("%d %lld\n", bestN, bestValue);
+    for (int i = 0; i < n; i++) {
+        if (((bestCode >> (n - i - 1)) & 1) > 0) {
+            printf("%d ", i + 1);
         }
-        bestCombination >>= 1;
     }
     return 0;
 }
