@@ -6,7 +6,7 @@
 int main() {
     freopen("input.txt", "r", stdin);
     freopen("output.txt", "w", stdout);
-    const long long INF = (long long)LLONG_MAX;
+    const long long INF = LLONG_MAX;
     int nV, nE;
     scanf("%d %d", &nV, &nE);
     std::vector<std::vector<long long>> d(nV, std::vector<long long>(nV, INF));
