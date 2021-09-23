@@ -26,7 +26,7 @@ int main() {
     int bestN = n + 1;
     long long bestValue = 0;
     long long bestCode = 0;
-    for (int code = 1; code < (1 << (n + 1)); code++) {
+    for (int code = 0; code < (1 << n); code++) {
         int curN = 0;
         long long curWeight = 0;
         long long curValue = 0;
