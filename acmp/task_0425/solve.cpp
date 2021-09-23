@@ -8,11 +8,11 @@ struct Point {
     long long y;
 };
 
-long long area(Point p1, Point p2, Point p3) {
+long long getArea(Point p1, Point p2, Point p3) {
     return (p2.x - p1.x) * (p3.y - p1.y) - (p2.y - p1.y) * (p3.x - p1.x);
 }
 
-bool intersect_1(long long a, long long b, long long c, long long d) {
+bool areIntersect(long long a, long long b, long long c, long long d) {
     if (a > b) {
         std::swap(a, b);
     } 
@@ -22,12 +22,11 @@ bool intersect_1(long long a, long long b, long long c, long long d) {
     return std::max(a, c) <= std::min(b, d);
 }
 
-bool intersect(Point p1, Point p2, Point p3, Point p4) {
-    return intersect_1(p1.x, p2.x, p3.x, p4.x) &&
-        intersect_1(p1.y, p2.y, p3.y, p4.y) &&
-        area(p1, p2, p3) * area(p1, p2, p4) <= 0 &&
-        area(p3, p4, p1) * area(p3, p4, p2) <= 0;
-
+bool areIntersect(Point p1, Point p2, Point p3, Point p4) {
+    return areIntersect(p1.x, p2.x, p3.x, p4.x) &&
+        areIntersect(p1.y, p2.y, p3.y, p4.y) &&
+        getArea(p1, p2, p3) * getArea(p1, p2, p4) <= 0 &&
+        getArea(p3, p4, p1) * getArea(p3, p4, p2) <= 0;
 }
 
 int main() {
@@ -44,7 +43,7 @@ int main() {
             Point p2 = Point{ i * 100, j * 100 };
             Point p3 = Point{ (i - 1) * 100, j * 100 };
             Point p4 = Point{ i * 100, (j - 1) * 100 };
-            if (intersect(mainP1, mainP2, p1, p2) || intersect(mainP1, mainP2, p3, p4)) {
+            if (areIntersect(mainP1, mainP2, p1, p2) || areIntersect(mainP1, mainP2, p3, p4)) {
                 count++;
             }
         }
