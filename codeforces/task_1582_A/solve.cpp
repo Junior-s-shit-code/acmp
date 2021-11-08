@@ -9,7 +9,7 @@ int main() {
         int a, b, c;
         scanf("%d %d %d", &a, &b, &c);
         long long t = a + 2 * b + 3 * c;
-        printf("%d\n", t & 1 > 0 ? 1 : 0);
+        printf("%d\n", t & 1);
     }
     return 0;
 }
