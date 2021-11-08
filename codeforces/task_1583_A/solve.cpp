@@ -2,7 +2,7 @@
 #include <algorithm>
 
 bool isPrime(int num) {
-    for (int d = 2; d * d <= num; d++) {
+    for (int d = 2; d <= num / d; d++) {
         if (num % d == 0) {
             return false;
         }
