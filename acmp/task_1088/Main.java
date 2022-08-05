@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.*;
+
 import static java.lang.Math.abs;
 
 public class Main {
@@ -14,7 +15,7 @@ public class Main {
         int j;
 
         void read() {
-            var input = in.next();
+            String input = in.next();
             this.i = input.charAt(0) - 'A' + 1;
             this.j = input.charAt(1) - '0';
         }
@@ -26,7 +27,7 @@ public class Main {
         a.read();
         b.read();
 
-        var isMove = new HashMap<String, Boolean> ();
+        Map<String, Boolean> isMove = new HashMap<>();
 
         int di = abs(b.i - a.i);
         int dj = abs(b.j - a.j);
