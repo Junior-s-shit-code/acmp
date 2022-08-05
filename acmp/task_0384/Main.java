@@ -8,9 +8,7 @@ public class Main {
 
     private int gcd(int a, int b) {
         while (b > 0) {
-            a %= b;
-
-            int tmp = a;
+            int tmp = a % b;
             a = b;
             b = tmp;
         }
