@@ -357,3 +357,10 @@ solve
 .vscode/c_cpp_properties.json
 .vscode/launch.json
 .vscode/settings.json
+
+# intellij IDEA
+/src/
+/out/
+src/
+out/
+/.idea/workspace.xml
