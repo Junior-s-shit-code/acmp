@@ -362,9 +362,4 @@ solve
 src/
 out/
 .idea/
-
-acmp.iml
-misc.xml
-modules.xml
-vcs.xml
-*.idea
+*.iml
