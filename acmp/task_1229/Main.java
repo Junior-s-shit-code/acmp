@@ -1,8 +1,6 @@
 import java.io.*;
 import java.util.*;
 
-import static java.lang.Math.*;
-
 public class Main {
     static Scanner in;
 
@@ -25,10 +23,10 @@ public class Main {
             return new Point(x, y);
         }
 
-        double distTo(Point p2) {
+        long distTo(Point p2) {
             int dx = x - p2.x;
             int dy = y - p2.y;
-            return sqrt(dx * dx + dy * dy);
+            return dx * dx + dy * dy;
         }
     }
 
@@ -38,13 +36,12 @@ public class Main {
         for (int i = 0; i < SIZE; i++) {
             p[i] = Point.read();
         }
-        double[] line = new double[SIZE];
+        long[] line = new long[SIZE];
         for (int i = 0; i < SIZE; i++) {
             line[i] = p[i].distTo(p[(i + 1) % SIZE]);
         }
         Arrays.sort(line);
-        final double EPS = (double) 1e-6;
-        out.print(abs(line[0] * line[0] + line[1] * line[1] - line[2] * line[2]) < EPS ? "Yes" : "No");
+        out.print(line[0] + line[1] == line[2] ? "Yes" : "No");
     }
 
     public void run() {
