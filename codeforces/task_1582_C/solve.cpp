@@ -35,7 +35,7 @@ int main() {
     for (int t = 0; t < nT; t++) {
         int len;
         scanf("%d", &len);
-        char buf[1 + INF];
+        char buf[1 + 20000];
         scanf("%s", &buf);
         std::string s(buf);
         int minDeleted = INF;
