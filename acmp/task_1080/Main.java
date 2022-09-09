@@ -18,7 +18,7 @@ public class Main {
         int nQ = in.nextInt();
         for (int q = 0; q < nQ; q++) {
             String cmd = in.next();
-            switch(cmd) {
+            switch (cmd) {
                 case "get" -> {
                     out.println(a[in.nextInt() - 1]);
                 }
@@ -72,7 +72,7 @@ public class Main {
             solve();
 
             out.close();
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println(e);
         }
     }
