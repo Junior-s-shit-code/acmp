@@ -1,0 +1,2 @@
+The next number for the number 13 is 14.
+The previous number for the number 13 is 12.
