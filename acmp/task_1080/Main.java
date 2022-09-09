@@ -69,7 +69,7 @@ public class Main {
 
             out.close();
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 
