@@ -23,7 +23,7 @@ public class Main {
             return new Point(x, y);
         }
 
-        long distTo(Point p2) {
+        int distTo(Point p2) {
             int dx = x - p2.x;
             int dy = y - p2.y;
             return dx * dx + dy * dy;
@@ -36,7 +36,7 @@ public class Main {
         for (int i = 0; i < SIZE; i++) {
             p[i] = Point.read();
         }
-        long[] line = new long[SIZE];
+        int[] line = new int[SIZE];
         for (int i = 0; i < SIZE; i++) {
             line[i] = p[i].distTo(p[(i + 1) % SIZE]);
         }
