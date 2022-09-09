@@ -19,9 +19,7 @@ public class Main {
         for (int q = 0; q < nQ; q++) {
             String cmd = in.next();
             switch (cmd) {
-                case "get" -> {
-                    out.println(a[in.nextInt() - 1]);
-                }
+                case "get" -> out.println(a[in.nextInt() - 1]);
                 case "update" -> {
                     int left = in.nextInt() - 1;
                     int right = in.nextInt() - 1;
@@ -56,9 +54,7 @@ public class Main {
                     }
                     out.println(minValue);
                 }
-                default -> {
-                    System.out.println("undefind case value");
-                }
+                default -> System.out.println("undefined case value");
             }
         }
     }
