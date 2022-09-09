@@ -26,7 +26,7 @@ public class Main {
 
         long totalNeed = getSum(right) - in.nextLong();
 
-        right = (int) ((totalNeed + 2) / 3);
+        right = (totalNeed + 2) / 3;
         while (left + 1 < right) {
             long mid = (left + right) >> 1;
             out.printf("? %d\n", mid);
@@ -43,11 +43,11 @@ public class Main {
         long coin1 = right;
 
         totalNeed -= coin1;
-        long end2 = (totalNeed - 1) / 2 ;
+        long end2 = (totalNeed - 1) / 2;
         out.printf("? %d\n", end2);
         out.flush();
 
-        long  need12 = getSum(end2) - in.nextLong();
+        long need12 = getSum(end2) - in.nextLong();
 
         long coin2 = need12 - coin1;
         long coin3 = totalNeed - coin2;
