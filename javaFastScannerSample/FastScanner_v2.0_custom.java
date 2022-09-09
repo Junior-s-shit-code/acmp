@@ -3,6 +3,32 @@ import java.util.*;
 
 public class Main {
 
+    Scanner in;
+
+    PrintWriter out;
+
+    private void solve() {
+
+    }
+
+    public void run() {
+        try {
+            Locale.setDefault(Locale.US);
+            in = new Scanner(new File("input.txt"));
+            out = new PrintWriter("output.txt");
+
+            solve();
+
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        new Main().run();
+    }
+
     private static class Scanner implements AutoCloseable {
         private final InputStream in;
         private final byte[] buf = new byte[1 << 16];
@@ -63,31 +89,5 @@ public class Main {
         public void close() throws IOException {
             in.close();
         }
-    }
-
-    Scanner in;
-
-    PrintWriter out;
-
-    private void solve() {
-
-    }
-
-    public void run() {
-        try {
-            Locale.setDefault(Locale.US);
-            in = new Scanner(new File("input.txt"));
-            out = new PrintWriter("output.txt");
-
-            solve();
-
-            out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void main(String[] args) {
-        new Main().run();
     }
 }

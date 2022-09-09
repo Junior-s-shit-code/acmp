@@ -10,6 +10,24 @@ public class Main {
 
     }
 
+    public void run() {
+        try {
+            Locale.setDefault(Locale.US);
+            in = new FastScanner(new File("input.txt"));
+            out = new PrintWriter("output.txt");
+
+            solve();
+
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        new Main().run();
+    }
+
     class FastScanner {
         BufferedReader br;
         StringTokenizer st;
@@ -36,23 +54,5 @@ public class Main {
         int nextInt() {
             return Integer.parseInt(next());
         }
-    }
-
-    public void run() {
-        try {
-            Locale.setDefault(Locale.US);
-            in = new FastScanner(new File("input.txt"));
-            out = new PrintWriter("output.txt");
-
-            solve();
-
-            out.close();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
-    public static void main(String[] args) {
-        new Main().run();
     }
 }
