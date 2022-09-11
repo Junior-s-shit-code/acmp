@@ -14,13 +14,13 @@ public class Main {
             a[i] = in.nextInt();
         }
         int count = 0;
-        for (int curN = n; curN > 1; curN--) {
-            for (int i = 0; i + 1 < curN; i++) {
-                if (a[i] > a[i + 1]) {
-                    int tmp = a[i];
-                    a[i] = a[i + 1];
-                    a[i + 1] = tmp;
+        for (int i = 0; i + 1 < n; i++) {
+            for (int j = 0; j + 1 < n; j++) {
+                if (a[j] > a[j + 1]) {
                     count++;
+                    int tmp = a[j];
+                    a[j] = a[j + 1];
+                    a[j + 1] = tmp;
                 }
             }
         }
