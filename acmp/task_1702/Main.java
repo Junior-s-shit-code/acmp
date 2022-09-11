@@ -14,22 +14,19 @@ public class Main {
         for (int i = 0; i < n; i++) {
             a[i] = in.nextInt();
         }
-        for (int curN = n; curN > 0; curN--) {
-            int maxValue = -INF;
-            int maxIndex = -INF;
-            for (int i = 0; i < curN; i++) {
-                if (a[i] > maxValue) {
-                    maxValue = a[i];
+        for (int curN = n - 1; curN >= 0; curN--) {
+            int maxIndex = 0;
+            for (int i = 0; i <= curN; i++) {
+                if (a[i] > a[maxIndex]) {
                     maxIndex = i;
                 }
             }
 
             int tmp = a[maxIndex];
-            a[maxIndex] = a[curN - 1];
-            a[curN - 1] = tmp;
+            a[maxIndex] = a[curN];
+            a[curN] = tmp;
 
-            out.print(maxIndex);
-            out.print(" ");
+            out.printf("%d ", maxIndex);
         }
     }
 
