@@ -1,0 +1,4 @@
+3 2
+Petrov 80 70 59
+Ivanov 89 73 61
+Sidorov 83 76 50
