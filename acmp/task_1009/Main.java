@@ -15,16 +15,16 @@ public class Main {
 
         String country;
 
-        String name;
+        String fullName;
 
         double[] result;
 
         Person(String country,
-               String name,
+               String fullName,
                double[] result
         ) {
             this.country = country;
-            this.name = name;
+            this.fullName = fullName;
             this.result = result;
         }
 
@@ -58,16 +58,15 @@ public class Main {
         }
         Arrays.sort(a, (right, left) -> Arrays.compare(left.result, right.result));
 
-        if (abs(a[0].result[0] - UNDEF) <= EPS) {
-            out.println("No results.");
-            out.close();
-            System.exit(0);
-        }
+        n = min(n, 3);
         for (int i = 0; i < min(3, n); i++) {
-            if (abs(a[i].result[0] - UNDEF) <= EPS) {
+            if (abs(a[i].result[0] - UNDEF) < EPS) {
+                if (i == 0) {
+                    out.println("No results.");
+                }
                 break;
             }
-            out.printf("%d) %s %s %.2f\n", i + 1, a[i].country, a[i].name, a[i].result[0]);
+            out.printf("%d) %s %s %.2f\n", i + 1, a[i].country, a[i].fullName, a[i].result[0]);
         }
     }
 
