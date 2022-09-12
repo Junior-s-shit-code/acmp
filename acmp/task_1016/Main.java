@@ -17,11 +17,10 @@ public class Main {
 
         String date;
 
-        Person(
-                String surname,
-                String name,
-                String couple,
-                String date
+        Person(String surname,
+               String name,
+               String couple,
+               String date
         ) {
             this.surname = surname;
             this.name = name;
@@ -36,6 +35,13 @@ public class Main {
             String date = in.next();
             return new Person(surname, name, couple, date);
         }
+
+        public String toString() {
+            return couple + " " +
+                    surname + " " +
+                    name + " " +
+                    date;
+        }
     }
 
     private void solve() {
@@ -45,18 +51,18 @@ public class Main {
             a[i] = Person.read();
         }
         Arrays.sort(a, (left, right) -> {
-            int cLen = Integer.compare(left.couple.length(), right.couple.length());
-            int couple = left.couple.compareTo(right.couple);
-            int surname = left.surname.compareTo(right.surname);
-            if (cLen != 0) {
-                return cLen;
-            } else if (couple != 0) {
-                return couple;
+            int res = Integer.compare(left.couple.length(), right.couple.length());
+            if (res != 0) {
+                return res;
             }
-            return surname;
+            res = left.couple.compareTo(right.couple);
+            if (res != 0) {
+                return res;
+            }
+            return left.surname.compareTo(right.surname);
         });
         for (Person p : a) {
-            out.printf("%s %s %s %s\n", p.couple, p.surname, p.name, p.date);
+            out.println(p.toString());
         }
     }
 
