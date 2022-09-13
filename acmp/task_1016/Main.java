@@ -36,6 +36,7 @@ public class Main {
             return new Person(surname, name, couple, date);
         }
 
+        @Override
         public String toString() {
             return couple + " " +
                     surname + " " +
