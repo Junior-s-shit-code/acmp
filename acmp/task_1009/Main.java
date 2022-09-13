@@ -59,7 +59,7 @@ public class Main {
         Arrays.sort(a, (right, left) -> Arrays.compare(left.result, right.result));
 
         n = min(n, 3);
-        for (int i = 0; i < min(3, n); i++) {
+        for (int i = 0; i < n; i++) {
             if (abs(a[i].result[0] - UNDEF) < EPS) {
                 if (i == 0) {
                     out.println("No results.");
