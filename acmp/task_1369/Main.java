@@ -11,7 +11,6 @@ public class Main {
     private static PrintWriter out;
 
     private void solve() {
-        final int INF = (int) 1e9;
         // input
         int n = in.nextInt();
         int[][] minDist = new int[n][n];
